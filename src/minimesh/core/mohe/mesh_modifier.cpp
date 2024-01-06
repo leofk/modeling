@@ -13,9 +13,10 @@ bool Mesh_modifier::edge_split(const int he_index)
 {
 	// get he from he_index
 	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_index);
-
-	// get he_twin from he
 	Mesh_connectivity::Half_edge_iterator he_twin = he.twin();
+	Mesh_connectivity::Half_edge_iterator he_twin_next = he.twin().next();
+	Mesh_connectivity::Half_edge_iterator he_prev = he.prev();
+	Mesh_connectivity::Half_edge_iterator he_next = he.next();
 
 	// add a new vertex v to mesh
 	Mesh_connectivity::Vertex_iterator v = mesh().add_vertex();
@@ -23,46 +24,40 @@ bool Mesh_modifier::edge_split(const int he_index)
 	v.data().xyz = (he.origin().data().xyz + he_twin.origin().data().xyz) / 2;
 	v.data().is_new = true;
 
-	// add he_new to mesh and copy data from he
+	// create two new half edges for split
 	Mesh_connectivity::Half_edge_iterator he_new = mesh().add_half_edge();
-	he_new.data().face = he.data().face;
-	he_new.data().next = he.data().next;
-	he_new.data().prev = he.data().prev;
-	he_new.data().twin = he.data().twin;
-	he_new.data().origin = he.data().origin;
-
-	// add he_new_twin to mesh
 	Mesh_connectivity::Half_edge_iterator he_new_twin = mesh().add_half_edge();
-	he_new_twin.data().face = he_twin.data().face;
-	he_new_twin.data().next = he_twin.data().next;
-	he_new_twin.data().prev = he_twin.data().prev;
-	he_new_twin.data().twin = he_twin.data().twin;
-	he_new_twin.data().origin = he_twin.data().origin;
 
-	// get he_prev from he
-	Mesh_connectivity::Half_edge_iterator he_prev = he.prev();
+	// update he_new
+	he_new.data().face = he.data().face;
+	he_new.data().next = he.index();
+	he_new.data().prev = he_prev.index();
+	he_new.data().twin = he_new_twin.index();
+	he_new.data().origin = he.data().origin;
+	he_new.data().is_split = true;
 
-	// get he_prev_twin from he_prev
-	Mesh_connectivity::Half_edge_iterator he_prev_twin = he_prev.twin();
-
-	// update tasks:
+	// update he: face, next, twin unchanged
 	he.data().prev = he_new.index();
 	he.data().origin = v.index();
 	he.data().is_split = true;
 
-	he_twin.data().next = he_new_twin.index();
-	he_twin.data().is_split = true;
+	// update he_prev: all but next unchanged
+	he_prev.data().next = he_new.index();
 
-	he_new.data().next = he.index();
-	he_new.data().is_split = true;
-		
+	// update he_new_twin
+	he_new_twin.data().face = he_twin.data().face;
+	he_new_twin.data().next = he_twin.data().next;
 	he_new_twin.data().prev = he_twin.index();
+	he_new_twin.data().twin = he_new.index();
 	he_new_twin.data().origin = v.index();
 	he_new_twin.data().is_split = true;
 
-	he_prev.data().next = he_new.index();
+	// udpate he_twin: face, prev, twin, origin unchanged
+	he_twin.data().next = he_new_twin.index();
+	he_twin.data().is_split = true;
 
-	he_prev_twin.data().prev = he_new_twin.index();
+	// update he_twin_next: all but prev unchanged
+	he_twin_next.data().prev = he_new_twin.index();
 
 	return true;
 }
@@ -93,7 +88,7 @@ bool Mesh_modifier::cut_a_corner(const int face_index)
 	// update he_new
 	he_new.data().face = face_new.index();
 	he_new.data().next = he.index();
-	he_new.data().prev = he.data().next;
+	he_new.data().prev = he_next.index();
 	he_new.data().twin = he_new_twin.index();
 	he_new.data().origin = he_next_next.data().origin;
 	he_new.data().is_split = true;
@@ -104,11 +99,12 @@ bool Mesh_modifier::cut_a_corner(const int face_index)
 
 	// update he_next
 	he_next.data().face = face_new.index();
+	he_next.data().next = he_new.index();
 
 	// update he_new_twin
 	he_new_twin.data().face = face_index;
 	he_new_twin.data().next = he_next_next.index();
-	he_new_twin.data().prev = he_prev.index();;
+	he_new_twin.data().prev = he_prev.index();
 	he_new_twin.data().twin = he_new.index();
 	he_new_twin.data().origin = he.data().origin;
 	he_new_twin.data().is_split = true;
@@ -118,6 +114,9 @@ bool Mesh_modifier::cut_a_corner(const int face_index)
 
 	// update he_next_next 
 	he_next_next.data().prev = he_new_twin.index();
+
+	// update orig face data
+	face.data().half_edge = he_new_twin.index();
 
 	return true;
 }
@@ -133,12 +132,11 @@ bool Mesh_modifier::is_triangle(const int face_index)
 	// get index of half edge of face
 	int he_index = face.data().half_edge;
 	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_index);
-	Mesh_connectivity::Half_edge_iterator he_prev = mesh().half_edge_at(he.data().prev);
 	Mesh_connectivity::Half_edge_iterator he_next = mesh().half_edge_at(he.data().next);
 	Mesh_connectivity::Half_edge_iterator he_next_next = mesh().half_edge_at(he_next.data().next);
 
 	// check if face is minimal triangle
-	return he.index() == he_next_next.data().next;
+	return he.data().prev == he_next.data().next;
 }
 
 //
@@ -159,6 +157,8 @@ bool Mesh_modifier::loop_subdivision()
 		}
 	}
 
+    force_assert( mesh().check_sanity_slowly() );
+
 	printf("cutting corners \n");
 	// iterate over all non-triangular faces
 	for(int face_id = 0 ; face_id < mesh().n_total_faces() ; ++face_id)
@@ -171,7 +171,8 @@ bool Mesh_modifier::loop_subdivision()
 			cut_a_corner(face_id);
 		}
 	}
-	printf("done \n");
+
+    force_assert( mesh().check_sanity_slowly() );
 
 	return true;
 }
