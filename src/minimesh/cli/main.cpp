@@ -106,6 +106,8 @@ int main(int argc, char **argv)
 
   printf("loop subdivision \n");
   modi.loop_subdivision();
+  
+  printf("check sanity \n");
   check_sanity_and_write_mesh();
 
   // // Now check that the mesh is sane and write it  in both 
