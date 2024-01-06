@@ -109,6 +109,7 @@ int main(int argc, char **argv)
   
   printf("check sanity \n");
   check_sanity_and_write_mesh();
+  printf("sane phew \n");
 
   // // Now check that the mesh is sane and write it  in both 
   // // .vtk and .obj formats

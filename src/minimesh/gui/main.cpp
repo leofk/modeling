@@ -195,7 +195,7 @@ int main(int argc, char * argv[])
 	if(argc == 1)
 	{
 		foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh");
-		mohe::Mesh_io(globalvars::mesh).read_auto("teddy.obj");
+		mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
 	}
 	else // otherwise use the address specified in the command line
 	{

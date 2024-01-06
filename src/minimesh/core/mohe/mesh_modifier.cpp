@@ -28,6 +28,9 @@ bool Mesh_modifier::edge_split(const int he_index)
 	Mesh_connectivity::Half_edge_iterator he_new = mesh().add_half_edge();
 	Mesh_connectivity::Half_edge_iterator he_new_twin = mesh().add_half_edge();
 
+	Mesh_connectivity::Vertex_iterator v_old = mesh().vertex_at(he.data().origin);
+	v_old.data().half_edge = he_new.index();
+
 	// update he_new
 	he_new.data().face = he.data().face;
 	he_new.data().next = he.index();
@@ -58,6 +61,8 @@ bool Mesh_modifier::edge_split(const int he_index)
 
 	// update he_twin_next: all but prev unchanged
 	he_twin_next.data().prev = he_new_twin.index();
+
+
 
 	return true;
 }
