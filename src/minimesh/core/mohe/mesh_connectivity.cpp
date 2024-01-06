@@ -51,6 +51,10 @@ bool Mesh_connectivity::Vertex_iterator::is_active()
 	return data().is_active;
 }
 
+bool Mesh_connectivity::Vertex_iterator::is_new()
+{
+	return data().is_new;
+}
 
 void Mesh_connectivity::Vertex_iterator::deactivate()
 {
@@ -88,6 +92,10 @@ bool Mesh_connectivity::Half_edge_iterator::is_active()
 	return data().is_active;
 }
 
+bool Mesh_connectivity::Half_edge_iterator::is_split()
+{
+	return data().is_split;
+}
 
 void Mesh_connectivity::Half_edge_iterator::deactivate()
 {

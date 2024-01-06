@@ -11,6 +11,7 @@
 // core
 #include <minimesh/core/mohe/mesh_connectivity.hpp>
 #include <minimesh/core/mohe/mesh_io.hpp>
+#include <minimesh/core/mohe/mesh_modifier.hpp>
 #include <minimesh/core/util/assert.hpp>
 #include <minimesh/core/util/foldertools.hpp>
 #include <minimesh/core/util/numbers.hpp>
@@ -29,6 +30,8 @@ namespace globalvars
 {
 Mesh_viewer viewer;
 mohe::Mesh_connectivity mesh;
+mohe::Mesh_modifier modi(mesh);
+
 //
 int glut_main_window_id;
 //
@@ -149,6 +152,7 @@ void mouse_moved(int x, int y)
 void subdivide_pressed(int)
 {
 	printf("Subdivide button was pressed \n");
+	// modi.loop_subdivision();
 }
 
 

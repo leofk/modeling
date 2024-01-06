@@ -104,20 +104,24 @@ int main(int argc, char **argv)
     ++writing_index;
   };
 
-  // Now check that the mesh is sane and write it  in both 
-  // .vtk and .obj formats
+  printf("loop subdivision \n");
+  modi.loop_subdivision();
   check_sanity_and_write_mesh();
 
-  // Flip the edge between vertices 4 and 5 (the diagonal from lower right to upper left)
-  // Note that the indices should become 0-index based rather than 1-index based.
-  printf("flipping edge \n");
-  modi.flip_edge( modi.get_halfedge_between_vertices(4-1, 5-1) );
-  check_sanity_and_write_mesh();
+  // // Now check that the mesh is sane and write it  in both 
+  // // .vtk and .obj formats
+  // check_sanity_and_write_mesh();
 
-  // Now flip back the edge again
-  printf("flipping edge again ...\n");
-  modi.flip_edge( modi.get_halfedge_between_vertices(2-1, 7-1) );
-  check_sanity_and_write_mesh();
+  // // Flip the edge between vertices 4 and 5 (the diagonal from lower right to upper left)
+  // // Note that the indices should become 0-index based rather than 1-index based.
+  // printf("flipping edge \n");
+  // modi.flip_edge( modi.get_halfedge_between_vertices(4-1, 5-1) );
+  // check_sanity_and_write_mesh();
+
+  // // Now flip back the edge again
+  // printf("flipping edge again ...\n");
+  // modi.flip_edge( modi.get_halfedge_between_vertices(2-1, 7-1) );
+  // check_sanity_and_write_mesh();
 
   return 0;
 } // end of main()

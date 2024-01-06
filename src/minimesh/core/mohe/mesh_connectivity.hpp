@@ -63,6 +63,9 @@ public:
 		// X, Y, and Z position of this vertex
 		Eigen::Vector3d xyz = Eigen::Vector3d(-1e10, -1e10, -1e10);
 
+		// Is this vertex new or old
+		bool is_new = false;
+
 	private:
 		// Is this vertex present in the mesh, or is it deleted, i.e.,
 		// it is only an empty space in the vector of vertices data.
@@ -99,6 +102,9 @@ public:
 
 		// The index of the vertex that this half edge goes out of.
 		int origin = invalid_index;
+
+		// Is half edge split or not
+		bool is_split = false;
 
 
 	private:
@@ -171,6 +177,9 @@ public:
 		// Is this vertex active or deleted
 		bool is_active();
 
+		// Is this vertex new or old
+		bool is_new();
+
 		// Deletes the vertex
 		void deactivate();
 
@@ -215,6 +224,9 @@ public:
 
 		// Is half edge active or deleted
 		bool is_active();
+
+		// Is half edge split or not
+		bool is_split();
 
 		// Delete the half edge
 		void deactivate();
