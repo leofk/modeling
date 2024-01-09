@@ -62,8 +62,6 @@ bool Mesh_modifier::edge_split(const int he_index)
 	// update he_twin_next: all but prev unchanged
 	he_twin_next.data().prev = he_new_twin.index();
 
-
-
 	return true;
 }
 
@@ -75,9 +73,16 @@ bool Mesh_modifier::cut_a_corner(const int face_index)
 	// get face from face_index
 	Mesh_connectivity::Face_iterator face = mesh().face_at(face_index);
 
-	// get index of half edge of face
-	int he_index = face.data().half_edge;
-	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_index);
+	// get half edge of face
+	Mesh_connectivity::Half_edge_iterator he = face.half_edge();
+
+	// make sure half edge points at a corner
+	while(he.twin().origin().is_new()) {
+ 		he = he.next();
+		// printf("next");
+	}
+
+	// get half edge neighbour data
 	Mesh_connectivity::Half_edge_iterator he_prev = mesh().half_edge_at(he.data().prev);
 	Mesh_connectivity::Half_edge_iterator he_next = mesh().half_edge_at(he.data().next);
 	Mesh_connectivity::Half_edge_iterator he_next_next = mesh().half_edge_at(he_next.data().next);
@@ -171,7 +176,7 @@ bool Mesh_modifier::loop_subdivision()
 		Mesh_connectivity::Face_iterator face = mesh().face_at(face_id);
 
 		// cut a corner out of the face if it is not a traingle
-		if (face.is_active() && !is_triangle(face_id))
+		while(face.is_active() && !is_triangle(face_id))
 		{
 			cut_a_corner(face_id);
 		}

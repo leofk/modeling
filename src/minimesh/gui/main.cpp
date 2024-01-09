@@ -151,8 +151,21 @@ void mouse_moved(int x, int y)
 
 void subdivide_pressed(int)
 {
+	// TODO need to reset is_new and is_split
+
+
 	printf("Subdivide button was pressed \n");
-	// modi.loop_subdivision();
+	globalvars::modi.loop_subdivision();
+	printf("Subdivide complete \n");
+
+	// reload the mesh in the viewer
+	{
+		mohe::Mesh_connectivity::Defragmentation_maps defrag;
+		globalvars::mesh.compute_defragmention_maps(defrag);
+		globalvars::viewer.get_mesh_buffer().rebuild(globalvars::mesh, defrag);
+	}
+	glutPostRedisplay();
+
 }
 
 
@@ -195,7 +208,8 @@ int main(int argc, char * argv[])
 	if(argc == 1)
 	{
 		foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh");
-		mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
+		mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
 	}
 	else // otherwise use the address specified in the command line
 	{
