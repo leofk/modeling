@@ -1,1 +1,10 @@
 build/
+build/.ninja_deps
+build/.ninja_log
+build/.cmake/api/v1/reply/index-2024-01-04T21-27-14-0881.json
+build/bin/minimeshcli
+build/bin/minimeshgui
+build/src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o
+build/src/minimesh/core/libminimeshcore.a
+build/src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o
+build/src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o

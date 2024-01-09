@@ -9,7 +9,7 @@ namespace mohe
 //
 // Given a half edge, split the edge into two
 //
-bool Mesh_modifier::edge_split(const int he_index)
+void Mesh_modifier::edge_split(const int he_index)
 {
 	// get he from he_index
 	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_index);
@@ -23,6 +23,7 @@ bool Mesh_modifier::edge_split(const int he_index)
 	v.data().half_edge = he.index();
 	v.data().xyz = (he.origin().data().xyz + he_twin.origin().data().xyz) / 2;
 	v.data().is_new = true;
+	new_vertices.push(v.index());
 
 	// create two new half edges for split
 	Mesh_connectivity::Half_edge_iterator he_new = mesh().add_half_edge();
@@ -38,11 +39,13 @@ bool Mesh_modifier::edge_split(const int he_index)
 	he_new.data().twin = he_new_twin.index();
 	he_new.data().origin = he.data().origin;
 	he_new.data().is_split = true;
+	split_half_edges.push(he_new.index());
 
 	// update he: face, next, twin unchanged
 	he.data().prev = he_new.index();
 	he.data().origin = v.index();
 	he.data().is_split = true;
+	split_half_edges.push(he.index());
 
 	// update he_prev: all but next unchanged
 	he_prev.data().next = he_new.index();
@@ -54,21 +57,21 @@ bool Mesh_modifier::edge_split(const int he_index)
 	he_new_twin.data().twin = he_new.index();
 	he_new_twin.data().origin = v.index();
 	he_new_twin.data().is_split = true;
+	split_half_edges.push(he_new_twin.index());
 
 	// udpate he_twin: face, prev, twin, origin unchanged
 	he_twin.data().next = he_new_twin.index();
 	he_twin.data().is_split = true;
+	split_half_edges.push(he_twin.index());
 
 	// update he_twin_next: all but prev unchanged
 	he_twin_next.data().prev = he_new_twin.index();
-
-	return true;
 }
 
 //
 // create additional faces. cut the first corner found, unless the face is already a triangle
 //
-bool Mesh_modifier::cut_a_corner(const int face_index)
+void Mesh_modifier::cut_a_corner(const int face_index)
 {
 	// get face from face_index
 	Mesh_connectivity::Face_iterator face = mesh().face_at(face_index);
@@ -102,6 +105,7 @@ bool Mesh_modifier::cut_a_corner(const int face_index)
 	he_new.data().twin = he_new_twin.index();
 	he_new.data().origin = he_next_next.data().origin;
 	he_new.data().is_split = true;
+	split_half_edges.push(he_new.index());
 
 	// update he
 	he.data().face = face_new.index();
@@ -118,6 +122,7 @@ bool Mesh_modifier::cut_a_corner(const int face_index)
 	he_new_twin.data().twin = he_new.index();
 	he_new_twin.data().origin = he.data().origin;
 	he_new_twin.data().is_split = true;
+	split_half_edges.push(he_new_twin.index());
 
 	// update he_prev
 	he_prev.data().next = he_new_twin.index();
@@ -127,8 +132,6 @@ bool Mesh_modifier::cut_a_corner(const int face_index)
 
 	// update orig face data
 	face.data().half_edge = he_new_twin.index();
-
-	return true;
 }
 
 //
@@ -149,10 +152,33 @@ bool Mesh_modifier::is_triangle(const int face_index)
 	return he.data().prev == he_next.data().next;
 }
 
+
+//
+// reset the flags applied in subdivision step. eg. is_new and is_split
+//
+void Mesh_modifier::reset_flags() 
+{
+	// reset split edge flag
+	while(!split_half_edges.empty()) {
+		int index = split_half_edges.top();
+		Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(index);
+		he.data().is_split = false;
+		split_half_edges.pop();
+	}
+
+	// reset split edge flag
+	while(!new_vertices.empty()) {
+		int index = new_vertices.top();
+		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(index);
+		v.data().is_new = false;
+		new_vertices.pop();
+	}
+}
+
 //
 // loop subdivision (topological structure)
 //
-bool Mesh_modifier::loop_subdivision()
+void Mesh_modifier::loop_subdivision()
 {
 	printf("splitting edges \n");
 	// iterate over all half edges that are not split
@@ -184,7 +210,7 @@ bool Mesh_modifier::loop_subdivision()
 
     force_assert( mesh().check_sanity_slowly() );
 
-	return true;
+	reset_flags();
 }
 
 //

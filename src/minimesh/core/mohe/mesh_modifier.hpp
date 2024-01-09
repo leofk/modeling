@@ -49,12 +49,12 @@ public:
 	//
 	// Given a half edge, split the edge into two
 	//
-	bool edge_split(const int he_index);
+	void edge_split(const int he_index);
 
 	//
 	// create additional faces. cut the first corner found, unless the face is already a triangle
 	//
-	bool cut_a_corner(const int face_index);
+	void cut_a_corner(const int face_index);
 
 	//
 	// checks to see if a given face is a triangle
@@ -64,11 +64,23 @@ public:
 	//
 	// loop subdivision (topological structure)
 	//
-	bool loop_subdivision();
+	void loop_subdivision();
+
+	//
+	// reset the flags applied in subdivision step. eg. is_new and is_split
+	//
+	void reset_flags(); 
+
 
 private:
 	// pointer to the mesh that we are working on.
 	Mesh_connectivity & _m;
+
+	// A stack to split half edges
+	std::stack<int> split_half_edges;
+
+	// A stack to new vertices
+	std::stack<int> new_vertices;
 };
 
 
