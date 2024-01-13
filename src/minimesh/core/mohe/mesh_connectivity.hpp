@@ -7,6 +7,7 @@
 //
 
 #include <stack>
+#include <queue>
 #include <vector>
 
 
@@ -105,6 +106,9 @@ public:
 
 		// Is half edge split or not
 		bool is_split = false;
+
+		// Has the the position of the new vertex associated with this he been updated?
+		bool is_pos_updated = false;
 
 
 	private:
@@ -227,6 +231,9 @@ public:
 
 		// Is half edge split or not
 		bool is_split();
+
+		// Has the the position of the new vertex associated with this he been updated?
+		bool is_pos_updated();
 
 		// Delete the half edge
 		void deactivate();

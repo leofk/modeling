@@ -97,6 +97,11 @@ bool Mesh_connectivity::Half_edge_iterator::is_split()
 	return data().is_split;
 }
 
+bool Mesh_connectivity::Half_edge_iterator::is_pos_updated()
+{
+	return data().is_pos_updated;
+}
+
 void Mesh_connectivity::Half_edge_iterator::deactivate()
 {
 	assert(is_active() && "Attempting to delete already deleted half edge");

@@ -62,14 +62,19 @@ public:
 	bool is_triangle(const int face_index);
 
 	//
-	// loop subdivision (topological structure)
+	// subdivision
 	//
-	void loop_subdivision();
+	void subdivision();
 
 	//
 	// reset the flags applied in subdivision step. eg. is_new and is_split
 	//
 	void reset_flags(); 
+
+	//
+	// butterfly schema mask for new vertex pos
+	//
+	Eigen::Vector3d butterfly_mask(const int vertex_index); 
 
 
 private:
@@ -80,7 +85,7 @@ private:
 	std::stack<int> split_half_edges;
 
 	// A stack to new vertices
-	std::stack<int> new_vertices;
+	std::queue<int> new_vertices;
 };
 
 

@@ -155,7 +155,7 @@ void subdivide_pressed(int)
 
 
 	printf("Subdivide button was pressed \n");
-	globalvars::modi.loop_subdivision();
+	globalvars::modi.subdivision();
 	printf("Subdivide complete \n");
 
 	// reload the mesh in the viewer
@@ -210,6 +210,8 @@ int main(int argc, char * argv[])
 		foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh");
 		mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("camel.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("octopus.obj");
 	}
 	else // otherwise use the address specified in the command line
 	{

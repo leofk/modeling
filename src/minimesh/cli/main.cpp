@@ -105,7 +105,7 @@ int main(int argc, char **argv)
   };
 
   printf("loop subdivision \n");
-  modi.loop_subdivision();
+  modi.subdivision();
   
   printf("check sanity \n");
   check_sanity_and_write_mesh();

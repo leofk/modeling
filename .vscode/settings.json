@@ -10,6 +10,11 @@
 		"array": "cpp",
 		"iterator": "cpp",
 		"vector": "cpp",
-		"chrono": "cpp"
+		"chrono": "cpp",
+		"complex": "cpp",
+		"ios": "cpp",
+		"stack": "cpp",
+		"queue": "cpp",
+		"__split_buffer": "cpp"
 	}
 }

@@ -21,7 +21,7 @@ void Mesh_modifier::edge_split(const int he_index)
 	// add a new vertex v to mesh
 	Mesh_connectivity::Vertex_iterator v = mesh().add_vertex();
 	v.data().half_edge = he.index();
-	v.data().xyz = (he.origin().data().xyz + he_twin.origin().data().xyz) / 2;
+	// v.data().xyz = (he.origin().data().xyz + he_twin.origin().data().xyz) / 2; 
 	v.data().is_new = true;
 	new_vertices.push(v.index());
 
@@ -152,6 +152,33 @@ bool Mesh_modifier::is_triangle(const int face_index)
 	return he.data().prev == he_next.data().next;
 }
 
+//
+// butterfly schema mask for new vertex pos
+//
+Eigen::Vector3d Mesh_modifier::butterfly_mask(const int he_index)
+{
+	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_index);
+	he.data().is_split = true;
+	split_half_edges.push(he.index());
+
+	he.twin().data().is_split = true;
+	split_half_edges.push(he.twin().index());
+
+	Eigen::Vector3d ml = he.origin().xyz(); 
+	Eigen::Vector3d mr = he.twin().origin().xyz(); 
+
+	Eigen::Vector3d tl = he.prev().twin().prev().origin().xyz(); 
+	Eigen::Vector3d tm = he.prev().origin().xyz(); 
+	Eigen::Vector3d tr = he.next().twin().prev().origin().xyz(); 
+	
+	Eigen::Vector3d bl = he.twin().next().twin().prev().origin().xyz();
+	Eigen::Vector3d bm = he.twin().prev().origin().xyz(); 
+	Eigen::Vector3d br = he.twin().prev().twin().prev().origin().xyz(); 
+	
+	return (-1.0/16.0) * tl + (2.0/16.0) * tm + (-1.0/16.0) * tr +
+		(8.0/16.0) * ml + (8.0/16.0) * mr +
+		(-1.0/16.0) * bl + (2.0/16.0) * bm + (-1.0/16.0) * br;
+} 
 
 //
 // reset the flags applied in subdivision step. eg. is_new and is_split
@@ -166,20 +193,29 @@ void Mesh_modifier::reset_flags()
 		split_half_edges.pop();
 	}
 
-	// reset split edge flag
-	while(!new_vertices.empty()) {
-		int index = new_vertices.top();
-		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(index);
-		v.data().is_new = false;
-		new_vertices.pop();
-	}
 }
 
 //
-// loop subdivision (topological structure)
+// subdivision 
 //
-void Mesh_modifier::loop_subdivision()
+void Mesh_modifier::subdivision()
 {
+
+	// compute new vertex pos using butterfly stencil mask
+	std::queue<Eigen::Vector3d> new_vertices_pos;
+	for(int he_id = 0 ; he_id < mesh().n_total_half_edges() ; ++he_id)
+	{
+		Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_id);
+
+		// prevent computing new vertex pos for twins
+		if (he.is_active() && !he.is_split())
+		{
+			new_vertices_pos.push(butterfly_mask(he_id));
+		}
+	}
+
+	reset_flags();
+
 	printf("splitting edges \n");
 	// iterate over all half edges that are not split
 	for(int he_id = 0 ; he_id < mesh().n_total_half_edges() ; ++he_id)
@@ -209,6 +245,36 @@ void Mesh_modifier::loop_subdivision()
 	}
 
     force_assert( mesh().check_sanity_slowly() );
+
+	// update new vertices pos
+	// index = 0;
+	// for(int v_id = 0 ; v_id < mesh().n_total_vertices() ; ++v_id)
+	// {
+	// 	Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(v_id);
+	// 	if(v.is_active() && v.is_new())
+	// 	{
+	// 		v.data().xyz = new_vertex_pos[index];
+	// 		++index;
+	// 	}
+	// }
+
+	// printf("new_vertex_queue_size = %d \n", new_vertices.size());
+	// printf("new_pos_queue_size = %d \n", new_vertices_pos.size());
+
+
+	while(!new_vertices.empty()) {
+		int vid = new_vertices.front();
+		Eigen::Vector3d pos = new_vertices_pos.front();
+
+		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(vid);
+		v.data().is_new = false;
+		v.data().xyz = pos;
+
+		new_vertices.pop();
+		new_vertices_pos.pop();
+	}
+
+
 
 	reset_flags();
 }
