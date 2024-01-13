@@ -21,7 +21,6 @@ void Mesh_modifier::edge_split(const int he_index)
 	// add a new vertex v to mesh
 	Mesh_connectivity::Vertex_iterator v = mesh().add_vertex();
 	v.data().half_edge = he.index();
-	// v.data().xyz = (he.origin().data().xyz + he_twin.origin().data().xyz) / 2; 
 	v.data().is_new = true;
 	new_vertices.push(v.index());
 
@@ -82,7 +81,6 @@ void Mesh_modifier::cut_a_corner(const int face_index)
 	// make sure half edge points at a corner
 	while(he.twin().origin().is_new()) {
  		he = he.next();
-		// printf("next");
 	}
 
 	// get half edge neighbour data
@@ -246,22 +244,6 @@ void Mesh_modifier::subdivision()
 
     force_assert( mesh().check_sanity_slowly() );
 
-	// update new vertices pos
-	// index = 0;
-	// for(int v_id = 0 ; v_id < mesh().n_total_vertices() ; ++v_id)
-	// {
-	// 	Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(v_id);
-	// 	if(v.is_active() && v.is_new())
-	// 	{
-	// 		v.data().xyz = new_vertex_pos[index];
-	// 		++index;
-	// 	}
-	// }
-
-	// printf("new_vertex_queue_size = %d \n", new_vertices.size());
-	// printf("new_pos_queue_size = %d \n", new_vertices_pos.size());
-
-
 	while(!new_vertices.empty()) {
 		int vid = new_vertices.front();
 		Eigen::Vector3d pos = new_vertices_pos.front();
@@ -273,8 +255,6 @@ void Mesh_modifier::subdivision()
 		new_vertices.pop();
 		new_vertices_pos.pop();
 	}
-
-
 
 	reset_flags();
 }
