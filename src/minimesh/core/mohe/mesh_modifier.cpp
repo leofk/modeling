@@ -151,35 +151,6 @@ bool Mesh_modifier::is_triangle(const int face_index)
 }
 
 //
-// butterfly schema mask for new vertex pos
-//
-Eigen::Vector3d Mesh_modifier::butterfly_mask(const int he_index)
-{
-	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_index);
-	he.data().is_split = true;
-	split_half_edges.push(he.index());
-
-	he.twin().data().is_split = true;
-	split_half_edges.push(he.twin().index());
-
-	Eigen::Vector3d ml = he.origin().xyz(); 
-	Eigen::Vector3d mr = he.twin().origin().xyz(); 
-
-	Eigen::Vector3d tl = he.prev().twin().prev().origin().xyz(); 
-	Eigen::Vector3d tm = he.prev().origin().xyz(); 
-	Eigen::Vector3d tr = he.next().twin().prev().origin().xyz(); 
-	
-	Eigen::Vector3d bl = he.twin().next().twin().prev().origin().xyz();
-	Eigen::Vector3d bm = he.twin().prev().origin().xyz(); 
-	Eigen::Vector3d br = he.twin().prev().twin().prev().origin().xyz(); 
-	
-	return (-1.0/16.0) * tl + (2.0/16.0) * tm + (-1.0/16.0) * tr +
-		(8.0/16.0) * ml + (8.0/16.0) * mr +
-		(-1.0/16.0) * bl + (2.0/16.0) * bm + (-1.0/16.0) * br;
-} 
-
-
-//
 // loop schema mask for new vertex pos for old control vertex
 //
 Eigen::Vector3d Mesh_modifier::loop_mask_v(const int v_index)
@@ -242,16 +213,12 @@ void Mesh_modifier::reset_flags()
 //
 void Mesh_modifier::subdivision()
 {
-	int subd_method = 1; //TODO PARSE A PARAM
-
 	int n_contol_vertices = mesh().n_total_vertices();
-	if (subd_method == 1) // loop subd
+	
+	// precompute new position for control vertices
+	for(int v_id = 0 ; v_id < n_contol_vertices ; ++v_id)
 	{
-		// precompute new old vertex pos
-		for(int v_id = 0 ; v_id < n_contol_vertices ; ++v_id)
-		{
-			old_vertices_new_pos.push(loop_mask_v(v_id));
-		}
+		old_vertices_new_pos.push(loop_mask_v(v_id));
 	}
 
 	// precompute new half edge vertex pos with desired stencil mask
@@ -262,17 +229,7 @@ void Mesh_modifier::subdivision()
 		// prevent computing new vertex pos for twins
 		if (he.is_active() && !he.is_split())
 		{
-			switch(subd_method)
-			{
-				case 0: // butterfly
-				{
-					new_vertices_pos.push(butterfly_mask(he_id));
-				}
-				case 1: // loop
-				{
-					new_vertices_pos.push(loop_mask_he(he_id));
-				}
-			}
+			new_vertices_pos.push(loop_mask_he(he_id));
 		}
 	}
 
@@ -282,8 +239,6 @@ void Mesh_modifier::subdivision()
 	for(int he_id = 0 ; he_id < mesh().n_total_half_edges() ; ++he_id)
 	{
 		Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_id);
-
-		// split half edge if not split
 		if (he.is_active() && !he.is_split())
 		{
 			edge_split(he_id);
@@ -296,28 +251,23 @@ void Mesh_modifier::subdivision()
 	for(int face_id = 0 ; face_id < mesh().n_total_faces() ; ++face_id)
 	{
 		Mesh_connectivity::Face_iterator face = mesh().face_at(face_id);
-
-		// cut a corner out of the face if it is not a traingle
 		while(face.is_active() && !is_triangle(face_id))
 		{
 			cut_a_corner(face_id);
 		}
 	}
 
-    force_assert( mesh().check_sanity_slowly() );
+	force_assert( mesh().check_sanity_slowly() );
 
-	if (subd_method == 1) // loop method
+	// update old vertex pos and clear flags/queue
+	for(int v_id = 0 ; v_id < n_contol_vertices ; ++v_id)
 	{
-		// update old vertex pos and clear flags/queue
-		for(int v_id = 0 ; v_id < n_contol_vertices ; ++v_id)
-		{
-			Eigen::Vector3d pos = old_vertices_new_pos.front();
-			mesh().vertex_at(v_id).data().xyz = pos;
-			old_vertices_new_pos.pop();
-		}
-
-		assert(old_vertices_new_pos.empty());
+		Eigen::Vector3d pos = old_vertices_new_pos.front();
+		mesh().vertex_at(v_id).data().xyz = pos;
+		old_vertices_new_pos.pop();
 	}
+
+	assert(old_vertices_new_pos.empty());
 
 	// update new vertex pos and clear flags/queue
 	while(!new_vertices.empty()) {

@@ -72,11 +72,6 @@ public:
 	void reset_flags(); 
 
 	//
-	// butterfly schema mask for new vertex pos
-	//
-	Eigen::Vector3d butterfly_mask(const int he_index); 
-
-	//
 	// loop schema mask for new vertex pos for old control vertex
 	//
 	Eigen::Vector3d loop_mask_v(const int v_index); 
