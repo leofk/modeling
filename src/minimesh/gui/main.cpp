@@ -151,12 +151,7 @@ void mouse_moved(int x, int y)
 
 void subdivide_pressed(int)
 {
-	// TODO need to reset is_new and is_split
-
-
-	printf("Subdivide button was pressed \n");
 	globalvars::modi.subdivision();
-	printf("Subdivide complete \n");
 
 	// reload the mesh in the viewer
 	{

@@ -74,8 +74,17 @@ public:
 	//
 	// butterfly schema mask for new vertex pos
 	//
-	Eigen::Vector3d butterfly_mask(const int vertex_index); 
+	Eigen::Vector3d butterfly_mask(const int he_index); 
 
+	//
+	// loop schema mask for new vertex pos for old control vertex
+	//
+	Eigen::Vector3d loop_mask_v(const int v_index); 
+
+	//
+	// loop schema mask for new vertex pos for split half edge
+	//
+	Eigen::Vector3d loop_mask_he(const int he_index); 
 
 private:
 	// pointer to the mesh that we are working on.
@@ -84,8 +93,15 @@ private:
 	// A stack to split half edges
 	std::stack<int> split_half_edges;
 
-	// A stack to new vertices
+	// A queue to new vertices
 	std::queue<int> new_vertices;
+
+	// A queue of new precomputed positions for control/old vertices
+	std::queue<Eigen::Vector3d> old_vertices_new_pos;
+
+	// A queue of new precomputed positions for new half edge vertices
+	std::queue<Eigen::Vector3d> new_vertices_pos;
+
 };
 
 

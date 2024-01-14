@@ -14,3 +14,11 @@ build/bin/minimeshcli
 build/bin/minimeshgui
 build/src/minimesh/core/libminimeshcore.a
 build/src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o
+build/.ninja_deps
+build/.ninja_log
+build/bin/minimeshcli
+build/bin/minimeshgui
+build/src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o
+build/src/minimesh/core/libminimeshcore.a
+build/src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o
+build/src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o

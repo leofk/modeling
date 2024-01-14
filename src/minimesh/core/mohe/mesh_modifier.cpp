@@ -178,6 +178,51 @@ Eigen::Vector3d Mesh_modifier::butterfly_mask(const int he_index)
 		(-1.0/16.0) * bl + (2.0/16.0) * bm + (-1.0/16.0) * br;
 } 
 
+
+//
+// loop schema mask for new vertex pos for old control vertex
+//
+Eigen::Vector3d Mesh_modifier::loop_mask_v(const int v_index)
+{
+	Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(v_index);
+	Mesh_connectivity::Vertex_ring_iterator ring_iter = mesh().vertex_ring_at(v_index);
+	
+	int n = 1; // valence of vertex
+	Eigen::Vector3d sum_adj_pos = ring_iter.half_edge().origin().xyz();
+	
+	while(ring_iter.advance()) 
+	{
+		sum_adj_pos += ring_iter.half_edge().origin().xyz();
+		n++;
+	}
+
+    double alpha_n = (3.0/8.0) + std::pow((3.0/8.0) + (1.0/4.0) * std::cos((2.0 * M_PI) / n), 2);
+
+	return alpha_n * v.xyz() + ((1.0-alpha_n)/n) * sum_adj_pos;
+} 
+
+
+//
+// loop schema mask for new vertex pos for split half edge
+//
+Eigen::Vector3d Mesh_modifier::loop_mask_he(const int he_index)
+{
+	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_index);
+	he.data().is_split = true;
+	split_half_edges.push(he.index());
+
+	he.twin().data().is_split = true;
+	split_half_edges.push(he.twin().index());
+
+	Eigen::Vector3d ml = he.origin().xyz(); 
+	Eigen::Vector3d mr = he.twin().origin().xyz(); 
+
+	Eigen::Vector3d tm = he.prev().origin().xyz(); 
+	Eigen::Vector3d bm = he.twin().prev().origin().xyz(); 
+	
+	return (3.0/8.0) * (ml + mr) + (1.0/8.0) * (tm + bm);
+} 
+
 //
 // reset the flags applied in subdivision step. eg. is_new and is_split
 //
@@ -190,7 +235,6 @@ void Mesh_modifier::reset_flags()
 		he.data().is_split = false;
 		split_half_edges.pop();
 	}
-
 }
 
 //
@@ -198,9 +242,19 @@ void Mesh_modifier::reset_flags()
 //
 void Mesh_modifier::subdivision()
 {
+	int subd_method = 1; //TODO PARSE A PARAM
 
-	// compute new vertex pos using butterfly stencil mask
-	std::queue<Eigen::Vector3d> new_vertices_pos;
+	int n_contol_vertices = mesh().n_total_vertices();
+	if (subd_method == 1) // loop subd
+	{
+		// precompute new old vertex pos
+		for(int v_id = 0 ; v_id < n_contol_vertices ; ++v_id)
+		{
+			old_vertices_new_pos.push(loop_mask_v(v_id));
+		}
+	}
+
+	// precompute new half edge vertex pos with desired stencil mask
 	for(int he_id = 0 ; he_id < mesh().n_total_half_edges() ; ++he_id)
 	{
 		Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_id);
@@ -208,14 +262,23 @@ void Mesh_modifier::subdivision()
 		// prevent computing new vertex pos for twins
 		if (he.is_active() && !he.is_split())
 		{
-			new_vertices_pos.push(butterfly_mask(he_id));
+			switch(subd_method)
+			{
+				case 0: // butterfly
+				{
+					new_vertices_pos.push(butterfly_mask(he_id));
+				}
+				case 1: // loop
+				{
+					new_vertices_pos.push(loop_mask_he(he_id));
+				}
+			}
 		}
 	}
 
 	reset_flags();
 
-	printf("splitting edges \n");
-	// iterate over all half edges that are not split
+	// split half edges and add new vertex
 	for(int he_id = 0 ; he_id < mesh().n_total_half_edges() ; ++he_id)
 	{
 		Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_id);
@@ -229,8 +292,7 @@ void Mesh_modifier::subdivision()
 
     force_assert( mesh().check_sanity_slowly() );
 
-	printf("cutting corners \n");
-	// iterate over all non-triangular faces
+	// add half edges to cut corners of non-triangular faces
 	for(int face_id = 0 ; face_id < mesh().n_total_faces() ; ++face_id)
 	{
 		Mesh_connectivity::Face_iterator face = mesh().face_at(face_id);
@@ -244,6 +306,20 @@ void Mesh_modifier::subdivision()
 
     force_assert( mesh().check_sanity_slowly() );
 
+	if (subd_method == 1) // loop method
+	{
+		// update old vertex pos and clear flags/queue
+		for(int v_id = 0 ; v_id < n_contol_vertices ; ++v_id)
+		{
+			Eigen::Vector3d pos = old_vertices_new_pos.front();
+			mesh().vertex_at(v_id).data().xyz = pos;
+			old_vertices_new_pos.pop();
+		}
+
+		assert(old_vertices_new_pos.empty());
+	}
+
+	// update new vertex pos and clear flags/queue
 	while(!new_vertices.empty()) {
 		int vid = new_vertices.front();
 		Eigen::Vector3d pos = new_vertices_pos.front();
