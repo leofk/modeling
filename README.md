@@ -1,3 +1,13 @@
+# CPSC 524 - Leo Foord-Kelcey
+UBC # 83974592
+
+## A1 - Subdivision
+Implemented Loop's Subdivision schema. Demo available in GUI via subdivide button.
+
+Entry point:
+- `mesh_subdivision.hpp`
+- `mesh_subdivision.cpp`
+
 # minimesh  
 
 <div style="text-align:center"><img src="imgs/minimesh.png" width="500"></img></div>

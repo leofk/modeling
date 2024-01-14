@@ -24,3 +24,8 @@
 1006	1065	1705264386135933228	bin/minimeshcli	8e56b1635a6139e0
 6	1548	1705264386612767493	src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o	3c62b01e30b2d644
 1548	1678	1705264386746854976	bin/minimeshgui	a9ddee07ea01c990
+6	816	1705265178852918505	src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o	b1f67f1ff1a99a53
+7	1267	1705265179303607045	src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_subdivision.cpp.o	48bf138f89b0ff87
+1267	1325	1705265179369326000	src/minimesh/core/libminimeshcore.a	65290559f593cbd7
+1325	1385	1705265179427004609	bin/minimeshcli	8e56b1635a6139e0
+1326	1455	1705265179494475020	bin/minimeshgui	a9ddee07ea01c990
