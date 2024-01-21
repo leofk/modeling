@@ -203,7 +203,7 @@ int main(int argc, char * argv[])
 	if(argc == 1)
 	{
 		// FOR MESHES W/O BOUNDARY
-		foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/");
+		// foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("camel.obj");
