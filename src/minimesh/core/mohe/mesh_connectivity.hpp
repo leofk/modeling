@@ -9,6 +9,7 @@
 #include <stack>
 #include <queue>
 #include <vector>
+#include <map>
 
 
 #include <Eigen/Core>
@@ -66,6 +67,9 @@ public:
 
 		// Is this vertex new or old
 		bool is_new = false;
+
+		// has this vertex had its position computed
+		bool is_done = false;
 
 	private:
 		// Is this vertex present in the mesh, or is it deleted, i.e.,
@@ -183,6 +187,9 @@ public:
 
 		// Is this vertex new or old
 		bool is_new();
+
+		// has this vertex had its position computed
+		bool is_done();
 
 		// Deletes the vertex
 		void deactivate();

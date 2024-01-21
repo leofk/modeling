@@ -202,14 +202,14 @@ int main(int argc, char * argv[])
 	// Change the hardcoded address to your needs.
 	if(argc == 1)
 	{
-		foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/");
-		mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
+		// foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("camel.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("octopus.obj");
 
-		// foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/with_boundary");
-		// mohe::Mesh_io(globalvars::mesh).read_auto("pyramid.obj");
+		foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/with_boundary");
+		mohe::Mesh_io(globalvars::mesh).read_auto("pyramid.obj");
 	}
 	else // otherwise use the address specified in the command line
 	{
