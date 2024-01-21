@@ -155,10 +155,9 @@ bool Mesh_subdivision::is_triangle(const int face_index)
 //
 bool Mesh_subdivision::is_boundary(const int he_index)
 {
-	// get face from face_index
 	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_index);
 
-	// get index of half edge of face
+	// see if the face for given half edge (or its twin) has negative index
 	return he.twin().face().index() < 0 || he.face().index() < 0; 
 }
 
@@ -212,22 +211,21 @@ Eigen::Vector3d Mesh_subdivision::loop_interior_new(const int he_index)
 //
 Eigen::Vector3d Mesh_subdivision::loop_boundary_control(const int he_index)
 {
-
 	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_index);
 
 	Mesh_connectivity::Vertex_iterator mid = he.origin();
-	mid.data().is_done = true;
+	mid.data().is_done = true; // so we don't recompute when revisited
 	
+	// boundary edges are a trivial cycle so we can just use next/prev
 	Mesh_connectivity::Half_edge_iterator right = he.next();
 	Mesh_connectivity::Half_edge_iterator left = he.prev();
 
 	return (1.0/8.0) * left.origin().xyz() + (6.0/8.0) * mid.xyz() + (1.0/8.0) * right.origin().xyz();
-
 } 
 
 
 //
-// loop schema mask for new boundary vertex
+// loop schema mask for new boundary vertex 
 //
 Eigen::Vector3d Mesh_subdivision::loop_boundary_new(const int he_index)
 {
@@ -267,20 +265,6 @@ void Mesh_subdivision::subdivision()
 {
 	int n_contol_vertices = mesh().n_total_vertices();
 
-
-	// for(int he_id = 0 ; he_id < mesh().n_total_half_edges() ; ++he_id)
-	// {
-	// 	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_id);
-	// 	int index = he.face().index();
-	// 	printf("face index %d \n", index);
-	// 	if (index < 0) {
-	// 		printf("he index %d \n", he.index());
-	// 		printf("next he index %d \n", he.next().index());
-	// 	}
-	// }
-
-    // throw std::runtime_error("stop");
-
 	// precompute new half edge vertex pos with desired stencil mask
 	for(int he_id = 0 ; he_id < mesh().n_total_half_edges() ; ++he_id)
 	{
@@ -289,57 +273,32 @@ void Mesh_subdivision::subdivision()
 		// half edge is on boundary
 		if (is_boundary(he_id)) 
 		{
-			printf("boundary!\n");
 			// prevent computing new vertex pos for twins
 			if (!he.is_split())
 			{
-				printf("not split!\n");
-
-				// compute position for new vertex 
+				// compute position for new boundary vertex 
 				new_vertices_pos.push(loop_boundary_new(he_id));
 				
-				// // compute position for control vertices (adjacent to edge)
-				// Mesh_connectivity::Vertex_iterator v1 = he.origin();
+				// get the actual boundary half edge (not the interior twin)
+				if (!(he.face().index() < 0)) { he = he.twin();}
 
-				// // prevent recomputing new pos if already done
-				// if (!v1.is_done())
-				// {
-				// 	printf("not done! \n");
-
-				// 	loop_boundary_control(v1.index());
-				// }
-
-				// compute position for control vertices (adjacent to edge)
-				// Mesh_connectivity::Vertex_iterator v1 = he.origin();
-				// Mesh_connectivity::Vertex_iterator v2 = he.twin().origin();
-
-				if (!(he.face().index() < 0)) { 
-					printf("op this is the boundary edge\n");
-					he = he.twin();
-				}
-				
-
-				// prevent recomputing new pos if already done
-				// if (!v1.is_done())
-				// {
+				// compute postion for control boundary vertex
 				vertex_pos_map[he.origin().index()] = loop_boundary_control(he.index());
-				// }
 			}
 		} 
 		else 
 		{
-
 			// prevent computing new vertex pos for twins
-			if (he.is_active() && !he.is_split())
+			if (!he.is_split())
 			{
-				// compute position for new vertex 
+				// compute position for new interior vertex 
 				new_vertices_pos.push(loop_interior_new(he_id));
 				
 				// compute position for control vertices (adjacent to edge)
 				Mesh_connectivity::Vertex_iterator v1 = he.origin();
 				Mesh_connectivity::Vertex_iterator v2 = he.twin().origin();
 
-				// prevent recomputing new pos if already done
+				// dont bother computing boundary vertex 
 				if (!v1.is_done())
 				{
 					vertex_pos_map[v1.index()] = loop_interior_control(v1.index());
@@ -379,23 +338,18 @@ void Mesh_subdivision::subdivision()
 
 	force_assert( mesh().check_sanity_slowly() );
 
-	assert(vertex_pos_map.size() == n_contol_vertices);
-
-	// update old vertex pos and clear flags/queue
+	// update control vertex positions (also clear flags/data structures)
 	for(int v_id = 0 ; v_id < n_contol_vertices ; ++v_id)
 	{
-		// Eigen::Vector3d pos = old_vertices_new_pos.front();
 		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(v_id);
 		v.data().is_done = false;
 		mesh().vertex_at(v_id).data().xyz = vertex_pos_map[v_id];
 		vertex_pos_map.erase(v_id);
-		// old_vertices_new_pos.pop();
 	}
 
 	assert(vertex_pos_map.empty());
-	// assert(old_vertices_new_pos.empty());
 
-	// update new vertex pos and clear flags/queue
+	// postion new vertices (also clear flags/data structures)
 	while(!new_vertices.empty()) {
 		int vid = new_vertices.front();
 		Eigen::Vector3d pos = new_vertices_pos.front();
@@ -412,7 +366,6 @@ void Mesh_subdivision::subdivision()
 	assert(new_vertices_pos.empty());
 
 	reset_flags();
-	// vertex_pos_map.clear();
 }
 
 
