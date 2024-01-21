@@ -45,6 +45,11 @@ public:
 	bool is_triangle(const int face_index);
 
 	//
+	// checks to see if a given half edge is at a boundary
+	//
+	bool is_boundary(const int he_index);
+
+	//
 	// subdivision
 	//
 	void subdivision();
@@ -55,14 +60,25 @@ public:
 	void reset_flags(); 
 
 	//
-	// loop schema mask for new vertex pos for old control vertex
+	// loop schema mask for control interior vertex
 	//
-	Eigen::Vector3d loop_mask_v(const int v_index); 
+	Eigen::Vector3d loop_interior_control(const int v_index); 
 
 	//
-	// loop schema mask for new vertex pos for split half edge
+	// loop schema mask for new interior vertex
 	//
-	Eigen::Vector3d loop_mask_he(const int he_index); 
+	Eigen::Vector3d loop_interior_new(const int he_index); 
+
+	//
+	// loop schema mask for control boundary vertex
+	//
+	Eigen::Vector3d loop_boundary_control(const int he_index);
+
+	//
+	// loop schema mask for new boundary vertex
+	//
+	Eigen::Vector3d loop_boundary_new(const int v_index); 
+
 
 private:
 	// pointer to the mesh that we are working on.
@@ -79,6 +95,9 @@ private:
 
 	// A queue of new precomputed positions for new half edge vertices
 	std::queue<Eigen::Vector3d> new_vertices_pos;
+
+	// a map with vertex index for key and new position as value
+    std::map<int, Eigen::Vector3d> vertex_pos_map;
 
 };
 

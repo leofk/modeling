@@ -8,6 +8,8 @@ Entry point:
 - `mesh_subdivision.hpp`
 - `mesh_subdivision.cpp`
 
+BONUS: Extended Loop subdivision to handle meshes with boundary edges.
+
 # minimesh  
 
 <div style="text-align:center"><img src="imgs/minimesh.png" width="500"></img></div>
