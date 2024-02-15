@@ -84,6 +84,7 @@ void Mesh_viewer::initialize(const Eigen::AlignedBox<float, 3> & bounding_box)
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, _black.data()); gl_check_error();
 
 	_mouse_function = MOUSE_VIEW;
+	_mesh_obj = MESH_CUBE;
 
 	_selected_vertex_mesh_buffer_id = invalid_index;
 	_has_user_just_selected = false;
@@ -409,7 +410,28 @@ bool Mesh_viewer::mouse_pushed(const int button, const int state, const int x, c
 						break;
 					}
 					default:;
-				} // End of mouse funciton
+				} // End of mouse function
+
+				switch(_mesh_obj)
+				{
+					case MESH_CUBE:
+					{
+
+						should_redraw = true;
+						break;
+					}
+					case MESH_COW:
+					{
+						should_redraw = true;
+						break;
+					}
+					case MESH_PYRAMID:
+					{
+						should_redraw = true;
+						break;
+					}
+					default:;
+				} // End of mesh function
 				default:;
 			} // End of button 0 -- left click
 		} // End of switch(button)

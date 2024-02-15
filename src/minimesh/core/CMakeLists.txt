@@ -29,6 +29,8 @@ set(SOURCE_FILES
   mohe/mesh_modifier.cpp
   mohe/mesh_subdivision.hpp
   mohe/mesh_subdivision.cpp
+  mohe/mesh_simplify.hpp
+  mohe/mesh_simplify.cpp
  )
 
  

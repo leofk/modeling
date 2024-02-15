@@ -38,6 +38,18 @@ public:
 	//
 
 	//
+	// return desired mesh obj
+	//
+	enum Mesh_function : int
+	{
+		MESH_CUBE = 0,
+		MESH_COW,
+		MESH_PYRAMID,
+		MESH_INVALID,
+	};
+	int & get_mesh() { return _mesh_obj; }
+
+	//
 	// return functionality of the mouse.
 	// You can change this depending on what you want left clicks to do.
 	//
@@ -54,6 +66,7 @@ public:
 	// was_selection_made: Did user just click on a vertex
 	// selected_vertex: index of the clicked vertex (actual index in the mesh, and not the defragmented one)
 	void get_and_clear_vertex_selection(bool &was_selection_made, int &selected_vertex);
+
 
 	// Whether user has tried to displace a vertex
 	// was_displaced: Did user just click pull a vertex
@@ -135,6 +148,7 @@ private:
 	int _yPos;
 	int _mouse_button;
 
+	int _mesh_obj;
 	int _mouse_function;
 
 	int _selected_vertex_mesh_buffer_id;

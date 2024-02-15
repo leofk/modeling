@@ -1,6 +1,7 @@
 #include <minimesh/core/mohe/mesh_modifier.hpp>
 #include <minimesh/core/util/assert.hpp>
 #include <minimesh/core/mohe/mesh_subdivision.hpp>
+#include <minimesh/core/mohe/mesh_simplify.hpp>
 
 namespace minimesh
 {
@@ -14,6 +15,15 @@ void Mesh_modifier::subdivision()
 {
 	Mesh_subdivision subd(mesh());
 	subd.subdivision();
+}
+
+//
+// simplifier 
+//
+void Mesh_modifier::simplify(int num_entities_to_simplify)
+{
+	Mesh_simplify simp(mesh());
+	simp.simplify(num_entities_to_simplify);
 }
 
 //

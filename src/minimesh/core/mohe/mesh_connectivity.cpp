@@ -69,7 +69,6 @@ void Mesh_connectivity::Vertex_iterator::deactivate()
 	_parent->_inactive_vertices.push(index());
 }
 
-
 bool Mesh_connectivity::Vertex_iterator::is_equal(Vertex_iterator o)
 {
 	return (_parent == o._parent) && (_index == o._index);

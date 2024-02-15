@@ -51,6 +51,11 @@ public:
 	//
 	void subdivision();
 
+	//
+	// simplify
+	//
+	void simplify(const int num_entities_to_simplify);
+
 
 private:
 	// pointer to the mesh that we are working on.
