@@ -39,7 +39,8 @@ namespace mohe
 class Mesh_simplify
 {
 public:
-	// Trivial constructor
+
+	// constructor
     Mesh_simplify(Mesh_connectivity& mesh_in): _m(mesh_in) {
 		// printf("constructor called \n");
         // initialize_Q_matrices();
@@ -57,13 +58,33 @@ public:
 	//
 	void simplify(const int num_entities_to_simplify);
 
+	//
+	// compute Q matrix for each vertex in the mesh
+	//
 	void initialize_Q_matrices();
+
+	//
+	// initialize new position and errors for given mesh
+	//
 	void init_pos_and_errors();
+
+	//
+	// compute the new position and error for a half edge
+	//
 	void compute_position_and_error(Mesh_connectivity::Half_edge_iterator he);
+
+	//
+	// collapse an edge by creating a new vertex and deactivating/modifying the local neighbourhood
+	//
+	void collapse_edge(Mesh_connectivity::Half_edge_iterator he);
+
+	// 
+	// check to see if collapsing a halfedge will modify the topology (like manifoldness)
+	//
+	bool check_topology(Mesh_connectivity::Half_edge_iterator he);
+
 	void mark_as_split(Mesh_connectivity::Half_edge_iterator he);
 	void reset_flags();
-	void collapse_edge(Mesh_connectivity::Half_edge_iterator he);
-	bool check_topology(Mesh_connectivity::Half_edge_iterator he);
 
 private:
 	// pointer to the mesh that we are working on.
@@ -72,12 +93,13 @@ private:
 	// A stack to split half edges
 	std::stack<int> split_half_edges;
 
-	// a map with vertex index for key and new position as value
+	// a map between vertices and their associated Q matrix
     std::map<int, Eigen::Matrix4d> Q_matrices;
 
-	// half edge to new vertex pos if collapsed
+	// a map between half edges and the new vector position if they were to be collapsed
     std::map<int, Eigen::Vector3d> new_pos;
 
+	// a priority queue of half edges ordered on min error
     std::priority_queue<Error> errorQueue;
 };
 
