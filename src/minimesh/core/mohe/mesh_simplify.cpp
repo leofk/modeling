@@ -114,7 +114,10 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 
 	// update faces
 	he.prev().data().face = he.next().twin().face().index();
+	he.prev().face().data().half_edge = he.prev().index();
+
 	he.twin().next().data().face = he.twin().prev().twin().face().index();
+	he.twin().next().face().data().half_edge = he.twin().next().index();
 
 	// update edge adjacency	
 	he.prev().data().next = he.next().twin().next().index();
@@ -136,9 +139,12 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 	he.twin().face().deactivate();
 
 	// adjacent edges
+	he.next().twin().origin().data().half_edge = he.prev().index();
 	he.next().twin().deactivate();
 	he.next().deactivate();
 	he.twin().prev().twin().deactivate();
+	
+	he.twin().prev().origin().data().half_edge = he.twin().next().twin().index();
 	he.twin().prev().deactivate();
 	
 	// collapsed edge
@@ -154,74 +160,6 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 		compute_position_and_error(v_ring.half_edge());
 	}
 }
-// //
-// // collapse an edge associated with a new vertex 
-// //
-// void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
-// {
-// 	// to be activated
-// 	Mesh_connectivity::Vertex_iterator v = mesh().add_vertex();
-// 	v.data().half_edge = he.prev().twin().index(); // half-edge going out of this vertex.
-// 	v.data().xyz = new_pos[he.index()];
-// 	Q_matrices[v.index()] = Q_matrices[he.origin().index()] + Q_matrices[he.twin().origin().index()];
-
-// 	// to be modified
-// 	// update origins
-// 	Mesh_connectivity::Vertex_ring_iterator v1_ring = mesh().vertex_ring_at(he.origin().index());
-// 	while(v1_ring.advance()) // vertex iterator (gets he pointing TO the vertex)
-// 	{
-// 		v1_ring.half_edge().twin().data().origin = v.index();
-// 	}
-
-// 	Mesh_connectivity::Vertex_ring_iterator v2_ring = mesh().vertex_ring_at(he.twin().origin().index());
-// 	while(v2_ring.advance()) 
-// 	{
-// 		v2_ring.half_edge().twin().data().origin = v.index();
-// 	}
-
-// 	// update faces
-// 	he.prev().data().face = he.next().twin().face().index();
-// 	he.twin().next().data().face = he.twin().prev().twin().face().index();
-
-// 	// update edge adjacency	
-// 	he.prev().data().next = he.next().twin().next().index();
-// 	he.prev().data().prev = he.next().twin().prev().index();
-// 	he.next().twin().next().data().prev = he.prev().index();
-// 	he.next().twin().prev().data().next = he.prev().index();
-	
-// 	he.twin().next().data().next = he.twin().prev().twin().next().index();
-// 	he.twin().next().data().prev = he.twin().prev().twin().prev().index();
-// 	he.twin().prev().twin().next().data().prev = he.twin().next().index();
-// 	he.twin().prev().twin().prev().data().next = he.twin().next().index();
-
-// 	// to be deactivate
-// 	// 2 vertices
-// 	he.origin().deactivate(); 
-// 	he.twin().origin().deactivate();
-	
-// 	// 2 faces
-// 	he.face().deactivate();
-// 	he.twin().face().deactivate();
-
-// 	// adjacent edges
-// 	he.next().twin().deactivate();
-// 	he.next().deactivate();
-// 	he.twin().prev().twin().deactivate();
-// 	he.twin().prev().deactivate();
-	
-// 	// collapsed edge
-// 	he.twin().deactivate();
-// 	he.deactivate();
-
-//     force_assert( mesh().check_sanity_slowly() );
-
-// 	// now update position and errors for new adjacent vertices
-// 	Mesh_connectivity::Vertex_ring_iterator v_ring = mesh().vertex_ring_at(v.index());
-// 	while(v_ring.advance()) // vertex iterator (gets he pointing TO the vertex)
-// 	{
-// 		compute_position_and_error(v_ring.half_edge());
-// 	}
-// }
 
 //
 // check to see if the mesh topology is valid. 
@@ -255,6 +193,39 @@ bool Mesh_simplify::check_topology(Mesh_connectivity::Half_edge_iterator he)
 	// if interesection != 2, not manifold
 	return intersection.size() == 2;
 }
+
+
+// bool Mesh_simplify::check_topology(Mesh_connectivity::Half_edge_iterator he)
+// {
+// 	// Create sets to store the indices encountered in each loop
+// 	std::set<int> v1_adj_vs;
+// 	std::set<int> v2_adj_vs;
+
+// 	// First loop
+// 	Mesh_connectivity::Vertex_ring_iterator v1_ring = mesh().vertex_ring_at(he.origin().index());
+// 	while (v1_ring.advance()) { // vertex iterator (gets he pointing TO the vertex)
+// 		Mesh_connectivity::Vertex_iterator vn = v1_ring.half_edge().twin().origin();
+// 		Mesh_connectivity::Vertex_ring_iterator vn_ring = mesh().vertex_ring_at(vn.index());
+// 		int val;
+// 		while (vn_ring.advance()) { // vertex iterator (gets he pointing TO the vertex)
+// 			val++;
+// 		}
+// 		if (val <= 3) { return false; }
+// 	}
+
+// 	// Second loop
+// 	Mesh_connectivity::Vertex_ring_iterator v2_ring = mesh().vertex_ring_at(he.twin().origin().index());
+// 	while (v2_ring.advance()) {
+// 		Mesh_connectivity::Vertex_iterator vn = v2_ring.half_edge().twin().origin();
+// 		Mesh_connectivity::Vertex_ring_iterator vn_ring = mesh().vertex_ring_at(vn.index());
+// 		int val;
+// 		while (vn_ring.advance()) { // vertex iterator (gets he pointing TO the vertex)
+// 			val++;
+// 		}
+// 		if (val <= 3) { return false; }
+// 	}
+// 	return true;
+// }
 
 //
 // inititialize starting new positions and new errors
@@ -300,12 +271,12 @@ void Mesh_simplify::simplify(int num_entities_to_simplify)
 				// printf("valid topo \n");
 
 				collapse_edge(he);
+				printf("collapsed an edge \n");
 				break;
 			}
-			// printf("invalid topo \n");
+			printf("invalid topo \n");
 
 		}
-		printf("queue done");
 	}
 }
 
