@@ -17,10 +17,10 @@
 // Define a struct to represent an error along with its value
 struct Error {
     double value; // The error value
-	int v_id; // vertex associated with error
+	int he_id; // half-edge associated with error
 
     // Constructor to initialize an Error object
-    Error(double val, int v_id) : value(val), v_id(v_id) {}
+    Error(double val, int he_id) : value(val), he_id(he_id) {}
     
     // Overload the comparison operator for priority queue
     bool operator<(const Error& other) const {
@@ -41,17 +41,17 @@ class Mesh_simplify
 public:
 
 	// constructor
-    Mesh_simplify(Mesh_connectivity& mesh_in): _m(mesh_in) {
-		// printf("constructor called \n");
-        // initialize_Q_matrices();
-		// printf("matrices done called \n");
-		// init_pos_and_errors(); 
-		// printf("pos done called \n");
-    }
+    Mesh_simplify(Mesh_connectivity& mesh_in): _m(mesh_in) {}
 	
 	// Get the underlying mesh
 	Mesh_connectivity & mesh() { return _m; }
 	const Mesh_connectivity & mesh() const { return _m; }
+
+	// Reset method to reinitialize the state of the Mesh_simplify object
+	void init() {
+		initialize_Q_matrices();
+		init_pos_and_errors();
+	}
 
 	//
 	// simplify
@@ -82,6 +82,8 @@ public:
 	// check to see if collapsing a halfedge will modify the topology (like manifoldness)
 	//
 	bool check_topology(Mesh_connectivity::Half_edge_iterator he);
+	bool check_connectivity(Mesh_connectivity::Half_edge_iterator he);
+	bool check_normals(Mesh_connectivity::Half_edge_iterator he);
 
 	void mark_as_split(Mesh_connectivity::Half_edge_iterator he);
 	void reset_flags();

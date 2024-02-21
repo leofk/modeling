@@ -18,7 +18,9 @@
 		"__split_buffer": "cpp",
 		"core": "cpp",
 		"set": "cpp",
-		"map": "cpp"
+		"map": "cpp",
+		"memory": "cpp",
+		"iostream": "cpp"
 	},
 	"C_Cpp.errorSquiggles": "enabled"
 }

@@ -40,6 +40,7 @@ int glut_main_window_id;
 GLUI * glui;
 //
 int num_entities_to_simplify;
+bool initialized = false;
 //
 Eigen::Matrix3Xd displaced_vertex_positions;
 }
@@ -166,8 +167,11 @@ void subdivide_pressed(int)
 void simplify_pressed(int)
 {
 	printf("Simplify button was pressed to remove %d entities \n", globalvars::num_entities_to_simplify);
-	globalvars::simp.initialize_Q_matrices(); //TODO THIS SHOULD HAPPEN IN CONSTRUCTOR
-	globalvars::simp.init_pos_and_errors(); // TODO THIS SHOULD HAPPNE IN CONSTRUCTOR
+	
+	if (!globalvars::initialized) { 
+		globalvars::simp.init();
+		globalvars::initialized = true;
+	} 
 	globalvars::simp.simplify(globalvars::num_entities_to_simplify);
 
 	// reload the mesh in the viewer
@@ -213,8 +217,8 @@ int main(int argc, char * argv[])
 		// FOR MESHES W/O BOUNDARY
 		foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
-		mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
-		// mohe::Mesh_io(globalvars::mesh).read_auto("sphere1.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
+		mohe::Mesh_io(globalvars::mesh).read_auto("sphere1.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("camel.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("octopus.obj");
 

@@ -22,8 +22,7 @@ void Mesh_modifier::subdivision()
 //
 void Mesh_modifier::simplify(int num_entities_to_simplify)
 {
-	Mesh_simplify simp(mesh());
-	simp.simplify(num_entities_to_simplify);
+	// done in main
 }
 
 //

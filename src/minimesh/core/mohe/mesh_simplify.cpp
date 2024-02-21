@@ -13,17 +13,13 @@ namespace mohe
 //
 void Mesh_simplify::initialize_Q_matrices()
 {
-	// printf("q \n");
-
 	for(int v_id = 0 ; v_id < mesh().n_total_vertices(); ++v_id) {
-		// printf("q loop\n");
 		
 		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(v_id);
 		Mesh_connectivity::Vertex_ring_iterator ring_iter = mesh().vertex_ring_at(v_id);
 		Eigen::Matrix4d Q_v = Eigen::Matrix4d::Zero(); 
 		
-		while(ring_iter.advance()) 
-		{
+		do {
 			Mesh_connectivity::Vertex_iterator v_i = ring_iter.half_edge().origin();
 			Mesh_connectivity::Vertex_iterator v_j = ring_iter.half_edge().prev().origin();
 
@@ -43,7 +39,7 @@ void Mesh_simplify::initialize_Q_matrices()
 				A * D, B * D, C * D, D * D;
 
 			Q_v += K_v;
-		}
+		} while(ring_iter.advance()); 
 
 		Q_matrices[v_id] = Q_v;
 	}
@@ -54,8 +50,6 @@ void Mesh_simplify::initialize_Q_matrices()
 //
 void Mesh_simplify::compute_position_and_error(Mesh_connectivity::Half_edge_iterator he)
 {
-	// printf("pos \n");
-
 	Mesh_connectivity::Vertex_iterator v_1 = he.origin();
 	Mesh_connectivity::Vertex_iterator v_2 = he.twin().origin();
 
@@ -80,9 +74,11 @@ void Mesh_simplify::compute_position_and_error(Mesh_connectivity::Half_edge_iter
 	if (x.allFinite()) 
 	{
 		new_pos[he.index()] << x(0), x(1), x(2);
+		new_pos[he.twin().index()] << x(0), x(1), x(2);
 	} else {
 		// no solution, use midpoint
 		new_pos[he.index()] = (v_1.xyz() + v_2.xyz()) / 2;
+		new_pos[he.twin().index()] = (v_1.xyz() + v_2.xyz()) / 2;
 	}
 
 	double error = x.transpose() * Q_v * x;
@@ -90,83 +86,112 @@ void Mesh_simplify::compute_position_and_error(Mesh_connectivity::Half_edge_iter
 
 }
 
-
 //
 // collapse an edge associated with a new vertex 
 //
 void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 {
-	// to be activated
-	Mesh_connectivity::Vertex_iterator v = he.origin();
-	v.data().half_edge = he.prev().twin().index();
-	v.data().xyz = new_pos[he.index()];
-	Q_matrices[v.index()] += Q_matrices[he.twin().origin().index()];
+	Mesh_connectivity::Half_edge_iterator H = he;
+	Mesh_connectivity::Half_edge_iterator HT = he.twin();
+	Mesh_connectivity::Half_edge_iterator HP = he.prev();
+	Mesh_connectivity::Half_edge_iterator HN = H.next();
+	Mesh_connectivity::Half_edge_iterator HTP = HT.prev();
+	Mesh_connectivity::Half_edge_iterator HTN = HT.next();
+	Mesh_connectivity::Half_edge_iterator HNT = HN.twin();
+	Mesh_connectivity::Half_edge_iterator HTPT = HTP.twin();
+	Mesh_connectivity::Half_edge_iterator HNTP = HNT.prev();
+	Mesh_connectivity::Half_edge_iterator HNTN = HNT.next();
+	Mesh_connectivity::Half_edge_iterator HTPTN = HTPT.next();
+	Mesh_connectivity::Half_edge_iterator HTPTP = HTPT.prev();
+
+	Mesh_connectivity::Vertex_iterator V1 = H.origin();
+	Mesh_connectivity::Vertex_iterator V2 = H.dest();
+	Mesh_connectivity::Vertex_iterator V3 = HN.dest();
+	Mesh_connectivity::Vertex_iterator V4 = HTP.origin();
+
+	Mesh_connectivity::Face_iterator F1 = H.face();
+	Mesh_connectivity::Face_iterator F2 = HT.face();
+	Mesh_connectivity::Face_iterator F3 = HNT.face();
+	Mesh_connectivity::Face_iterator F4 = HTPT.face();
 
 	// update origins
-	he.next().twin().next().data().origin = v.index();
-	he.next().twin().next().twin().next().data().origin = v.index();
-	he.twin().prev().twin().prev().twin().data().origin = v.index();
-	// Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(he.twin().origin().index());
-	// while(ring.advance()) // vertex iterator (gets he pointing TO the vertex)
-	// {
-	// 	ring.half_edge().twin().data().origin = v.index();
-	// }
+	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(V2.index());
+	do // *points to*
+	{
+		ring.half_edge().twin().data().origin = V1.index();
+	} while(ring.advance());
+
+	// update edge adjacency (next/prevs)
+	HP.data().next = HNTN.index();
+	HP.data().prev = HNTP.index();
+	HNTN.data().prev = HP.index();
+	HNTP.data().next = HP.index();
+
+	HTN.data().next = HTPTN.index();
+	HTN.data().prev = HTPTP.index();
+	HTPTN.data().prev = HTN.index();
+	HTPTP.data().next = HTN.index();
+
+	// update vertex edge adjacency
+	V3.data().half_edge = HP.index(); // *going out*
+	V4.data().half_edge = HTPTN.index(); // *going out*
 
 	// update faces
-	he.prev().data().face = he.next().twin().face().index();
-	he.prev().face().data().half_edge = he.prev().index();
+	HP.data().face = F3.index();
+	F3.data().half_edge = HP.index();
 
-	he.twin().next().data().face = he.twin().prev().twin().face().index();
-	he.twin().next().face().data().half_edge = he.twin().next().index();
+	HTN.data().face = F4.index();
+	F4.data().half_edge = HTN.index();
 
-	// update edge adjacency	
-	he.prev().data().next = he.next().twin().next().index();
-	he.prev().data().prev = he.next().twin().prev().index();
-	he.next().twin().next().data().prev = he.prev().index();
-	he.next().twin().prev().data().next = he.prev().index();
-	
-	he.twin().next().data().next = he.twin().prev().twin().next().index();
-	he.twin().next().data().prev = he.twin().prev().twin().prev().index();
-	he.twin().prev().twin().next().data().prev = he.twin().next().index();
-	he.twin().prev().twin().prev().data().next = he.twin().next().index();
+	// update V1 
+	V1.data().half_edge = HNTN.index(); // *going out*
+	V1.data().xyz = new_pos[he.index()];
+	Q_matrices[V1.index()] += Q_matrices[V2.index()];
 
-	// to be deactivate
-	// 1 vertex
-	he.twin().origin().deactivate();
+	// deactivate 1 vertex
+	V2.deactivate();
 	
-	// 2 faces
-	he.face().deactivate();
-	he.twin().face().deactivate();
+	// deactivate 2 faces
+	F1.deactivate();
+	F2.deactivate();
 
-	// adjacent edges
-	he.next().twin().origin().data().half_edge = he.prev().index();
-	he.next().twin().deactivate();
-	he.next().deactivate();
-	he.twin().prev().twin().deactivate();
-	
-	he.twin().prev().origin().data().half_edge = he.twin().next().twin().index();
-	he.twin().prev().deactivate();
-	
-	// collapsed edge
-	he.twin().deactivate();
-	he.deactivate();
+	// deactivate 6 half-edges
+	H.deactivate();
+	printf("H index: %d \n", H.index());
+
+	HT.deactivate();
+	printf("HT index: %d \n", HT.index());
+
+	HN.deactivate();
+	printf("HN index: %d \n", HN.index());
+
+	HTP.deactivate();
+	printf("HTP index: %d \n", HTP.index());
+
+	HNT.deactivate();
+	printf("HNT index: %d \n", HNT.index());
+
+	HTPT.deactivate();
+	printf("HTPT index: %d \n", HTPT.index());
 
     force_assert( mesh().check_sanity_slowly() );
+	printf("deactivated objects");
 
 	// now update position and errors for new adjacent vertices
-	Mesh_connectivity::Vertex_ring_iterator v_ring = mesh().vertex_ring_at(v.index());
-	while(v_ring.advance()) // vertex iterator (gets he pointing TO the vertex)
+	ring = mesh().vertex_ring_at(V1.index());
+	do // vertex iterator (gets he pointing TO the vertex)
 	{
-		compute_position_and_error(v_ring.half_edge());
-	}
+		compute_position_and_error(ring.half_edge());
+	} while(ring.advance());
+
 }
 
 //
-// check to see if the mesh topology is valid. 
-// the endpoints of the edge to be collapsed must not have more than two adjacent vertices in common
-// true is valid, false if not
+// only one edge should merge after a collapse
+// see that end point vertices only have two adjacent vertices in common
+// true if connectivity is valid
 //
-bool Mesh_simplify::check_topology(Mesh_connectivity::Half_edge_iterator he)
+bool Mesh_simplify::check_connectivity(Mesh_connectivity::Half_edge_iterator he)
 {
 	// Create sets to store the indices encountered in each loop
 	std::set<int> v1_adj_vs;
@@ -174,15 +199,18 @@ bool Mesh_simplify::check_topology(Mesh_connectivity::Half_edge_iterator he)
 
 	// First loop
 	Mesh_connectivity::Vertex_ring_iterator v1_ring = mesh().vertex_ring_at(he.origin().index());
-	while (v1_ring.advance()) {
+	do // he that point TO v
+	{
 		v1_adj_vs.insert(v1_ring.half_edge().origin().index());
-	}
+	} while(v1_ring.advance()); 
 
 	// Second loop
 	Mesh_connectivity::Vertex_ring_iterator v2_ring = mesh().vertex_ring_at(he.twin().origin().index());
-	while (v2_ring.advance()) {
+	do
+	{
 		v2_adj_vs.insert(v2_ring.half_edge().origin().index());
-	}
+	} while(v2_ring.advance()); 
+
 
 	// Calculate the intersection of the sets
 	std::set<int> intersection;
@@ -194,46 +222,67 @@ bool Mesh_simplify::check_topology(Mesh_connectivity::Half_edge_iterator he)
 	return intersection.size() == 2;
 }
 
+//
+// normals should not flip after collapse
+// true if normals do not flip
+//
+bool Mesh_simplify::check_normals(Mesh_connectivity::Half_edge_iterator he)
+{
+	Mesh_connectivity::Vertex_iterator v1 = he.origin();
+	Mesh_connectivity::Vertex_iterator v2 = he.dest();
 
-// bool Mesh_simplify::check_topology(Mesh_connectivity::Half_edge_iterator he)
-// {
-// 	// Create sets to store the indices encountered in each loop
-// 	std::set<int> v1_adj_vs;
-// 	std::set<int> v2_adj_vs;
+	Eigen::Vector3d a, b, c, d, old_normal, new_normal;
 
-// 	// First loop
-// 	Mesh_connectivity::Vertex_ring_iterator v1_ring = mesh().vertex_ring_at(he.origin().index());
-// 	while (v1_ring.advance()) { // vertex iterator (gets he pointing TO the vertex)
-// 		Mesh_connectivity::Vertex_iterator vn = v1_ring.half_edge().twin().origin();
-// 		Mesh_connectivity::Vertex_ring_iterator vn_ring = mesh().vertex_ring_at(vn.index());
-// 		int val;
-// 		while (vn_ring.advance()) { // vertex iterator (gets he pointing TO the vertex)
-// 			val++;
-// 		}
-// 		if (val <= 3) { return false; }
-// 	}
+	Mesh_connectivity::Vertex_ring_iterator ring_iter = mesh().vertex_ring_at(v1.index());
+	do { // *points to*
+		Mesh_connectivity::Vertex_iterator v_i = ring_iter.half_edge().origin(); 
+		Mesh_connectivity::Vertex_iterator v_j = ring_iter.half_edge().prev().origin();
 
-// 	// Second loop
-// 	Mesh_connectivity::Vertex_ring_iterator v2_ring = mesh().vertex_ring_at(he.twin().origin().index());
-// 	while (v2_ring.advance()) {
-// 		Mesh_connectivity::Vertex_iterator vn = v2_ring.half_edge().twin().origin();
-// 		Mesh_connectivity::Vertex_ring_iterator vn_ring = mesh().vertex_ring_at(vn.index());
-// 		int val;
-// 		while (vn_ring.advance()) { // vertex iterator (gets he pointing TO the vertex)
-// 			val++;
-// 		}
-// 		if (val <= 3) { return false; }
-// 	}
-// 	return true;
-// }
+		if (v_i.index() != v2.index() && v_j.index() != v2.index()) {
+			a = v1.xyz() - v_i.xyz();
+			b = v_j.xyz() - v_i.xyz();
+			old_normal = a.cross(b).normalized();
+
+			c = new_pos[he.index()] - v_i.xyz();
+			d = v_j.xyz() - v_i.xyz();
+			new_normal = a.cross(b).normalized();
+
+			if (old_normal.dot(new_normal) < 0) return false;
+		}
+	} while(ring_iter.advance()); 
+
+	ring_iter = mesh().vertex_ring_at(v2.index());
+	do {
+		Mesh_connectivity::Vertex_iterator v_i = ring_iter.half_edge().origin();
+		Mesh_connectivity::Vertex_iterator v_j = ring_iter.half_edge().prev().origin();
+
+		if (v_i.index() != v1.index() && v_j.index() != v1.index()) {
+			a = v2.xyz() - v_i.xyz();
+			b = v_j.xyz() - v_i.xyz();
+			old_normal = a.cross(b).normalized();
+
+			c = new_pos[he.index()] - v_i.xyz();
+			d = v_j.xyz() - v_i.xyz();
+			new_normal = a.cross(b).normalized();
+
+			if (old_normal.dot(new_normal) < 0 ) return false;
+		}
+
+	} while(ring_iter.advance()); 
+
+	return true;
+}
+
+bool Mesh_simplify::check_topology(Mesh_connectivity::Half_edge_iterator he)
+{
+	return check_connectivity(he) && check_normals(he);
+}
 
 //
 // inititialize starting new positions and new errors
 //
 void Mesh_simplify::init_pos_and_errors() 
 {
-	printf("init \n");
-
 	for(int he_id = 0 ; he_id < mesh().n_total_half_edges() ; ++he_id) 
 	{
 		Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_id);
@@ -244,8 +293,6 @@ void Mesh_simplify::init_pos_and_errors()
 			compute_position_and_error(he);
 		}
 	}
-	printf("init done \n");
-
 	reset_flags();
 }
 
@@ -255,21 +302,19 @@ void Mesh_simplify::init_pos_and_errors()
 //
 void Mesh_simplify::simplify(int num_entities_to_simplify)
 {
-	printf("qmat size %lu \n", Q_matrices.size());
 	for(int entity = 0; entity < num_entities_to_simplify; ++entity) {
 
 		while (!errorQueue.empty()) {
 
-			// printf("not empty \n");
 			Error min_error = errorQueue.top();
-			Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(min_error.v_id);
+			Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(min_error.he_id);
+
 			errorQueue.pop();
 
 			// Check if topology is valid
 			if (check_topology(he)) {
 				// If topology is valid, collapse the edge and exit the loop
-				// printf("valid topo \n");
-
+				printf("valid topo \n");
 				collapse_edge(he);
 				printf("collapsed an edge \n");
 				break;
@@ -297,9 +342,6 @@ void Mesh_simplify::reset_flags()
 		split_half_edges.pop();
 	}
 	assert(split_half_edges.empty());
-
-	// TODO MAYBE NEED TO DELETE ERRORQUEUE?
-
 }
 
 //
