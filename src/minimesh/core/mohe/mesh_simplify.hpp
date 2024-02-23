@@ -85,6 +85,8 @@ public:
 	bool check_connectivity(Mesh_connectivity::Half_edge_iterator he);
 	bool check_valence(Mesh_connectivity::Half_edge_iterator he);
 	bool check_normals(Mesh_connectivity::Half_edge_iterator he);
+	bool check_invalid_connection(Mesh_connectivity::Half_edge_iterator he);
+
 	void color_queue(Mesh_buffer &buffer, Mesh_connectivity::Defragmentation_maps &defrag);
 
 	void mark_as_split(Mesh_connectivity::Half_edge_iterator he);

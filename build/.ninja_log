@@ -86,3 +86,13 @@
 3705	3766	1708722034297911000	src/minimesh/core/libminimeshcore.a	665c1598d2d2f696
 3766	3820	1708722034349494903	bin/minimeshcli	8e56b1635a6139e0
 3767	3879	1708722034406854891	bin/minimeshgui	9ddea8e6d693cf62
+4	1008	1708722556111104970	src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o	b1f67f1ff1a99a53
+5	1727	1708722556829710699	src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o	aa31a3740652b4ca
+5	3749	1708722558847041778	src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o	1d51ec9c47195baa
+3749	3808	1708722558920746000	src/minimesh/core/libminimeshcore.a	665c1598d2d2f696
+3808	3860	1708722558970965033	bin/minimeshcli	8e56b1635a6139e0
+3808	3919	1708722559027591185	bin/minimeshgui	9ddea8e6d693cf62
+5	3670	1708722717221108040	src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o	1d51ec9c47195baa
+3670	3728	1708722717293732000	src/minimesh/core/libminimeshcore.a	665c1598d2d2f696
+3728	3780	1708722717343804694	bin/minimeshcli	8e56b1635a6139e0
+3728	3842	1708722717402759283	bin/minimeshgui	9ddea8e6d693cf62

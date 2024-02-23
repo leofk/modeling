@@ -116,15 +116,26 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 
     force_assert( mesh().check_sanity_slowly() );
 
-	if (!H.is_active()) 
-	{
+	if (H.index() < 0 && !H.is_active()) {		
 		printf("H is not active. \n");
+		return;
+	}
+
+	// if the vertex in question is inactive or has and invalid index
+	if (!V1.is_active() && !V2.is_active() && (V1.index() == mesh().invalid_index) && (V1.index() == mesh().invalid_index)) {
+		printf("Vertices is not active. \n");
 		return;
 	}
 
 	if (!check_valence(H)) 
 	{
 		printf("H has low valence. \n");
+		return;
+	}
+
+	// pre contraction checks - invalid/inactive neighborhood
+	if (!check_invalid_connection(H)) {
+		printf("[WARNING] Rejecting contraction, Invalid neighboring vertices/half-edges \n");
 		return;
 	}
 
@@ -144,7 +155,7 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(V2.index());
 	do // *points to*
 	{
-		printf("inf A \n");
+		// printf("inf A \n");
 
 		ring.half_edge().twin().data().origin = V1.index();
 	} while(ring.advance());
@@ -217,11 +228,47 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 	ring = mesh().vertex_ring_at(V1.index());
 	do // vertex iterator (gets he pointing TO the vertex)
 	{
-		printf("inf b \n");
+		// printf("inf b \n");
 
 		compute_position_and_error(ring.half_edge());
 	} while(ring.advance());
+}
 
+// check invalid connection
+bool Mesh_simplify::check_invalid_connection(Mesh_connectivity::Half_edge_iterator he) 
+{
+
+	Mesh_connectivity::Vertex_iterator v1 = he.origin();
+	Mesh_connectivity::Vertex_iterator v2 = he.dest();
+	Mesh_connectivity::Vertex_iterator v3 = he.twin().next().dest();
+	Mesh_connectivity::Vertex_iterator v4 = he.prev().origin();
+
+	Mesh_connectivity::Vertex_ring_iterator ring1 = mesh().vertex_ring_at(v1.index());
+	Mesh_connectivity::Vertex_ring_iterator ring2 = mesh().vertex_ring_at(v2.index());
+	Mesh_connectivity::Vertex_ring_iterator ring3 = mesh().vertex_ring_at(v3.index());
+	Mesh_connectivity::Vertex_ring_iterator ring4 = mesh().vertex_ring_at(v4.index());
+
+	bool state1 = true;
+	bool state2 = true;
+	bool state3 = true;
+	bool state4 = true;
+
+	do {
+		state1 = state1 && (ring1.half_edge().is_active());
+	} while (ring1.advance());
+
+	do {
+		state2 = state2 && (ring2.half_edge().is_active());
+	} while (ring2.advance());
+
+	do {
+		state3 = state3 && (ring3.half_edge().is_active());
+	} while (ring3.advance());
+	do {
+		state4 = state4 && (ring4.half_edge().is_active());
+	} while (ring4.advance());
+
+	return state1 && state2 && state3 && state4;
 }
 
 //
@@ -239,7 +286,7 @@ bool Mesh_simplify::check_connectivity(Mesh_connectivity::Half_edge_iterator he)
 	Mesh_connectivity::Vertex_ring_iterator v1_ring = mesh().vertex_ring_at(he.origin().index());
 	do // he that point TO v
 	{
-		printf("inf c  \n");
+		// printf("inf c  \n");
 
 		v1_adj_vs.insert(v1_ring.half_edge().origin().index());
 	} while(v1_ring.advance()); 
@@ -248,7 +295,7 @@ bool Mesh_simplify::check_connectivity(Mesh_connectivity::Half_edge_iterator he)
 	Mesh_connectivity::Vertex_ring_iterator v2_ring = mesh().vertex_ring_at(he.twin().origin().index());
 	do
 	{
-		printf("inf d \n");
+		// printf("inf d \n");
 
 		v2_adj_vs.insert(v2_ring.half_edge().origin().index());
 	} while(v2_ring.advance()); 
@@ -281,7 +328,7 @@ bool Mesh_simplify::check_valence(Mesh_connectivity::Half_edge_iterator he)
 	Mesh_connectivity::Vertex_ring_iterator v1_ring = mesh().vertex_ring_at(he.origin().index());
 	do // he that point TO v
 	{
-		printf("inf e \n");
+		// printf("inf e \n");
 		val_v1++;
 	} while(v1_ring.advance()); 
 
@@ -290,7 +337,7 @@ bool Mesh_simplify::check_valence(Mesh_connectivity::Half_edge_iterator he)
 	Mesh_connectivity::Vertex_ring_iterator v2_ring = mesh().vertex_ring_at(he.twin().origin().index());
 	do
 	{
-		printf("inf f \n");
+		// printf("inf f \n");
 		val_v2++;
 	} while(v2_ring.advance()); 
 
@@ -311,7 +358,7 @@ bool Mesh_simplify::check_normals(Mesh_connectivity::Half_edge_iterator he)
 
 	Mesh_connectivity::Vertex_ring_iterator ring_iter = mesh().vertex_ring_at(v1.index());
 	do { // *points to*
-		printf("inf e  \n");
+		// printf("inf e  \n");
 
 		Mesh_connectivity::Vertex_iterator v_i = ring_iter.half_edge().origin(); 
 		Mesh_connectivity::Vertex_iterator v_j = ring_iter.half_edge().prev().origin();
@@ -331,7 +378,7 @@ bool Mesh_simplify::check_normals(Mesh_connectivity::Half_edge_iterator he)
 
 	ring_iter = mesh().vertex_ring_at(v2.index());
 	do {
-		printf("inf f  \n");
+		// printf("inf f  \n");
 
 		Mesh_connectivity::Vertex_iterator v_i = ring_iter.half_edge().origin();
 		Mesh_connectivity::Vertex_iterator v_j = ring_iter.half_edge().prev().origin();
