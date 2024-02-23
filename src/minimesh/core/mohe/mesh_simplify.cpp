@@ -116,16 +116,16 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 
     force_assert( mesh().check_sanity_slowly() );
 
-	if (H.index() < 0 && !H.is_active()) {		
+	if (!H.is_active()) {		
 		printf("H is not active. \n");
 		return;
 	}
 
 	// if the vertex in question is inactive or has and invalid index
-	if (!V1.is_active() && !V2.is_active() && (V1.index() == mesh().invalid_index) && (V1.index() == mesh().invalid_index)) {
-		printf("Vertices is not active. \n");
-		return;
-	}
+	// if (!V1.is_active() && !V2.is_active() && (V1.index() == mesh().invalid_index) && (V1.index() == mesh().invalid_index)) {
+	// 	printf("Vertices is not active. \n");
+	// 	return;
+	// }
 
 	if (!check_valence(H)) 
 	{
@@ -134,10 +134,10 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 	}
 
 	// pre contraction checks - invalid/inactive neighborhood
-	if (!check_invalid_connection(H)) {
-		printf("[WARNING] Rejecting contraction, Invalid neighboring vertices/half-edges \n");
-		return;
-	}
+	// if (!check_invalid_connection(H)) {
+	// 	printf("[WARNING] Rejecting contraction, Invalid neighboring vertices/half-edges \n");
+	// 	return;
+	// }
 
 	if (!check_connectivity(H)) 
 	{
