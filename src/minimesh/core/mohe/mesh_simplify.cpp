@@ -114,10 +114,20 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 	Mesh_connectivity::Face_iterator F3 = HNT.face();
 	Mesh_connectivity::Face_iterator F4 = HTPT.face();
 
-	// update origins
+    force_assert( mesh().check_sanity_slowly() );
+
+	if (!H.is_active()) 
+	{
+		printf("H IS NOT ACTIVE \n");
+		return;
+	}
+
+	// printf("myBool value: %d\n", H.is_active());	// update origins
 	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(V2.index());
 	do // *points to*
 	{
+		printf("inf A \n");
+
 		ring.half_edge().twin().data().origin = V1.index();
 	} while(ring.advance());
 
@@ -157,17 +167,17 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 
 	// deactivate 6 half-edges
 	H.deactivate();
-	collapsed_edges.insert(H.index());
+	// collapsed_edges.insert(H.index());
 	HT.deactivate();
-	collapsed_edges.insert(HT.index());
+	// collapsed_edges.insert(HT.index());
 	HN.deactivate();
-	collapsed_edges.insert(HN.index());
+	// collapsed_edges.insert(HN.index());
 	HTP.deactivate();
-	collapsed_edges.insert(HTP.index());
+	// collapsed_edges.insert(HTP.index());
 	HNT.deactivate();
-	collapsed_edges.insert(HNT.index());
+	// collapsed_edges.insert(HNT.index());
 	HTPT.deactivate();
-	collapsed_edges.insert(HTPT.index());
+	// collapsed_edges.insert(HTPT.index());
 
 	// printf("H index: %d \n", H.index());
 	// printf("HT index: %d \n", HT.index());
@@ -184,12 +194,13 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 
 
     force_assert( mesh().check_sanity_slowly() );
-	printf("deactivated objects \n");
 
 	// now update position and errors for new adjacent vertices
 	ring = mesh().vertex_ring_at(V1.index());
 	do // vertex iterator (gets he pointing TO the vertex)
 	{
+		printf("inf b \n");
+
 		compute_position_and_error(ring.half_edge());
 	} while(ring.advance());
 
@@ -210,6 +221,8 @@ bool Mesh_simplify::check_connectivity(Mesh_connectivity::Half_edge_iterator he)
 	Mesh_connectivity::Vertex_ring_iterator v1_ring = mesh().vertex_ring_at(he.origin().index());
 	do // he that point TO v
 	{
+		printf("inf c  \n");
+
 		v1_adj_vs.insert(v1_ring.half_edge().origin().index());
 	} while(v1_ring.advance()); 
 
@@ -217,6 +230,8 @@ bool Mesh_simplify::check_connectivity(Mesh_connectivity::Half_edge_iterator he)
 	Mesh_connectivity::Vertex_ring_iterator v2_ring = mesh().vertex_ring_at(he.twin().origin().index());
 	do
 	{
+		printf("inf d \n");
+
 		v2_adj_vs.insert(v2_ring.half_edge().origin().index());
 	} while(v2_ring.advance()); 
 
@@ -229,6 +244,40 @@ bool Mesh_simplify::check_connectivity(Mesh_connectivity::Half_edge_iterator he)
 
 	// if interesection != 2, not manifold
 	return intersection.size() == 2;
+}
+
+
+
+//
+// valence of endpoint vertices of edge being collapsed should not be 3 
+// true if valence != 3
+//
+bool Mesh_simplify::check_valence(Mesh_connectivity::Half_edge_iterator he)
+{
+	// Create sets to store the indices encountered in each loop
+	std::set<int> v1_adj_vs;
+	std::set<int> v2_adj_vs;
+
+	// First loop
+	int val_v1 = 0;
+	Mesh_connectivity::Vertex_ring_iterator v1_ring = mesh().vertex_ring_at(he.origin().index());
+	do // he that point TO v
+	{
+		printf("inf e \n");
+		val_v1++;
+	} while(v1_ring.advance()); 
+
+	// Second loop
+	int val_v2 = 0;
+	Mesh_connectivity::Vertex_ring_iterator v2_ring = mesh().vertex_ring_at(he.twin().origin().index());
+	do
+	{
+		printf("inf f \n");
+		val_v2++;
+	} while(v2_ring.advance()); 
+
+	// if interesection != 2, not manifold
+	return val_v1 > 3 && val_v2 > 3;
 }
 
 //
@@ -244,6 +293,8 @@ bool Mesh_simplify::check_normals(Mesh_connectivity::Half_edge_iterator he)
 
 	Mesh_connectivity::Vertex_ring_iterator ring_iter = mesh().vertex_ring_at(v1.index());
 	do { // *points to*
+		printf("inf e  \n");
+
 		Mesh_connectivity::Vertex_iterator v_i = ring_iter.half_edge().origin(); 
 		Mesh_connectivity::Vertex_iterator v_j = ring_iter.half_edge().prev().origin();
 
@@ -262,6 +313,8 @@ bool Mesh_simplify::check_normals(Mesh_connectivity::Half_edge_iterator he)
 
 	ring_iter = mesh().vertex_ring_at(v2.index());
 	do {
+		printf("inf f  \n");
+
 		Mesh_connectivity::Vertex_iterator v_i = ring_iter.half_edge().origin();
 		Mesh_connectivity::Vertex_iterator v_j = ring_iter.half_edge().prev().origin();
 
@@ -284,7 +337,8 @@ bool Mesh_simplify::check_normals(Mesh_connectivity::Half_edge_iterator he)
 
 bool Mesh_simplify::check_topology(Mesh_connectivity::Half_edge_iterator he)
 {
-	return check_connectivity(he) && check_normals(he);
+	return check_connectivity(he) && check_valence(he);
+	// return check_connectivity(he) && check_valence(he) && check_normals(he);
 }
 
 //
@@ -302,7 +356,7 @@ void Mesh_simplify::init_pos_and_errors()
 			compute_position_and_error(he);
 		}
 	}
-	reset_flags();
+
 }
 
 Eigen::Vector4f generateColorFromSpectrum(float position, float maxPosition) {
@@ -363,32 +417,46 @@ void Mesh_simplify::color_queue(Mesh_buffer &buffer, Mesh_connectivity::Defragme
 void Mesh_simplify::simplify(int num_entities_to_simplify)
 {
 	for(int entity = 0; entity < num_entities_to_simplify; ++entity) {
+		printf("it: %d \n", entity);
 
 		while (!errorQueue.empty()) {
-
-			Mesh_connectivity::Half_edge_iterator he82 = mesh().half_edge_at(82);
-
-			printf("he.index(): %d, he.prev().index(): %d\n", he82.index(), he82.prev().index());
+			// printf("queue size: %d \n", errorQueue.size());
 
 			Error min_error = errorQueue.top();
 			Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(min_error.he_id);
 
 			errorQueue.pop();
+			force_assert( mesh().check_sanity_slowly() );
 
 			// Check if topology is valid
-			if (check_topology(he) && min_error.value == errorMap[he.index()] && !collapsed_edges.count(he.index())) {
+			// if (!collapsed_edges.count(he.index()) && min_error.value == errorMap[he.index()] && check_topology(he)) {
+			// if (min_error.value != errorMap[he.index()]) printf("minerror \n");
+			// if (!check_topology(he)) printf("topology \n");
+			
+			
+			if (min_error.value == errorMap[he.index()] && check_topology(he)) {
 				// If topology is valid, collapse the edge and exit the loop
 				printf("valid topo \n");
-				printf("edge id %d \n", he.index());
 				collapse_edge(he);
-				printf("collapsed an edge \n");
 
 				break;
 			}
 			printf("invalid topo \n");
-
 		}
+
+		
+
 	}
+	force_assert( mesh().check_sanity_slowly() );
+
+
+	if(errorQueue.empty()) 
+	{
+		reset_flags();
+		printf("queue empty \n");
+	}
+
+
 }
 
 ////////////////////////////////////////////////
@@ -408,6 +476,16 @@ void Mesh_simplify::reset_flags()
 		split_half_edges.pop();
 	}
 	assert(split_half_edges.empty());
+
+    // Clear Q_matrices
+    Q_matrices.clear();
+
+    // Clear new_pos
+    new_pos.clear();
+
+    // Clear errorMap
+    errorMap.clear();
+
 }
 
 //

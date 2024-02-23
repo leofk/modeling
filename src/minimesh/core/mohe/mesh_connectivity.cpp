@@ -805,7 +805,9 @@ bool Mesh_connectivity::check_sanity_slowly(const bool verbose)
 			soft_assert_msg(he.twin().is_active(), "");
 			soft_assert_msg(he.twin().twin().is_equal(he), "");
 			
-			soft_assert_msg(he.next().is_active(), "");
+			// soft_assert_msg(he.next().is_active(), "");
+			soft_assert_msg(he.next().is_active(), "he.index(): " + std::to_string(he.index()) + ", he.next().index(): " + std::to_string(he.next().index()));
+
 			soft_assert_msg(he.next().prev().is_equal(he), "");
       
 			// soft_assert_msg(he.prev().is_active(), he.prev().index());

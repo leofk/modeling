@@ -83,6 +83,7 @@ public:
 	//
 	bool check_topology(Mesh_connectivity::Half_edge_iterator he);
 	bool check_connectivity(Mesh_connectivity::Half_edge_iterator he);
+	bool check_valence(Mesh_connectivity::Half_edge_iterator he);
 	bool check_normals(Mesh_connectivity::Half_edge_iterator he);
 	void color_queue(Mesh_buffer &buffer, Mesh_connectivity::Defragmentation_maps &defrag);
 
@@ -105,7 +106,7 @@ private:
 	// a set to store what edges have been collapsed
 	std::map<int, double> errorMap;
 
-	std::unordered_set<int> collapsed_edges;
+	// std::unordered_set<int> collapsed_edges;
 
 	// a priority queue of half edges ordered on min error
     std::priority_queue<Error> errorQueue;
