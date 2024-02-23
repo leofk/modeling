@@ -118,7 +118,25 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 
 	if (!H.is_active()) 
 	{
-		printf("H IS NOT ACTIVE \n");
+		printf("H is not active. \n");
+		return;
+	}
+
+	if (!check_valence(H)) 
+	{
+		printf("H has low valence. \n");
+		return;
+	}
+
+	if (!check_connectivity(H)) 
+	{
+		printf("H is poorly connected. \n");
+		return;
+	}
+
+	if (!check_normals(H)) 
+	{
+		printf("H inverts normals. \n");
 		return;
 	}
 
@@ -434,27 +452,28 @@ void Mesh_simplify::simplify(int num_entities_to_simplify)
 			// if (!check_topology(he)) printf("topology \n");
 			
 			
-			if (min_error.value == errorMap[he.index()] && check_topology(he)) {
+			if (min_error.value == errorMap[he.index()]) {
 				// If topology is valid, collapse the edge and exit the loop
-				printf("valid topo \n");
+				// printf("valid topo \n");
 				collapse_edge(he);
 
 				break;
 			}
-			printf("invalid topo \n");
+			// printf("invalid topo \n");
 		}
 
-		
+		if(errorQueue.empty()) 
+		{
+			reset_flags();
+			printf("queue empty \n");
+			break;
+		}
 
 	}
 	force_assert( mesh().check_sanity_slowly() );
 
 
-	if(errorQueue.empty()) 
-	{
-		reset_flags();
-		printf("queue empty \n");
-	}
+	
 
 
 }
