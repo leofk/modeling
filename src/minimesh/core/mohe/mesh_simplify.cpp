@@ -120,19 +120,9 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 	{
 		ring.half_edge().twin().data().origin = V1.index();
 	} while(ring.advance());
-	// do {
-	// 	if (ring.half_edge().is_equal(he)) continue; // condition to ignore the half-edge btw v1 and v2. i had to put it because i was getting ring_iteration_errors
-	// 	ring.half_edge().twin().data().origin = V1.index();
-	// } while (ring.advance());
 
 	// update edge adjacency (next/prevs)
-	printf("BEFORE HP NEXT index: %d \n", HP.next().index());
 	HP.data().next = HNTN.index();
-	HP.data().next = HNTN.index();
-	printf("AFTER HP NEXT index: %d \n", HP.next().index());
-	printf("HTNN: %d \n", HTN.next().index());
-	printf("HTP: %d \n", HTP.index());
-
 	HP.data().prev = HNTP.index();
 	HNTN.data().prev = HP.index();
 	HNTP.data().next = HP.index();
@@ -144,25 +134,17 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 
 	// update vertex edge adjacency
 	V3.data().half_edge = HP.index(); // *going out*
-	// if (V3.half_edge().index() == HNT.index()) V3.data().half_edge = HP.index();
 	V4.data().half_edge = HTPTN.index(); // *going out*
-	// if (V4.half_edge().index() == HTP.index()) V4.data().half_edge = HTPTN.index();
 
 	// update faces
 	HP.data().face = F3.index();
 	F3.data().half_edge = HP.index();
-	// if (F3.half_edge().index() == HNT.index()) F3.data().half_edge = HP.index();
-
-
 
 	HTN.data().face = F4.index();
 	F4.data().half_edge = HTN.index();
-	// if (F4.half_edge().index() == HTPT.index()) F4.data().half_edge = HTN.index();
-
 
 	// update V1 
 	V1.data().half_edge = HNTN.index(); // *going out*
-	// if (V1.half_edge().index() == H.index()) V1.data().half_edge = HTN.index();
 	V1.data().xyz = new_pos[he.index()];
 	Q_matrices[V1.index()] += Q_matrices[V2.index()];
 
@@ -176,38 +158,30 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 	// deactivate 6 half-edges
 	H.deactivate();
 	collapsed_edges.insert(H.index());
-
 	HT.deactivate();
 	collapsed_edges.insert(HT.index());
-
-	printf("H index: %d \n", H.index());
-	printf("HT index: %d \n", HT.index());
-	printf("HN index: %d \n", HN.index());
-	printf("HTP index: %d \n", HTP.index());
-	printf("HNT index: %d \n", HNT.index());
-	printf("HTPT index: %d \n", HTPT.index());
-	printf("HNTN index: %d \n", HNTN.index());
-	printf("HTPTP index: %d \n", HTPTP.index());
-	printf("HNTP index: %d \n", HNTP.index());
-	printf("HTPTN index: %d \n", HTPTN.index());
-	printf("HP index: %d \n", HP.index());
-	printf("HTN index: %d \n", HTN.index());
-
 	HN.deactivate();
-	// TODOD YOU NEED TO LEAVE THE QUEUE
 	collapsed_edges.insert(HN.index());
-
 	HTP.deactivate();
-	// TODOD YOU NEED TO LEAVE THE QUEUE
 	collapsed_edges.insert(HTP.index());
-
 	HNT.deactivate();
-	// TODOD YOU NEED TO LEAVE THE QUEUE
 	collapsed_edges.insert(HNT.index());
-
 	HTPT.deactivate();
-	// TODOD YOU NEED TO LEAVE THE QUEUE
 	collapsed_edges.insert(HTPT.index());
+
+	// printf("H index: %d \n", H.index());
+	// printf("HT index: %d \n", HT.index());
+	// printf("HN index: %d \n", HN.index());
+	// printf("HTP index: %d \n", HTP.index());
+	// printf("HNT index: %d \n", HNT.index());
+	// printf("HTPT index: %d \n", HTPT.index());
+	// printf("HNTN index: %d \n", HNTN.index());
+	// printf("HTPTP index: %d \n", HTPTP.index());
+	// printf("HNTP index: %d \n", HNTP.index());
+	// printf("HTPTN index: %d \n", HTPTN.index());
+	// printf("HP index: %d \n", HP.index());
+	// printf("HTN index: %d \n", HTN.index());
+
 
     force_assert( mesh().check_sanity_slowly() );
 	printf("deactivated objects \n");
