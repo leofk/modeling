@@ -456,6 +456,7 @@ Eigen::Vector4f generateColorFromSpectrum(float position, float maxPosition) {
 
 void Mesh_simplify::color_queue(Mesh_buffer &buffer, Mesh_connectivity::Defragmentation_maps &defrag) 
 {
+	if (errorQueue.empty()) return;
     std::priority_queue<Error> temp = errorQueue;
 	Eigen::Matrix4Xf vertexColors = Eigen::Matrix4Xf::Ones(4, mesh().n_active_vertices());
 	int max = 1;
