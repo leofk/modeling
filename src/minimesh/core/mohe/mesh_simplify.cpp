@@ -334,7 +334,7 @@ bool Mesh_simplify::check_valence(Mesh_connectivity::Half_edge_iterator he)
 
 	// Second loop
 	int val_v2 = 0;
-	Mesh_connectivity::Vertex_ring_iterator v2_ring = mesh().vertex_ring_at(he.twin().origin().index());
+	Mesh_connectivity::Vertex_ring_iterator v2_ring = mesh().vertex_ring_at(he.dest().index());
 	do
 	{
 		// printf("inf f \n");
@@ -342,7 +342,8 @@ bool Mesh_simplify::check_valence(Mesh_connectivity::Half_edge_iterator he)
 	} while(v2_ring.advance()); 
 
 	// if interesection != 2, not manifold
-	return val_v1 > 3 && val_v2 > 3;
+	// return val_v1 > 3 && val_v2 > 3;
+	return val_v2 > 3;
 }
 
 //
