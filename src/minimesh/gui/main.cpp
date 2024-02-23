@@ -179,7 +179,7 @@ void simplify_pressed(int)
 	globalvars::mesh.compute_defragmention_maps(defrag);
 	globalvars::viewer.get_mesh_buffer().rebuild(globalvars::mesh, defrag);
 	
-	globalvars::simp.color_queue(globalvars::viewer.get_mesh_buffer(), defrag);
+	globalvars::simp.color_queue(globalvars::viewer.get_mesh_buffer(), defrag, globalvars::num_entities_to_simplify);
 	glutPostRedisplay();
 }
 

@@ -79,15 +79,17 @@ public:
 	void collapse_edge(Mesh_connectivity::Half_edge_iterator he);
 
 	// 
-	// check to see if collapsing a halfedge will modify the topology (like manifoldness)
+	// check that collapsing an edge wont result in illegal topology
 	//
-	bool check_topology(Mesh_connectivity::Half_edge_iterator he);
 	bool check_connectivity(Mesh_connectivity::Half_edge_iterator he);
-	bool check_valence(Mesh_connectivity::Half_edge_iterator he);
-	bool check_normals(Mesh_connectivity::Half_edge_iterator he);
-	bool check_invalid_connection(Mesh_connectivity::Half_edge_iterator he);
 
-	void color_queue(Mesh_buffer &buffer, Mesh_connectivity::Defragmentation_maps &defrag);
+	//
+	// check no vertices adjacent to H has 3 or less valence
+	//
+	bool check_valence(Mesh_connectivity::Half_edge_iterator he);
+ 
+	// color the vertices at the top of the queue
+	void color_queue(Mesh_buffer &buffer, Mesh_connectivity::Defragmentation_maps &defrag, int num_e);
 
 	void mark_as_split(Mesh_connectivity::Half_edge_iterator he);
 	void reset_flags();
@@ -105,10 +107,8 @@ private:
 	// a map between half edges and the new vector position if they were to be collapsed
     std::map<int, Eigen::Vector3d> new_pos;
 
-	// a set to store what edges have been collapsed
+	// a map to keep track of the current error for an edge
 	std::map<int, double> errorMap;
-
-	// std::unordered_set<int> collapsed_edges;
 
 	// a priority queue of half edges ordered on min error
     std::priority_queue<Error> errorQueue;
