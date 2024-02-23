@@ -83,7 +83,7 @@ void Mesh_simplify::compute_position_and_error(Mesh_connectivity::Half_edge_iter
 
 	double error = x.transpose() * Q_v * x;
 	errorQueue.push(Error(error, he.index()));
-
+	errorMap[he.index()] = error;
 }
 
 //
@@ -120,9 +120,19 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 	{
 		ring.half_edge().twin().data().origin = V1.index();
 	} while(ring.advance());
+	// do {
+	// 	if (ring.half_edge().is_equal(he)) continue; // condition to ignore the half-edge btw v1 and v2. i had to put it because i was getting ring_iteration_errors
+	// 	ring.half_edge().twin().data().origin = V1.index();
+	// } while (ring.advance());
 
 	// update edge adjacency (next/prevs)
+	printf("BEFORE HP NEXT index: %d \n", HP.next().index());
 	HP.data().next = HNTN.index();
+	HP.data().next = HNTN.index();
+	printf("AFTER HP NEXT index: %d \n", HP.next().index());
+	printf("HTNN: %d \n", HTN.next().index());
+	printf("HTP: %d \n", HTP.index());
+
 	HP.data().prev = HNTP.index();
 	HNTN.data().prev = HP.index();
 	HNTP.data().next = HP.index();
@@ -134,17 +144,25 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 
 	// update vertex edge adjacency
 	V3.data().half_edge = HP.index(); // *going out*
+	// if (V3.half_edge().index() == HNT.index()) V3.data().half_edge = HP.index();
 	V4.data().half_edge = HTPTN.index(); // *going out*
+	// if (V4.half_edge().index() == HTP.index()) V4.data().half_edge = HTPTN.index();
 
 	// update faces
 	HP.data().face = F3.index();
 	F3.data().half_edge = HP.index();
+	// if (F3.half_edge().index() == HNT.index()) F3.data().half_edge = HP.index();
+
+
 
 	HTN.data().face = F4.index();
 	F4.data().half_edge = HTN.index();
+	// if (F4.half_edge().index() == HTPT.index()) F4.data().half_edge = HTN.index();
+
 
 	// update V1 
 	V1.data().half_edge = HNTN.index(); // *going out*
+	// if (V1.half_edge().index() == H.index()) V1.data().half_edge = HTN.index();
 	V1.data().xyz = new_pos[he.index()];
 	Q_matrices[V1.index()] += Q_matrices[V2.index()];
 
@@ -157,25 +175,42 @@ void Mesh_simplify::collapse_edge(Mesh_connectivity::Half_edge_iterator he)
 
 	// deactivate 6 half-edges
 	H.deactivate();
-	printf("H index: %d \n", H.index());
+	collapsed_edges.insert(H.index());
 
 	HT.deactivate();
+	collapsed_edges.insert(HT.index());
+
+	printf("H index: %d \n", H.index());
 	printf("HT index: %d \n", HT.index());
+	printf("HN index: %d \n", HN.index());
+	printf("HTP index: %d \n", HTP.index());
+	printf("HNT index: %d \n", HNT.index());
+	printf("HTPT index: %d \n", HTPT.index());
+	printf("HNTN index: %d \n", HNTN.index());
+	printf("HTPTP index: %d \n", HTPTP.index());
+	printf("HNTP index: %d \n", HNTP.index());
+	printf("HTPTN index: %d \n", HTPTN.index());
+	printf("HP index: %d \n", HP.index());
+	printf("HTN index: %d \n", HTN.index());
 
 	HN.deactivate();
-	printf("HN index: %d \n", HN.index());
+	// TODOD YOU NEED TO LEAVE THE QUEUE
+	collapsed_edges.insert(HN.index());
 
 	HTP.deactivate();
-	printf("HTP index: %d \n", HTP.index());
+	// TODOD YOU NEED TO LEAVE THE QUEUE
+	collapsed_edges.insert(HTP.index());
 
 	HNT.deactivate();
-	printf("HNT index: %d \n", HNT.index());
+	// TODOD YOU NEED TO LEAVE THE QUEUE
+	collapsed_edges.insert(HNT.index());
 
 	HTPT.deactivate();
-	printf("HTPT index: %d \n", HTPT.index());
+	// TODOD YOU NEED TO LEAVE THE QUEUE
+	collapsed_edges.insert(HTPT.index());
 
     force_assert( mesh().check_sanity_slowly() );
-	printf("deactivated objects");
+	printf("deactivated objects \n");
 
 	// now update position and errors for new adjacent vertices
 	ring = mesh().vertex_ring_at(V1.index());
@@ -296,6 +331,57 @@ void Mesh_simplify::init_pos_and_errors()
 	reset_flags();
 }
 
+Eigen::Vector4f generateColorFromSpectrum(float position, float maxPosition) {
+    float hue = (position / maxPosition) * 240.0f; // Map position to hue value (0 to 240 degrees)
+    float saturation = 1.0f; // Full saturation
+    float value = 1.0f; // Full value (brightness)
+
+    // Convert HSV to RGB
+    int hi = static_cast<int>(std::floor(hue / 60.0f)) % 6;
+    float f = hue / 60.0f - std::floor(hue / 60.0f);
+    float v = value;
+    float p = value * (1 - saturation);
+    float q = value * (1 - f * saturation);
+    float t = value * (1 - (1 - f) * saturation);
+
+    switch (hi) {
+        case 0:
+            return Eigen::Vector4f(v, t, p, 1.0f);
+        case 1:
+            return Eigen::Vector4f(q, v, p, 1.0f);
+        case 2:
+            return Eigen::Vector4f(p, v, t, 1.0f);
+        case 3:
+            return Eigen::Vector4f(p, q, v, 1.0f);
+        case 4:
+            return Eigen::Vector4f(t, p, v, 1.0f);
+        default:
+            return Eigen::Vector4f(v, p, q, 1.0f);
+    }
+}
+
+
+void Mesh_simplify::color_queue(Mesh_buffer &buffer, Mesh_connectivity::Defragmentation_maps &defrag) 
+{
+    std::priority_queue<Error> temp = errorQueue;
+	Eigen::Matrix4Xf vertexColors = Eigen::Matrix4Xf::Ones(4, mesh().n_active_vertices());
+	int max = 1;
+	for (int i = max; i > 0; --i) {
+		float position = static_cast<float>(max - i + 1); 
+        Eigen::Vector4f rgba = generateColorFromSpectrum(position, max); 
+		Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(temp.top().he_id);
+
+		int v1 = defrag.old2new_vertices[he.origin().index()];
+		int v2 = defrag.old2new_vertices[he.dest().index()];
+		if (v1 != mesh().invalid_index) vertexColors.col(v1) << rgba[0], rgba[1], rgba[2], rgba[3];
+		if (v2 != mesh().invalid_index) vertexColors.col(v2) << rgba[0], rgba[1], rgba[2], rgba[3];
+
+		temp.pop();
+	}
+
+	buffer.set_vertex_colors(vertexColors);
+}
+
 
 //
 // simplify 
@@ -306,17 +392,23 @@ void Mesh_simplify::simplify(int num_entities_to_simplify)
 
 		while (!errorQueue.empty()) {
 
+			Mesh_connectivity::Half_edge_iterator he82 = mesh().half_edge_at(82);
+
+			printf("he.index(): %d, he.prev().index(): %d\n", he82.index(), he82.prev().index());
+
 			Error min_error = errorQueue.top();
 			Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(min_error.he_id);
 
 			errorQueue.pop();
 
 			// Check if topology is valid
-			if (check_topology(he)) {
+			if (check_topology(he) && min_error.value == errorMap[he.index()] && !collapsed_edges.count(he.index())) {
 				// If topology is valid, collapse the edge and exit the loop
 				printf("valid topo \n");
+				printf("edge id %d \n", he.index());
 				collapse_edge(he);
 				printf("collapsed an edge \n");
+
 				break;
 			}
 			printf("invalid topo \n");
@@ -355,6 +447,8 @@ void Mesh_simplify::mark_as_split(Mesh_connectivity::Half_edge_iterator he)
 	he.twin().data().is_split = true;
 	split_half_edges.push(he.twin().index());
 }
+
+
 
 } // end of mohe
 } // end of minimesh

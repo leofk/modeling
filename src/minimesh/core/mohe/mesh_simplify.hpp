@@ -10,9 +10,9 @@
 
 
 #include <string>
-
+#include <unordered_set>
 #include <minimesh/core/mohe/mesh_connectivity.hpp>
-
+#include "minimesh/viz/mesh_buffer.hpp"
 
 // Define a struct to represent an error along with its value
 struct Error {
@@ -84,6 +84,7 @@ public:
 	bool check_topology(Mesh_connectivity::Half_edge_iterator he);
 	bool check_connectivity(Mesh_connectivity::Half_edge_iterator he);
 	bool check_normals(Mesh_connectivity::Half_edge_iterator he);
+	void color_queue(Mesh_buffer &buffer, Mesh_connectivity::Defragmentation_maps &defrag);
 
 	void mark_as_split(Mesh_connectivity::Half_edge_iterator he);
 	void reset_flags();
@@ -100,6 +101,11 @@ private:
 
 	// a map between half edges and the new vector position if they were to be collapsed
     std::map<int, Eigen::Vector3d> new_pos;
+
+	// a set to store what edges have been collapsed
+	std::map<int, double> errorMap;
+
+	std::unordered_set<int> collapsed_edges;
 
 	// a priority queue of half edges ordered on min error
     std::priority_queue<Error> errorQueue;

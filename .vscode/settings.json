@@ -20,7 +20,12 @@
 		"set": "cpp",
 		"map": "cpp",
 		"memory": "cpp",
-		"iostream": "cpp"
+		"iostream": "cpp",
+		"limits": "cpp",
+		"ratio": "cpp",
+		"functional": "cpp",
+		"unordered_map": "cpp",
+		"unordered_set": "cpp"
 	},
 	"C_Cpp.errorSquiggles": "enabled"
 }
