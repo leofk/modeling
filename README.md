@@ -1,6 +1,13 @@
 # CPSC 524 - Leo Foord-Kelcey
 UBC # 83974592
 
+## A2 - Simplification
+Implemented Edge-Collapse based simplification algorithm.
+
+Entry point:
+- `mesh_simplify.hpp`
+- `mesh_simplify.cpp`
+
 ## A1 - Subdivision
 Implemented Loop's Subdivision schema. Demo available in GUI via subdivide button.
 

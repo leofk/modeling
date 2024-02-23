@@ -69,7 +69,6 @@ void Mesh_connectivity::Vertex_iterator::deactivate()
 	_parent->_inactive_vertices.push(index());
 }
 
-
 bool Mesh_connectivity::Vertex_iterator::is_equal(Vertex_iterator o)
 {
 	return (_parent == o._parent) && (_index == o._index);
@@ -806,10 +805,14 @@ bool Mesh_connectivity::check_sanity_slowly(const bool verbose)
 			soft_assert_msg(he.twin().is_active(), "");
 			soft_assert_msg(he.twin().twin().is_equal(he), "");
 			
-			soft_assert_msg(he.next().is_active(), "");
+			// soft_assert_msg(he.next().is_active(), "");
+			soft_assert_msg(he.next().is_active(), "he.index(): " + std::to_string(he.index()) + ", he.next().index(): " + std::to_string(he.next().index()));
+
 			soft_assert_msg(he.next().prev().is_equal(he), "");
       
-			soft_assert_msg(he.prev().is_active(), "");
+			// soft_assert_msg(he.prev().is_active(), he.prev().index());
+			soft_assert_msg(he.prev().is_active(), "he.index(): " + std::to_string(he.index()) + ", he.prev().index(): " + std::to_string(he.prev().index()));
+
 			soft_assert_msg(he.prev().next().is_equal(he), "");
       
 			soft_assert_msg(!he.prev().is_equal(he), "");

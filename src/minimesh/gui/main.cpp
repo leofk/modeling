@@ -12,6 +12,7 @@
 #include <minimesh/core/mohe/mesh_connectivity.hpp>
 #include <minimesh/core/mohe/mesh_io.hpp>
 #include <minimesh/core/mohe/mesh_modifier.hpp>
+#include <minimesh/core/mohe/mesh_simplify.hpp>
 #include <minimesh/core/util/assert.hpp>
 #include <minimesh/core/util/foldertools.hpp>
 #include <minimesh/core/util/numbers.hpp>
@@ -31,6 +32,7 @@ namespace globalvars
 Mesh_viewer viewer;
 mohe::Mesh_connectivity mesh;
 mohe::Mesh_modifier modi(mesh);
+mohe::Mesh_simplify simp(mesh);
 
 //
 int glut_main_window_id;
@@ -38,6 +40,7 @@ int glut_main_window_id;
 GLUI * glui;
 //
 int num_entities_to_simplify;
+bool initialized = false;
 //
 Eigen::Matrix3Xd displaced_vertex_positions;
 }
@@ -154,19 +157,30 @@ void subdivide_pressed(int)
 	globalvars::modi.subdivision();
 
 	// reload the mesh in the viewer
-	{
-		mohe::Mesh_connectivity::Defragmentation_maps defrag;
-		globalvars::mesh.compute_defragmention_maps(defrag);
-		globalvars::viewer.get_mesh_buffer().rebuild(globalvars::mesh, defrag);
-	}
+	mohe::Mesh_connectivity::Defragmentation_maps defrag;
+	globalvars::mesh.compute_defragmention_maps(defrag);
+	globalvars::viewer.get_mesh_buffer().rebuild(globalvars::mesh, defrag);
 	glutPostRedisplay();
-
 }
 
 
 void simplify_pressed(int)
 {
 	printf("Simplify button was pressed to remove %d entities \n", globalvars::num_entities_to_simplify);
+	
+	if (!globalvars::initialized) { 
+		globalvars::simp.init();
+		globalvars::initialized = true;
+	} 
+	globalvars::simp.simplify(globalvars::num_entities_to_simplify);
+
+	// reload the mesh in the viewer
+	mohe::Mesh_connectivity::Defragmentation_maps defrag;
+	globalvars::mesh.compute_defragmention_maps(defrag);
+	globalvars::viewer.get_mesh_buffer().rebuild(globalvars::mesh, defrag);
+	
+	globalvars::simp.color_queue(globalvars::viewer.get_mesh_buffer(), defrag, globalvars::num_entities_to_simplify);
+	glutPostRedisplay();
 }
 
 
@@ -203,15 +217,16 @@ int main(int argc, char * argv[])
 	if(argc == 1)
 	{
 		// FOR MESHES W/O BOUNDARY
-		// foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/");
+		foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
-		// mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
+		mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("sphere1.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("camel.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("octopus.obj");
 
 		// FOR MESHES W BOUNDARY
-		foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/with_boundary");
-		mohe::Mesh_io(globalvars::mesh).read_auto("pyramid.obj");
+		// foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/with_boundary");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("pyramid.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cat.obj");
 	}
 	else // otherwise use the address specified in the command line
@@ -221,12 +236,14 @@ int main(int argc, char * argv[])
 
 	// Initialize GLUT window
 	glutInit(&argc, argv);
-	glutInitWindowSize(800, 600);
+	
+	glutInitWindowSize(1920, 1080);
 	glutInitDisplayMode(GLUT_STENCIL | GLUT_DEPTH | GLUT_RGBA | GLUT_DOUBLE);
 	globalvars::glut_main_window_id = glutCreateWindow("Mesh Viewer");
 
 	// Initialize GLUI window for buttons and ...
-	globalvars::glui = GLUI_Master.create_glui("Controls");
+	// globalvars::glui = GLUI_Master.create_glui("Controls");
+	globalvars::glui = GLUI_Master.create_glui_subwindow(globalvars::glut_main_window_id, GLUI_SUBWINDOW_LEFT);
 	globalvars::glui->set_main_gfx_window(globalvars::glut_main_window_id);
 
 	// Register callbacks
@@ -249,12 +266,27 @@ int main(int argc, char * argv[])
 		}
 	}
 	globalvars::viewer.initialize(bbox);
-
+	
 	// Load the mesh in the viewer
 	{
 		mohe::Mesh_connectivity::Defragmentation_maps defrag;
 		globalvars::mesh.compute_defragmention_maps(defrag);
 		globalvars::viewer.get_mesh_buffer().rebuild(globalvars::mesh, defrag);
+	}
+
+	//
+	// Add radio buttons to choose mesh
+	//
+	GLUI_Panel * panel_mesh = globalvars::glui->add_panel("Choose Mesh");
+	GLUI_RadioGroup * radio_group_mesh = globalvars::glui->add_radiogroup_to_panel(panel_mesh, &globalvars::viewer.get_mesh());
+	for(int i = 0; i < Mesh_viewer::MESH_INVALID; ++i)
+	{
+		if(i == Mesh_viewer::MESH_CUBE)
+			globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Cube");
+		if(i == Mesh_viewer::MESH_COW)
+			globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Cow");
+		if(i == Mesh_viewer::MESH_PYRAMID)
+			globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Pyramid (w/ boundary)");
 	}
 
 	//
