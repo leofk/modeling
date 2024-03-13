@@ -81,6 +81,9 @@ void Mesh_fixed_param::compute_interior_pos()
     Eigen::MatrixXd V = A.partialPivLu().solve(Vbar);
 
     for (int i = 0; i < U.rows(); ++i) {
+		float u = U(i);
+		float v = V(i);
+		// printf("u = %f , v = %f \n", u, v);
         new_positions[interior_rev[i]] = Eigen::Vector3d(U(i), V(i), 0.0);
     }
 }
@@ -100,6 +103,8 @@ void Mesh_fixed_param::compute_A_i(int vid, int i)
 		{
 			int j = interior[v_j.index()];
 			A(i, j) = -lambda_ij(vid,v_j.index());
+			printf("aij = %f \n", A(i,j));
+
 		}
 	} while(ring.advance());
 
@@ -119,10 +124,12 @@ void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 		if (v_j.is_boundary())
 		{
 			int j = interior[v_j.index()];
-			u_sum += lambda_ij(vid,v_j.index()) * new_positions[j][0];
-			v_sum += lambda_ij(vid,v_j.index()) * new_positions[j][1];
+			u_sum += lambda_ij(vid,v_j.index()) * new_positions[v_j.index()][0];
+			v_sum += lambda_ij(vid,v_j.index()) * new_positions[v_j.index()][1];
 		}
 	} while(ring.advance());
+	printf("ui = %f \n", Ubar(i));
+	printf("vi = %f \n", Vbar(i));
 
 	Ubar(i) = u_sum;
 	Vbar(i) = v_sum;
