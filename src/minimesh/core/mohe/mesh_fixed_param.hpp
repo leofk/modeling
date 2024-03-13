@@ -60,10 +60,13 @@ private:
 	std::stack<int> split_half_edges;
 
 	// Index of boundary vertices
-	std::stack<int> boundary;
+	// std::stack<int> boundary;
+    std::map<int, int> boundary;
+    
+	std::map<int, int> interior;
 
-	// Index of interior vertices
-	std::stack<int> interior;
+	// // Index of interior vertices
+	// std::stack<int> interior;
 
 	// map of new vertex positions
     std::map<int, Eigen::Vector3d> new_positions;

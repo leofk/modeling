@@ -23,11 +23,13 @@ void Mesh_fixed_param::flag_boundary()
 			if (is_boundary(he_id)) 
 			{
 				he.origin().data().is_boundary = true;
-				boundary.push(he.origin().index());
+				// boundary.push(he.origin().index());
+				boundary[he.origin().index()] = he.origin().index();
 
 				he.dest().data().is_boundary = true;
-				boundary.push(he.dest().index());
-			}
+				// boundary.push(he.dest().index());
+				boundary[he.dest().index()] = he.dest().index();
+			} 
 
 			he.data().is_split = true;
 			split_half_edges.push(he.index());
@@ -58,6 +60,8 @@ void Mesh_fixed_param::compute_circle_pos(const int vid)
 	
 	float x = v.xyz()[0];
 	float y = v.xyz()[1];
+	// printf("x=%f , y=%f \n", x, y);
+
 
     float theta = std::atan2(y, x); 
 
@@ -221,18 +225,19 @@ void Mesh_fixed_param::math()
 	Ubar = Eigen::MatrixXd::Zero(n, 1);
 	Vbar = Eigen::MatrixXd::Zero(n, 1);
 
+    for (const auto& pair : boundary) {
+		compute_circle_pos(pair.second);
+    }
+
+	// TODO - slow to iterate over all this, maybe a faster solution?
 	for(int vid = 0 ; vid < mesh().n_total_vertices() ; ++vid)
 	{
 		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(vid);
 
-		if (v.is_boundary())
+		if (!v.is_boundary())
 		{
-			compute_circle_pos(v.index());
-		}
-		else 
-		{
-			compute_A_i(v.index());
-			compute_UVbar_i(v.index());
+			compute_A_i(vid);
+			compute_UVbar_i(vid);
 		}
 	}
 }
@@ -264,15 +269,15 @@ void Mesh_fixed_param::reset_flags()
 
 	assert(split_half_edges.empty());
 
-	// reset split edge flag
-	while(!boundary.empty()) {
-		int index = boundary.top();
-		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(index);
-		v.data().is_boundary = false;
-		boundary.pop();
-	}
 
-	assert(boundary.empty());
+	// while(!boundary.empty()) {
+	// 	int index = boundary.top();
+	// 	Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(index);
+	// 	v.data().is_boundary = false;
+	// 	boundary.pop();
+	// }
+
+	// assert(boundary.empty());
 }
 
 } // end of mohe
