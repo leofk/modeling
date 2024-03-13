@@ -86,7 +86,7 @@ void Mesh_fixed_param::compute_interior_pos()
 //
 void Mesh_fixed_param::compute_A_i(const int i)
 {
-	A[i, i] = 1;
+	A(i, i) = 1.0;
 
 	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
 	do // *points to*
@@ -95,7 +95,7 @@ void Mesh_fixed_param::compute_A_i(const int i)
 		if (!v_j.is_boundary())
 		{
 			int j = v_j.index();
-			A[i, j] = -lambda_ij(i,j);
+			A(i, j) = -lambda_ij(i,j);
 		}
 	} while(ring.advance());
 
@@ -120,8 +120,8 @@ void Mesh_fixed_param::compute_UVbar_i(const int i)
 		}
 	} while(ring.advance());
 
-	Ubar[i] = u_sum;
-	Vbar[i] = v_sum;
+	Ubar(i) = u_sum;
+	Vbar(i) = v_sum;
 }
 
 //
@@ -151,7 +151,7 @@ float Mesh_fixed_param::lambda_ij(const int i, const int j)
 	
 		w_ik = (tan(a_ik/2) + tan(b_ki/2)) / r_ik;
 
-		if (k=j) { w_ij = w_ik; }
+		if (k==j) { w_ij = w_ik; }
 		w_sum += w_ik;
 
 	} while(ring.advance());
@@ -166,14 +166,14 @@ void Mesh_fixed_param::compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Ve
 	Eigen::Vector3d p_pos = r.prev().origin().xyz();
 	Eigen::Vector3d q_pos = r.next().dest().xyz();
 
+   	float R = (k_pos - i_pos).norm();
+	float A1 = (p_pos - i_pos).norm();
+	float A2 = (p_pos - k_pos).norm();
+	float B1 = (q_pos - i_pos).norm();
+	float B2 = (q_pos - k_pos).norm();
 
-	// TODO 
-	// get lengths of sides from positions
-	// USE LAW OF COSINES
-	// ^ https://www.mathsisfun.com/algebra/trig-solving-sss-triangles.html
-
-	a_ik = 0.0;
-	b_ki = 0.0;
+	a_ik = acos((R*R + A1*A1 - A2*A2)/(2*R*A1));
+	b_ki = acos((B1*B1 + R*R - B2*B2)/(2*R*B1));
 }
 
 
@@ -184,12 +184,27 @@ void Mesh_fixed_param::parametrize()
 {
 	// iterated over vertices to find boundary/nonboundary vertices
 	flag_boundary();
+	printf("flags done \n");
+	force_assert( mesh().check_sanity_slowly() );
+	
 	
 	math();
+	printf("math done \n");
+
+	force_assert( mesh().check_sanity_slowly() );
+
 
 	compute_interior_pos();
+	printf("interior done \n");
+
+	force_assert( mesh().check_sanity_slowly() );
+
 
 	update_vertex_pos();
+	printf("update done \n");
+
+	force_assert( mesh().check_sanity_slowly() );
+
 
 	reset_flags();
 }

@@ -2,6 +2,7 @@
 #include <minimesh/core/util/assert.hpp>
 #include <minimesh/core/mohe/mesh_subdivision.hpp>
 #include <minimesh/core/mohe/mesh_simplify.hpp>
+#include <minimesh/core/mohe/mesh_fixed_param.hpp>
 
 namespace minimesh
 {
@@ -24,6 +25,13 @@ void Mesh_modifier::simplify(int num_entities_to_simplify)
 {
 	// done in main
 }
+
+void Mesh_modifier::parametrize()
+{
+	Mesh_fixed_param param(mesh());
+	param.parametrize();
+}
+
 
 //
 // Given two vertices, this function return the index of the half-edge going from v0 to v1.

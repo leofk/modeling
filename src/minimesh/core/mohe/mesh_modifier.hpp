@@ -50,6 +50,7 @@ public:
 	// subdivision
 	//
 	void subdivision();
+	void parametrize();
 
 	//
 	// simplify
