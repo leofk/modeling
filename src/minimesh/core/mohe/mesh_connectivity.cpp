@@ -56,6 +56,11 @@ bool Mesh_connectivity::Vertex_iterator::is_new()
 	return data().is_new;
 }
 
+bool Mesh_connectivity::Vertex_iterator::is_boundary()
+{
+	return data().is_boundary;
+}
+
 bool Mesh_connectivity::Vertex_iterator::is_done()
 {
 	return data().is_done;

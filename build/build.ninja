@@ -12,7 +12,7 @@
 
 # =============================================================================
 # Project: minimesh
-# Configurations: Release
+# Configurations: Debug
 # =============================================================================
 
 #############################################
@@ -24,7 +24,7 @@ ninja_required_version = 1.5
 #############################################
 # Set configuration variable for custom commands.
 
-CONFIGURATION = Release
+CONFIGURATION = Debug
 # =============================================================================
 # Include auxiliary files.
 
@@ -39,13 +39,13 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = /Users/leofk/Documents/524/modeling/build/
+cmake_ninja_workdir = /Users/leofk/Documents/GitHub/modeling/build/
 
 #############################################
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/leofk/Documents/524/modeling/build && /usr/local/Cellar/cmake/3.28.3/bin/ccmake -S/Users/leofk/Documents/524/modeling -B/Users/leofk/Documents/524/modeling/build
+  COMMAND = cd /Users/leofk/Documents/GitHub/modeling/build && /usr/local/Cellar/cmake/3.28.3/bin/ccmake -S/Users/leofk/Documents/GitHub/modeling -B/Users/leofk/Documents/GitHub/modeling/build
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -57,7 +57,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/leofk/Documents/524/modeling/build && /usr/local/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S/Users/leofk/Documents/524/modeling -B/Users/leofk/Documents/524/modeling/build
+  COMMAND = cd /Users/leofk/Documents/GitHub/modeling/build && /usr/local/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S/Users/leofk/Documents/GitHub/modeling -B/Users/leofk/Documents/GitHub/modeling/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -66,7 +66,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# /Users/leofk/Documents/524/modeling/CMakeLists.txt
+# /Users/leofk/Documents/GitHub/modeling/CMakeLists.txt
 # =============================================================================
 
 # =============================================================================
@@ -78,59 +78,67 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
 build cmake_object_order_depends_target_minimeshcore: phony || src/minimesh/core/CMakeFiles/minimeshcore.dir
 
-build src/minimesh/core/CMakeFiles/minimeshcore.dir/util/foldertools.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Release /Users/leofk/Documents/524/modeling/src/minimesh/core/util/foldertools.cpp || cmake_object_order_depends_target_minimeshcore
-  DEFINES = -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG
+build src/minimesh/core/CMakeFiles/minimeshcore.dir/util/foldertools.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/util/foldertools.cpp || cmake_object_order_depends_target_minimeshcore
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
   DEP_FILE = src/minimesh/core/CMakeFiles/minimeshcore.dir/util/foldertools.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  INCLUDES = -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
   OBJECT_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir
   OBJECT_FILE_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir/util
 
-build src/minimesh/core/CMakeFiles/minimeshcore.dir/util/get_basefilename.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Release /Users/leofk/Documents/524/modeling/src/minimesh/core/util/get_basefilename.cpp || cmake_object_order_depends_target_minimeshcore
-  DEFINES = -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG
+build src/minimesh/core/CMakeFiles/minimeshcore.dir/util/get_basefilename.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/util/get_basefilename.cpp || cmake_object_order_depends_target_minimeshcore
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
   DEP_FILE = src/minimesh/core/CMakeFiles/minimeshcore.dir/util/get_basefilename.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  INCLUDES = -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
   OBJECT_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir
   OBJECT_FILE_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir/util
 
-build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_connectivity.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Release /Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_connectivity.cpp || cmake_object_order_depends_target_minimeshcore
-  DEFINES = -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG
+build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_connectivity.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_connectivity.cpp || cmake_object_order_depends_target_minimeshcore
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
   DEP_FILE = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_connectivity.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  INCLUDES = -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
   OBJECT_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir
   OBJECT_FILE_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe
 
-build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_io.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Release /Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_io.cpp || cmake_object_order_depends_target_minimeshcore
-  DEFINES = -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG
+build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_io.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_io.cpp || cmake_object_order_depends_target_minimeshcore
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
   DEP_FILE = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_io.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  INCLUDES = -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
   OBJECT_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir
   OBJECT_FILE_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe
 
-build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Release /Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_modifier.cpp || cmake_object_order_depends_target_minimeshcore
-  DEFINES = -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG
+build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_modifier.cpp || cmake_object_order_depends_target_minimeshcore
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
   DEP_FILE = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  INCLUDES = -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
   OBJECT_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir
   OBJECT_FILE_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe
 
-build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_subdivision.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Release /Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_subdivision.cpp || cmake_object_order_depends_target_minimeshcore
-  DEFINES = -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG
+build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_subdivision.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_subdivision.cpp || cmake_object_order_depends_target_minimeshcore
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
   DEP_FILE = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_subdivision.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  INCLUDES = -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
   OBJECT_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir
   OBJECT_FILE_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe
 
-build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Release /Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_simplify.cpp || cmake_object_order_depends_target_minimeshcore
-  DEFINES = -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG
+build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_simplify.cpp || cmake_object_order_depends_target_minimeshcore
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
   DEP_FILE = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  INCLUDES = -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  OBJECT_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir
+  OBJECT_FILE_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe
+
+build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_fixed_param.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_fixed_param.cpp || cmake_object_order_depends_target_minimeshcore
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
+  DEP_FILE = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_fixed_param.cpp.o.d
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
   OBJECT_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir
   OBJECT_FILE_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe
 
@@ -142,9 +150,9 @@ build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o: CX
 #############################################
 # Link the static library src/minimesh/core/libminimeshcore.a
 
-build src/minimesh/core/libminimeshcore.a: CXX_STATIC_LIBRARY_LINKER__minimeshcore_Release src/minimesh/core/CMakeFiles/minimeshcore.dir/util/foldertools.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/util/get_basefilename.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_connectivity.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_io.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_subdivision.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o
+build src/minimesh/core/libminimeshcore.a: CXX_STATIC_LIBRARY_LINKER__minimeshcore_Debug src/minimesh/core/CMakeFiles/minimeshcore.dir/util/foldertools.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/util/get_basefilename.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_connectivity.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_io.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_subdivision.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_fixed_param.cpp.o
   ARCH_FLAGS = -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  LANGUAGE_COMPILE_FLAGS = -O3 -DNDEBUG
+  LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -156,7 +164,7 @@ build src/minimesh/core/libminimeshcore.a: CXX_STATIC_LIBRARY_LINKER__minimeshco
 # Utility command for edit_cache
 
 build src/minimesh/core/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/leofk/Documents/524/modeling/build/src/minimesh/core && /usr/local/Cellar/cmake/3.28.3/bin/ccmake -S/Users/leofk/Documents/524/modeling -B/Users/leofk/Documents/524/modeling/build
+  COMMAND = cd /Users/leofk/Documents/GitHub/modeling/build/src/minimesh/core && /usr/local/Cellar/cmake/3.28.3/bin/ccmake -S/Users/leofk/Documents/GitHub/modeling -B/Users/leofk/Documents/GitHub/modeling/build
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -168,7 +176,7 @@ build src/minimesh/core/edit_cache: phony src/minimesh/core/CMakeFiles/edit_cach
 # Utility command for rebuild_cache
 
 build src/minimesh/core/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/leofk/Documents/524/modeling/build/src/minimesh/core && /usr/local/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S/Users/leofk/Documents/524/modeling -B/Users/leofk/Documents/524/modeling/build
+  COMMAND = cd /Users/leofk/Documents/GitHub/modeling/build/src/minimesh/core && /usr/local/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S/Users/leofk/Documents/GitHub/modeling -B/Users/leofk/Documents/GitHub/modeling/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -177,7 +185,7 @@ build src/minimesh/core/rebuild_cache: phony src/minimesh/core/CMakeFiles/rebuil
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# /Users/leofk/Documents/524/modeling/CMakeLists.txt
+# /Users/leofk/Documents/GitHub/modeling/CMakeLists.txt
 # =============================================================================
 
 # =============================================================================
@@ -189,11 +197,11 @@ build src/minimesh/core/rebuild_cache: phony src/minimesh/core/CMakeFiles/rebuil
 
 build cmake_object_order_depends_target_minimeshcli: phony || cmake_object_order_depends_target_minimeshcore
 
-build src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o: CXX_COMPILER__minimeshcli_unscanned_Release /Users/leofk/Documents/524/modeling/src/minimesh/cli/main.cpp || cmake_object_order_depends_target_minimeshcli
-  DEFINES = -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG
+build src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o: CXX_COMPILER__minimeshcli_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/cli/main.cpp || cmake_object_order_depends_target_minimeshcli
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
   DEP_FILE = src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  INCLUDES = -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
   OBJECT_DIR = src/minimesh/cli/CMakeFiles/minimeshcli.dir
   OBJECT_FILE_DIR = src/minimesh/cli/CMakeFiles/minimeshcli.dir
 
@@ -205,8 +213,8 @@ build src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o: CXX_COMPILER__mini
 #############################################
 # Link the executable bin/minimeshcli
 
-build bin/minimeshcli: CXX_EXECUTABLE_LINKER__minimeshcli_Release src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o | src/minimesh/core/libminimeshcore.a || src/minimesh/core/libminimeshcore.a
-  FLAGS = -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+build bin/minimeshcli: CXX_EXECUTABLE_LINKER__minimeshcli_Debug src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o | src/minimesh/core/libminimeshcore.a || src/minimesh/core/libminimeshcore.a
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
   LINK_LIBRARIES = src/minimesh/core/libminimeshcore.a
   OBJECT_DIR = src/minimesh/cli/CMakeFiles/minimeshcli.dir
   POST_BUILD = :
@@ -219,7 +227,7 @@ build bin/minimeshcli: CXX_EXECUTABLE_LINKER__minimeshcli_Release src/minimesh/c
 # Utility command for edit_cache
 
 build src/minimesh/cli/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/leofk/Documents/524/modeling/build/src/minimesh/cli && /usr/local/Cellar/cmake/3.28.3/bin/ccmake -S/Users/leofk/Documents/524/modeling -B/Users/leofk/Documents/524/modeling/build
+  COMMAND = cd /Users/leofk/Documents/GitHub/modeling/build/src/minimesh/cli && /usr/local/Cellar/cmake/3.28.3/bin/ccmake -S/Users/leofk/Documents/GitHub/modeling -B/Users/leofk/Documents/GitHub/modeling/build
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -231,7 +239,7 @@ build src/minimesh/cli/edit_cache: phony src/minimesh/cli/CMakeFiles/edit_cache.
 # Utility command for rebuild_cache
 
 build src/minimesh/cli/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/leofk/Documents/524/modeling/build/src/minimesh/cli && /usr/local/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S/Users/leofk/Documents/524/modeling -B/Users/leofk/Documents/524/modeling/build
+  COMMAND = cd /Users/leofk/Documents/GitHub/modeling/build/src/minimesh/cli && /usr/local/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S/Users/leofk/Documents/GitHub/modeling -B/Users/leofk/Documents/GitHub/modeling/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -240,7 +248,7 @@ build src/minimesh/cli/rebuild_cache: phony src/minimesh/cli/CMakeFiles/rebuild_
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# /Users/leofk/Documents/524/modeling/CMakeLists.txt
+# /Users/leofk/Documents/GitHub/modeling/CMakeLists.txt
 # =============================================================================
 
 # =============================================================================
@@ -252,27 +260,27 @@ build src/minimesh/cli/rebuild_cache: phony src/minimesh/cli/CMakeFiles/rebuild_
 
 build cmake_object_order_depends_target_minimeshviz: phony || src/minimesh/viz/CMakeFiles/minimeshviz.dir
 
-build src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_buffer.cpp.o: CXX_COMPILER__minimeshviz_unscanned_Release /Users/leofk/Documents/524/modeling/src/minimesh/viz/mesh_buffer.cpp || cmake_object_order_depends_target_minimeshviz
-  DEFINES = -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG
+build src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_buffer.cpp.o: CXX_COMPILER__minimeshviz_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/viz/mesh_buffer.cpp || cmake_object_order_depends_target_minimeshviz
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
   DEP_FILE = src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_buffer.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  INCLUDES = -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
   OBJECT_DIR = src/minimesh/viz/CMakeFiles/minimeshviz.dir
   OBJECT_FILE_DIR = src/minimesh/viz/CMakeFiles/minimeshviz.dir
 
-build src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_viewer.cpp.o: CXX_COMPILER__minimeshviz_unscanned_Release /Users/leofk/Documents/524/modeling/src/minimesh/viz/mesh_viewer.cpp || cmake_object_order_depends_target_minimeshviz
-  DEFINES = -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG
+build src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_viewer.cpp.o: CXX_COMPILER__minimeshviz_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/viz/mesh_viewer.cpp || cmake_object_order_depends_target_minimeshviz
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
   DEP_FILE = src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_viewer.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  INCLUDES = -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
   OBJECT_DIR = src/minimesh/viz/CMakeFiles/minimeshviz.dir
   OBJECT_FILE_DIR = src/minimesh/viz/CMakeFiles/minimeshviz.dir
 
-build src/minimesh/viz/CMakeFiles/minimeshviz.dir/util/glui_slider.cpp.o: CXX_COMPILER__minimeshviz_unscanned_Release /Users/leofk/Documents/524/modeling/src/minimesh/viz/util/glui_slider.cpp || cmake_object_order_depends_target_minimeshviz
-  DEFINES = -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG
+build src/minimesh/viz/CMakeFiles/minimeshviz.dir/util/glui_slider.cpp.o: CXX_COMPILER__minimeshviz_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/viz/util/glui_slider.cpp || cmake_object_order_depends_target_minimeshviz
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
   DEP_FILE = src/minimesh/viz/CMakeFiles/minimeshviz.dir/util/glui_slider.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  INCLUDES = -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
   OBJECT_DIR = src/minimesh/viz/CMakeFiles/minimeshviz.dir
   OBJECT_FILE_DIR = src/minimesh/viz/CMakeFiles/minimeshviz.dir/util
 
@@ -284,9 +292,9 @@ build src/minimesh/viz/CMakeFiles/minimeshviz.dir/util/glui_slider.cpp.o: CXX_CO
 #############################################
 # Link the static library src/minimesh/viz/libminimeshviz.a
 
-build src/minimesh/viz/libminimeshviz.a: CXX_STATIC_LIBRARY_LINKER__minimeshviz_Release src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_buffer.cpp.o src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_viewer.cpp.o src/minimesh/viz/CMakeFiles/minimeshviz.dir/util/glui_slider.cpp.o
+build src/minimesh/viz/libminimeshviz.a: CXX_STATIC_LIBRARY_LINKER__minimeshviz_Debug src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_buffer.cpp.o src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_viewer.cpp.o src/minimesh/viz/CMakeFiles/minimeshviz.dir/util/glui_slider.cpp.o
   ARCH_FLAGS = -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  LANGUAGE_COMPILE_FLAGS = -O3 -DNDEBUG
+  LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = src/minimesh/viz/CMakeFiles/minimeshviz.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -298,7 +306,7 @@ build src/minimesh/viz/libminimeshviz.a: CXX_STATIC_LIBRARY_LINKER__minimeshviz_
 # Utility command for edit_cache
 
 build src/minimesh/viz/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/leofk/Documents/524/modeling/build/src/minimesh/viz && /usr/local/Cellar/cmake/3.28.3/bin/ccmake -S/Users/leofk/Documents/524/modeling -B/Users/leofk/Documents/524/modeling/build
+  COMMAND = cd /Users/leofk/Documents/GitHub/modeling/build/src/minimesh/viz && /usr/local/Cellar/cmake/3.28.3/bin/ccmake -S/Users/leofk/Documents/GitHub/modeling -B/Users/leofk/Documents/GitHub/modeling/build
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -310,7 +318,7 @@ build src/minimesh/viz/edit_cache: phony src/minimesh/viz/CMakeFiles/edit_cache.
 # Utility command for rebuild_cache
 
 build src/minimesh/viz/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/leofk/Documents/524/modeling/build/src/minimesh/viz && /usr/local/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S/Users/leofk/Documents/524/modeling -B/Users/leofk/Documents/524/modeling/build
+  COMMAND = cd /Users/leofk/Documents/GitHub/modeling/build/src/minimesh/viz && /usr/local/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S/Users/leofk/Documents/GitHub/modeling -B/Users/leofk/Documents/GitHub/modeling/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -319,7 +327,7 @@ build src/minimesh/viz/rebuild_cache: phony src/minimesh/viz/CMakeFiles/rebuild_
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# /Users/leofk/Documents/524/modeling/CMakeLists.txt
+# /Users/leofk/Documents/GitHub/modeling/CMakeLists.txt
 # =============================================================================
 
 # =============================================================================
@@ -331,11 +339,11 @@ build src/minimesh/viz/rebuild_cache: phony src/minimesh/viz/CMakeFiles/rebuild_
 
 build cmake_object_order_depends_target_minimeshgui: phony || cmake_object_order_depends_target_minimeshcore cmake_object_order_depends_target_minimeshviz
 
-build src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o: CXX_COMPILER__minimeshgui_unscanned_Release /Users/leofk/Documents/524/modeling/src/minimesh/gui/main.cpp || cmake_object_order_depends_target_minimeshgui
-  DEFINES = -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG
+build src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o: CXX_COMPILER__minimeshgui_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/gui/main.cpp || cmake_object_order_depends_target_minimeshgui
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
   DEP_FILE = src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-  INCLUDES = -I/Users/leofk/Documents/524/modeling/src -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /usr/local/include/eigen3 -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /usr/local/include/eigen3 -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
   OBJECT_DIR = src/minimesh/gui/CMakeFiles/minimeshgui.dir
   OBJECT_FILE_DIR = src/minimesh/gui/CMakeFiles/minimeshgui.dir
 
@@ -347,8 +355,8 @@ build src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o: CXX_COMPILER__mini
 #############################################
 # Link the executable bin/minimeshgui
 
-build bin/minimeshgui: CXX_EXECUTABLE_LINKER__minimeshgui_Release src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o | src/minimesh/core/libminimeshcore.a src/minimesh/viz/libminimeshviz.a /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/OpenGL.framework /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/OpenGL.framework /usr/local/lib/libglui.a /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/OpenGL.framework || src/minimesh/core/libminimeshcore.a src/minimesh/viz/libminimeshviz.a
-  FLAGS = -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+build bin/minimeshgui: CXX_EXECUTABLE_LINKER__minimeshgui_Debug src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o | src/minimesh/core/libminimeshcore.a src/minimesh/viz/libminimeshviz.a /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/OpenGL.framework /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/OpenGL.framework /usr/local/lib/libglui.a /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/OpenGL.framework || src/minimesh/core/libminimeshcore.a src/minimesh/viz/libminimeshviz.a
+  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
   LINK_LIBRARIES = src/minimesh/core/libminimeshcore.a  src/minimesh/viz/libminimeshviz.a  -framework GLUT  -framework Cocoa  -framework OpenGL  -framework OpenGL  /usr/local/lib/libglui.a  -framework OpenGL
   OBJECT_DIR = src/minimesh/gui/CMakeFiles/minimeshgui.dir
   POST_BUILD = :
@@ -361,7 +369,7 @@ build bin/minimeshgui: CXX_EXECUTABLE_LINKER__minimeshgui_Release src/minimesh/g
 # Utility command for edit_cache
 
 build src/minimesh/gui/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/leofk/Documents/524/modeling/build/src/minimesh/gui && /usr/local/Cellar/cmake/3.28.3/bin/ccmake -S/Users/leofk/Documents/524/modeling -B/Users/leofk/Documents/524/modeling/build
+  COMMAND = cd /Users/leofk/Documents/GitHub/modeling/build/src/minimesh/gui && /usr/local/Cellar/cmake/3.28.3/bin/ccmake -S/Users/leofk/Documents/GitHub/modeling -B/Users/leofk/Documents/GitHub/modeling/build
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -373,7 +381,7 @@ build src/minimesh/gui/edit_cache: phony src/minimesh/gui/CMakeFiles/edit_cache.
 # Utility command for rebuild_cache
 
 build src/minimesh/gui/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/leofk/Documents/524/modeling/build/src/minimesh/gui && /usr/local/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S/Users/leofk/Documents/524/modeling -B/Users/leofk/Documents/524/modeling/build
+  COMMAND = cd /Users/leofk/Documents/GitHub/modeling/build/src/minimesh/gui && /usr/local/Cellar/cmake/3.28.3/bin/cmake --regenerate-during-build -S/Users/leofk/Documents/GitHub/modeling -B/Users/leofk/Documents/GitHub/modeling/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -401,35 +409,35 @@ build minimeshviz: phony src/minimesh/viz/libminimeshviz.a
 # =============================================================================
 
 #############################################
-# Folder: /Users/leofk/Documents/524/modeling/build
+# Folder: /Users/leofk/Documents/GitHub/modeling/build
 
 build all: phony src/minimesh/core/all src/minimesh/cli/all src/minimesh/viz/all src/minimesh/gui/all
 
 # =============================================================================
 
 #############################################
-# Folder: /Users/leofk/Documents/524/modeling/build/src/minimesh/cli
+# Folder: /Users/leofk/Documents/GitHub/modeling/build/src/minimesh/cli
 
 build src/minimesh/cli/all: phony bin/minimeshcli
 
 # =============================================================================
 
 #############################################
-# Folder: /Users/leofk/Documents/524/modeling/build/src/minimesh/core
+# Folder: /Users/leofk/Documents/GitHub/modeling/build/src/minimesh/core
 
 build src/minimesh/core/all: phony src/minimesh/core/libminimeshcore.a
 
 # =============================================================================
 
 #############################################
-# Folder: /Users/leofk/Documents/524/modeling/build/src/minimesh/gui
+# Folder: /Users/leofk/Documents/GitHub/modeling/build/src/minimesh/gui
 
 build src/minimesh/gui/all: phony bin/minimeshgui
 
 # =============================================================================
 
 #############################################
-# Folder: /Users/leofk/Documents/524/modeling/build/src/minimesh/viz
+# Folder: /Users/leofk/Documents/GitHub/modeling/build/src/minimesh/viz
 
 build src/minimesh/viz/all: phony src/minimesh/viz/libminimeshviz.a
 
@@ -440,14 +448,14 @@ build src/minimesh/viz/all: phony src/minimesh/viz/libminimeshviz.a
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /Users/leofk/Documents/524/modeling/CMakeLists.txt /Users/leofk/Documents/524/modeling/cmake/FindEigen3.cmake /Users/leofk/Documents/524/modeling/cmake/FindFREEGLUT.cmake /Users/leofk/Documents/524/modeling/cmake/FindGLUI.cmake /Users/leofk/Documents/524/modeling/cmake/minimesh.cmake /Users/leofk/Documents/524/modeling/src/minimesh/cli/CMakeLists.txt /Users/leofk/Documents/524/modeling/src/minimesh/core/CMakeLists.txt /Users/leofk/Documents/524/modeling/src/minimesh/gui/CMakeLists.txt /Users/leofk/Documents/524/modeling/src/minimesh/viz/CMakeLists.txt /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeGenericSystem.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/AppleClang-C.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/AppleClang-CXX.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/Clang.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/GNU.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/FindOpenGL.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/FindPackageMessage.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-AppleClang-C.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-AppleClang-CXX.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-Clang-C.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-Clang-CXX.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-Clang.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Darwin-Initialize.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Darwin.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCCompiler.cmake CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | /Users/leofk/Documents/GitHub/modeling/CMakeLists.txt /Users/leofk/Documents/GitHub/modeling/cmake/FindEigen3.cmake /Users/leofk/Documents/GitHub/modeling/cmake/FindFREEGLUT.cmake /Users/leofk/Documents/GitHub/modeling/cmake/FindGLUI.cmake /Users/leofk/Documents/GitHub/modeling/cmake/minimesh.cmake /Users/leofk/Documents/GitHub/modeling/src/minimesh/cli/CMakeLists.txt /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/CMakeLists.txt /Users/leofk/Documents/GitHub/modeling/src/minimesh/gui/CMakeLists.txt /Users/leofk/Documents/GitHub/modeling/src/minimesh/viz/CMakeLists.txt /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeGenericSystem.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/AppleClang-C.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/AppleClang-CXX.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/Clang.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/GNU.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/FindOpenGL.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/FindPackageMessage.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-AppleClang-C.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-AppleClang-CXX.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-Clang-C.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-Clang-CXX.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-Clang.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Darwin-Initialize.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Darwin.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCCompiler.cmake CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /Users/leofk/Documents/524/modeling/CMakeLists.txt /Users/leofk/Documents/524/modeling/cmake/FindEigen3.cmake /Users/leofk/Documents/524/modeling/cmake/FindFREEGLUT.cmake /Users/leofk/Documents/524/modeling/cmake/FindGLUI.cmake /Users/leofk/Documents/524/modeling/cmake/minimesh.cmake /Users/leofk/Documents/524/modeling/src/minimesh/cli/CMakeLists.txt /Users/leofk/Documents/524/modeling/src/minimesh/core/CMakeLists.txt /Users/leofk/Documents/524/modeling/src/minimesh/gui/CMakeLists.txt /Users/leofk/Documents/524/modeling/src/minimesh/viz/CMakeLists.txt /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeGenericSystem.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/AppleClang-C.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/AppleClang-CXX.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/Clang.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/GNU.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/FindOpenGL.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/FindPackageMessage.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-AppleClang-C.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-AppleClang-CXX.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-Clang-C.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-Clang-CXX.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-Clang.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Darwin-Initialize.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Darwin.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCCompiler.cmake CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake: phony
+build /Users/leofk/Documents/GitHub/modeling/CMakeLists.txt /Users/leofk/Documents/GitHub/modeling/cmake/FindEigen3.cmake /Users/leofk/Documents/GitHub/modeling/cmake/FindFREEGLUT.cmake /Users/leofk/Documents/GitHub/modeling/cmake/FindGLUI.cmake /Users/leofk/Documents/GitHub/modeling/cmake/minimesh.cmake /Users/leofk/Documents/GitHub/modeling/src/minimesh/cli/CMakeLists.txt /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/CMakeLists.txt /Users/leofk/Documents/GitHub/modeling/src/minimesh/gui/CMakeLists.txt /Users/leofk/Documents/GitHub/modeling/src/minimesh/viz/CMakeLists.txt /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeGenericSystem.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/AppleClang-C.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/AppleClang-CXX.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/Clang.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Compiler/GNU.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/FindOpenGL.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/FindPackageMessage.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-AppleClang-C.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-AppleClang-CXX.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-Clang-C.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-Clang-CXX.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Apple-Clang.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Darwin-Initialize.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/Darwin.cmake /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCCompiler.cmake CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake: phony
 
 
 #############################################
