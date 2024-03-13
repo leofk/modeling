@@ -226,7 +226,8 @@ int main(int argc, char * argv[])
 		// mohe::Mesh_io(globalvars::mesh).read_auto("octopus.obj");
 
 		// FOR MESHES W BOUNDARY
-		mohe::Mesh_io(globalvars::mesh).read_auto("pyramid.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("pyramid.obj");
+		mohe::Mesh_io(globalvars::mesh).read_auto("hexagon.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cat.obj");
 	}
 	else // otherwise use the address specified in the command line

@@ -1,4 +1,4 @@
-#pragma once
+		#pragma once
 
 //
 // mesh_simplify.hpp
@@ -44,8 +44,8 @@ public:
 	
 	void compute_circle_pos(const int v_id); 
 	
-	void compute_A_i(const int v_id); 
-	void compute_UVbar_i(const int v_id); 
+	void compute_A_i(int vid, int i); 
+	void compute_UVbar_i(int vid, int i); 
 	void compute_interior_pos(); 
 	void update_vertex_pos(); 
 	void math(); 
@@ -63,7 +63,9 @@ private:
 	// std::stack<int> boundary;
     std::map<int, int> boundary;
     
+	// Map between interior vertex id and position in matrices
 	std::map<int, int> interior;
+	std::map<int, int> interior_rev;
 
 	// // Index of interior vertices
 	// std::stack<int> interior;
@@ -71,7 +73,7 @@ private:
 	// map of new vertex positions
     std::map<int, Eigen::Vector3d> new_positions;
 
-	int RADIUS = 10;
+	int RADIUS = 1;
 	Eigen::MatrixXd A;
 	Eigen::MatrixXd Ubar;
 	Eigen::MatrixXd Vbar;

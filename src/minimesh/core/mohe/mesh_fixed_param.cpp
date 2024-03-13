@@ -60,14 +60,14 @@ void Mesh_fixed_param::compute_circle_pos(const int vid)
 	
 	float x = v.xyz()[0];
 	float y = v.xyz()[1];
-	// printf("x=%f , y=%f \n", x, y);
+	printf("x = %f , y = %f \n", x, y);
 
 
     float theta = std::atan2(y, x); 
 
     float x_new = RADIUS * std::cos(theta); 
     float y_new = RADIUS * std::sin(theta);
-	// TODO -  maybe need to adjust based on quadrant??
+	printf("x new = %f , y new = %f \n", x_new, y_new);
 
 	new_positions[vid] = Eigen::Vector3d(x_new, y_new, 0.0);
 }
@@ -81,14 +81,14 @@ void Mesh_fixed_param::compute_interior_pos()
     Eigen::MatrixXd V = A.partialPivLu().solve(Vbar);
 
     for (int i = 0; i < U.rows(); ++i) {
-        new_positions[i] = Eigen::Vector3d(U(i), V(i), 0.0);
+        new_positions[interior_rev[i]] = Eigen::Vector3d(U(i), V(i), 0.0);
     }
 }
 
 //
 // compute values for A matrix per interioir vertex
 //
-void Mesh_fixed_param::compute_A_i(const int i)
+void Mesh_fixed_param::compute_A_i(int vid, int i)
 {
 	A(i, i) = 1.0;
 
@@ -98,8 +98,8 @@ void Mesh_fixed_param::compute_A_i(const int i)
 		Mesh_connectivity::Vertex_iterator v_j = ring.half_edge().origin();
 		if (!v_j.is_boundary())
 		{
-			int j = v_j.index();
-			A(i, j) = -lambda_ij(i,j);
+			int j = interior[v_j.index()];
+			A(i, j) = -lambda_ij(vid,v_j.index());
 		}
 	} while(ring.advance());
 
@@ -108,7 +108,7 @@ void Mesh_fixed_param::compute_A_i(const int i)
 //
 // compute values for Ubar and Vbar matrix per interioir vertex
 //
-void Mesh_fixed_param::compute_UVbar_i(const int i)
+void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 {
 	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
 	float u_sum, v_sum = 0.0;
@@ -118,9 +118,9 @@ void Mesh_fixed_param::compute_UVbar_i(const int i)
 		Mesh_connectivity::Vertex_iterator v_j = ring.half_edge().origin();
 		if (v_j.is_boundary())
 		{
-			int j = v_j.index();
-			u_sum += lambda_ij(i,j) * new_positions[j][0];
-			v_sum += lambda_ij(i,j) * new_positions[j][1];
+			int j = interior[v_j.index()];
+			u_sum += lambda_ij(vid,v_j.index()) * new_positions[j][0];
+			v_sum += lambda_ij(vid,v_j.index()) * new_positions[j][1];
 		}
 	} while(ring.advance());
 
@@ -131,7 +131,7 @@ void Mesh_fixed_param::compute_UVbar_i(const int i)
 //
 // compute mean-value weights given vertices with index i and j
 //
-float Mesh_fixed_param::lambda_ij(const int i, const int j)
+float Mesh_fixed_param::lambda_ij(int i, int j)
 {
  	Mesh_connectivity::Vertex_iterator v_i = mesh().vertex_at(i);
  	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
@@ -229,6 +229,7 @@ void Mesh_fixed_param::math()
 		compute_circle_pos(pair.second);
     }
 
+	int i = 0;
 	// TODO - slow to iterate over all this, maybe a faster solution?
 	for(int vid = 0 ; vid < mesh().n_total_vertices() ; ++vid)
 	{
@@ -236,10 +237,16 @@ void Mesh_fixed_param::math()
 
 		if (!v.is_boundary())
 		{
-			compute_A_i(vid);
-			compute_UVbar_i(vid);
+			interior[vid] = i;
+			interior_rev[i] = vid;
+			i++;
 		}
 	}
+
+	for (const auto& pair : interior) {
+		compute_A_i(pair.first, pair.second);
+		compute_UVbar_i(pair.first, pair.second);
+    }
 }
 
 //
