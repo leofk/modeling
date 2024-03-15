@@ -228,10 +228,13 @@ int main(int argc, char * argv[])
 		// FOR MESHES W BOUNDARY
 		// mohe::Mesh_io(globalvars::mesh).read_auto("pyramid.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("hexagon.obj");
-		mohe::Mesh_io(globalvars::mesh).read_auto("cat.obj");
+		mohe::Mesh_io(globalvars::mesh).read_auto("camel_head.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("cat.obj");
 	}
 	else // otherwise use the address specified in the command line
 	{
+		foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/");
+
 		mohe::Mesh_io(globalvars::mesh).read_auto(argv[1]);
 	}
 

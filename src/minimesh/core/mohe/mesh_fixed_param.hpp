@@ -13,7 +13,8 @@
 #include <unordered_set>
 #include <minimesh/core/mohe/mesh_connectivity.hpp>
 #include "minimesh/viz/mesh_buffer.hpp"
-
+#include <Eigen/SparseCore>
+#include <Eigen/SparseCholesky>
 
 namespace minimesh
 {
@@ -43,6 +44,7 @@ public:
 	void reset_flags(); 
 	
 	void compute_circle_pos(const int v_id); 
+	void generate_circle(); 
 	
 	void compute_A_i(int vid, int i); 
 	void compute_UVbar_i(int vid, int i); 
@@ -60,7 +62,7 @@ private:
 	std::stack<int> split_half_edges;
 
 	// Index of boundary vertices
-	// std::stack<int> boundary;
+	std::stack<int> boundary_ids;
     std::map<int, int> boundary;
     
 	// Map between interior vertex id and position in matrices
@@ -74,10 +76,11 @@ private:
     std::map<int, Eigen::Vector3d> new_positions;
 
 	int RADIUS = 1;
-	Eigen::MatrixXd A;
+	// Eigen::MatrixXd A;
 	Eigen::MatrixXd Ubar;
 	Eigen::MatrixXd Vbar;
-
+    Eigen::SparseMatrix<double> A;
+	std::vector<Eigen::Triplet<double>> A_elem;
 };
 
 
