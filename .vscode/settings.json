@@ -70,7 +70,9 @@
 		"system_error": "cpp",
 		"tuple": "cpp",
 		"type_traits": "cpp",
-		"typeinfo": "cpp"
+		"typeinfo": "cpp",
+		"dense": "cpp",
+		"sparselu": "cpp"
 	},
 	"C_Cpp.errorSquiggles": "enabled"
 }

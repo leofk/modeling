@@ -1,7 +1,11 @@
 #include <minimesh/core/mohe/mesh_fixed_param.hpp>
 #include <minimesh/core/util/assert.hpp>
 #include <Eigen/Dense> 
+#include <Eigen/SparseLU> 
 #include <set>
+
+#include <iostream>
+#include <sstream>
 
 namespace minimesh
 {
@@ -88,7 +92,7 @@ void Mesh_fixed_param::generate_circle()
         // Compute new xy position of vertex on the circle using trigonometry
         float x_new = RADIUS * cos(angle);
         float y_new = RADIUS * sin(angle);
-		printf("x new = %f , y new = %f \n", x_new, y_new);
+		// printf("x new = %f , y new = %f \n", x_new, y_new);
 
         new_positions[vid] = Eigen::Vector3d(x_new, y_new, 0.0);
 
@@ -121,7 +125,7 @@ void Mesh_fixed_param::compute_circle_pos(const int vid)
 
     float x_new = RADIUS * std::cos(theta); 
     float y_new = RADIUS * std::sin(theta);
-	printf("x new = %f , y new = %f \n", x_new, y_new);
+	// printf("x new = %f , y new = %f \n", x_new, y_new);
 
 	new_positions[vid] = Eigen::Vector3d(x_new, y_new, 0.0);
 }
@@ -133,11 +137,22 @@ void Mesh_fixed_param::compute_interior_pos()
 {
     // Eigen::MatrixXd U = A.partialPivLu().solve(Ubar);
     // Eigen::MatrixXd V = A.partialPivLu().solve(Vbar);
-	
+
+	std::cout << "A: " << A << std::endl;
+	std::cout << "Ubar: " << Ubar << std::endl;
+	std::cout << "Vbar: " << Vbar << std::endl;
+
   	Eigen::SimplicialLDLT< Eigen::SparseMatrix<double> > solver;
 	solver.compute(A);
-	Eigen::MatrixXd U = solver.solve(Ubar).normalized();
-	Eigen::MatrixXd V = solver.solve(Vbar).normalized();
+	// TODO WORKS IF NORMALIZED??A
+	// Eigen::MatrixXd U = solver.solve(Ubar).normalized();
+	// Eigen::MatrixXd V = solver.solve(Vbar).normalized();
+	Eigen::MatrixXd U = solver.solve(Ubar);
+	Eigen::MatrixXd V = solver.solve(Vbar);
+
+
+	std::cout << "U: " << U << std::endl;
+	std::cout << "V: " << V << std::endl;
 
     for (int i = 0; i < U.rows(); ++i) {
 		float u = U(i);
@@ -152,10 +167,9 @@ void Mesh_fixed_param::compute_interior_pos()
 //
 void Mesh_fixed_param::compute_A_i(int vid, int i)
 {
-	// A(i, i) = 1.0;
-	A_elem.push_back(Eigen::Triplet<double>(i, i, 1.0));
-
-	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
+	// A_elem.push_back(Eigen::Triplet<double>(i, i, 1.0));
+	float sum = 0.0;
+	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(vid);
 	do // *points to*
 	{
 		Mesh_connectivity::Vertex_iterator v_j = ring.half_edge().origin();
@@ -164,11 +178,15 @@ void Mesh_fixed_param::compute_A_i(int vid, int i)
 			int j = interior[v_j.index()];
 			// A(i, j) = -lambda_ij(vid,v_j.index());
 			A_elem.push_back(Eigen::Triplet<double>(i, j, -lambda_ij(vid,v_j.index())));
-
+			sum += 1.0;
+			//sum += lambda_ij(vid,v_j.index());
 			// printf("aij = %f \n", A(i,j));
 
 		}
 	} while(ring.advance());
+
+	A_elem.push_back(Eigen::Triplet<double>(i, i, sum));
+
 
 }
 
@@ -177,7 +195,7 @@ void Mesh_fixed_param::compute_A_i(int vid, int i)
 //
 void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 {
-	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
+	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(vid);
 	float u_sum, v_sum = 0.0;
 	
 	do // *points to*
@@ -186,7 +204,7 @@ void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 		if (v_j.is_boundary())
 		{
 			int j = interior[v_j.index()];
-			u_sum += lambda_ij(vid,v_j.index()) * new_positions[v_j.index()][0];
+			u_sum += lambda_ij(vid,v_j.index()) * new_positions[v_j.index()][0]; // k_ij * u_j
 			v_sum += lambda_ij(vid,v_j.index()) * new_positions[v_j.index()][1];
 		}
 	} while(ring.advance());
@@ -205,7 +223,7 @@ float Mesh_fixed_param::lambda_ij(int i, int j)
  	Mesh_connectivity::Vertex_iterator v_i = mesh().vertex_at(i);
  	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
 	float w_sum = 0.0;
-	float w_ij;
+	float w_ij = 0.0;
 
 	do // *points to*
 	{
@@ -221,15 +239,16 @@ float Mesh_fixed_param::lambda_ij(int i, int j)
 
 		float a_ik, b_ki;
 		compute_angles(ring.half_edge().index(), i_pos, k_pos, a_ik, b_ki);
-	
-		w_ik = (tan(a_ik/2) + tan(b_ki/2)) / r_ik;
+		w_ik = (tan(a_ik/2.0) + tan(b_ki/2.0)) / r_ik;
 
 		if (k==j) { w_ij = w_ik; }
+		
 		w_sum += w_ik;
 
 	} while(ring.advance());
 
-	return w_ij / w_sum;
+	//return w_ij / w_sum;
+	return 1.0;
 }
 
 void Mesh_fixed_param::compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Vector3d k_pos, float& a_ik, float& b_ki)
@@ -246,8 +265,8 @@ void Mesh_fixed_param::compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Ve
 	float B_n = B.norm();
 	float IJ_n = IJ.norm();
 
-	a_ik = acos(IJ.dot(A) / (A_n * IJ_n));
-	b_ki = acos(IJ.dot(B) / (B_n * IJ_n));
+	a_ik = acos(A.dot(IJ) / (A_n * IJ_n));
+	b_ki = acos(B.dot(IJ) / (B_n * IJ_n));
 }
 
 

@@ -33,8 +33,8 @@ set(SOURCE_FILES
   mohe/mesh_simplify.cpp
   mohe/mesh_fixed_param.hpp
   mohe/mesh_fixed_param.cpp
-  # mohe/mesh_free_param.hpp
-  # mohe/mesh_free_param.cpp
+  mohe/mesh_free_param.hpp
+  mohe/mesh_free_param.cpp
  )
 
  
