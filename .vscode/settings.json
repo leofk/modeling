@@ -72,7 +72,9 @@
 		"type_traits": "cpp",
 		"typeinfo": "cpp",
 		"dense": "cpp",
-		"sparselu": "cpp"
+		"sparselu": "cpp",
+		"sparse": "cpp",
+		"list": "cpp"
 	},
 	"C_Cpp.errorSquiggles": "enabled"
 }

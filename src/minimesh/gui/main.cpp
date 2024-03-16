@@ -155,7 +155,8 @@ void mouse_moved(int x, int y)
 void subdivide_pressed(int)
 {
 	// globalvars::modi.subdivision();
-	globalvars::modi.parametrize();
+	// globalvars::modi.fixed_param();
+	globalvars::modi.free_param();
 	// mohe::Mesh_io(globalvars::mesh).write_obj("hex_more.obj");
 
 	// reload the mesh in the viewer

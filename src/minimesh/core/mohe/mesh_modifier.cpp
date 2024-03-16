@@ -3,6 +3,7 @@
 #include <minimesh/core/mohe/mesh_subdivision.hpp>
 #include <minimesh/core/mohe/mesh_simplify.hpp>
 #include <minimesh/core/mohe/mesh_fixed_param.hpp>
+#include <minimesh/core/mohe/mesh_free_param.hpp>
 
 namespace minimesh
 {
@@ -26,9 +27,15 @@ void Mesh_modifier::simplify(int num_entities_to_simplify)
 	// done in main
 }
 
-void Mesh_modifier::parametrize()
+void Mesh_modifier::fixed_param()
 {
 	Mesh_fixed_param param(mesh());
+	param.parametrize();
+}
+
+void Mesh_modifier::free_param()
+{
+	Mesh_free_param param(mesh());
 	param.parametrize();
 }
 

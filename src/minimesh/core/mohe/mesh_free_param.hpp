@@ -40,10 +40,18 @@ public:
 	bool is_boundary(const int he_id);
 	void get_pinned();
 	void mass_matrix();
+	void u_matrix();
 	float geo_dist(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2);
 	void init_matrices();
-	void get_vertices(int f_id, int& v1, int& v2, int& v3);
-	
+	void set_matrices();
+	void get_vertices(std::vector<int>& ids, int f_id, int& v1, int& v2, int& v3);
+	float compute_dt(int& v1, int& v2, int& v3);
+	std::pair<bool, int> is_pinned(int& v);
+	std::pair<float, float> compute_w(int& v2, int& v3);
+	void A_matrix();
+	void b_matrix();
+	void solve_system();
+	void update_positions();
 	
 private:
 	// pointer to the mesh that we are working on.
@@ -55,28 +63,30 @@ private:
 	// Index of boundary vertices
 	// std::stack<int> boundary_ids;
 	std::vector<int> boundary_ids;
-	std::vector<int> pinned_ids;
-    std::map<int, int> boundary;
+	int p1;
+	int p2;
     
-	// Map between interior vertex id and position in matrices
-	std::map<int, int> interior;
-	std::map<int, int> interior_rev;
-
-	// // Index of interior vertices
-	// std::stack<int> interior;
-
+	std::map<int, int> free;
+	// std::map<int, int> interior_rev;
 	// map of new vertex positions
     std::map<int, Eigen::Vector3d> new_positions;
 
-	int RADIUS = 1;
-	// Eigen::MatrixXd A;
-	Eigen::MatrixXd Ubar;
-	Eigen::MatrixXd Vbar;
     Eigen::SparseMatrix<double> MF1;
+	std::vector<Eigen::Triplet<double>> MF1_elem;
     Eigen::SparseMatrix<double> MP1;
+	std::vector<Eigen::Triplet<double>> MP1_elem;
     Eigen::SparseMatrix<double> MF2;
+	std::vector<Eigen::Triplet<double>> MF2_elem;
     Eigen::SparseMatrix<double> MP2;
-	std::vector<Eigen::Triplet<double>> A_elem;
+	std::vector<Eigen::Triplet<double>> MP2_elem;
+
+	Eigen::MatrixXd UP1;
+	Eigen::MatrixXd UP2;
+
+    Eigen::SparseMatrix<double> A;
+	Eigen::MatrixXd b;
+	Eigen::MatrixXd X;
+
 };
 
 
