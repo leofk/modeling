@@ -42,8 +42,6 @@ public:
 	void flag_boundary();
 
 	void reset_flags(); 
-	
-	void compute_circle_pos(const int v_id); 
 	void generate_circle(); 
 	
 	void compute_A_i(int vid, int i); 

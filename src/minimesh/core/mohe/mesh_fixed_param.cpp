@@ -89,45 +89,15 @@ void Mesh_fixed_param::generate_circle()
     while (!boundary_ids.empty()) {
         int vid = boundary_ids.top();
 
-        // Compute new xy position of vertex on the circle using trigonometry
         float x_new = RADIUS * cos(angle);
         float y_new = RADIUS * sin(angle);
-		// printf("x new = %f , y new = %f \n", x_new, y_new);
 
         new_positions[vid] = Eigen::Vector3d(x_new, y_new, 0.0);
 
-        // Increase the angle for the next vertex
         angle += angle_increment;
 		
 		boundary_ids.pop();
 	}
-}
-
-
-
-//
-// compute position of vertex as projected onto a circle
-//
-void Mesh_fixed_param::compute_circle_pos(const int vid)
-{
-	Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(vid);
-	
-	float x = v.xyz()[0];
-	float y = v.xyz()[1];
-	// printf("x = %f , y = %f \n", x, y);
-
-
-    float theta = std::atan2(y, x); 
-
-	if (theta < 0) {
-		theta += 2 * M_PI;
-	}
-
-    float x_new = RADIUS * std::cos(theta); 
-    float y_new = RADIUS * std::sin(theta);
-	// printf("x new = %f , y new = %f \n", x_new, y_new);
-
-	new_positions[vid] = Eigen::Vector3d(x_new, y_new, 0.0);
 }
 
 //
@@ -135,18 +105,13 @@ void Mesh_fixed_param::compute_circle_pos(const int vid)
 //
 void Mesh_fixed_param::compute_interior_pos()
 {
-    // Eigen::MatrixXd U = A.partialPivLu().solve(Ubar);
-    // Eigen::MatrixXd V = A.partialPivLu().solve(Vbar);
-
 	// std::cout << "A: " << A << std::endl;
 	// std::cout << "Ubar: " << Ubar << std::endl;
 	// std::cout << "Vbar: " << Vbar << std::endl;
 
   	Eigen::SimplicialLDLT< Eigen::SparseMatrix<double> > solver;
 	solver.compute(A);
-	// TODO WORKS IF NORMALIZED??A
-	// Eigen::MatrixXd U = solver.solve(Ubar).normalized();
-	// Eigen::MatrixXd V = solver.solve(Vbar).normalized();
+
 	Eigen::MatrixXd U = solver.solve(Ubar);
 	Eigen::MatrixXd V = solver.solve(Vbar);
 
@@ -156,7 +121,6 @@ void Mesh_fixed_param::compute_interior_pos()
     for (int i = 0; i < U.rows(); ++i) {
 		float u = U(i);
 		float v = V(i);
-		// printf("u = %f , v = %f \n", u, v);
         new_positions[interior_rev[i]] = Eigen::Vector3d(u, v, 0.0);
     }
 }
@@ -187,8 +151,6 @@ void Mesh_fixed_param::compute_A_i(int vid, int i)
 	} while(ring.advance());
 
 	A_elem.push_back(Eigen::Triplet<double>(i, i, sum));
-
-
 }
 
 //
@@ -314,10 +276,6 @@ void Mesh_fixed_param::math()
 	Vbar = Eigen::MatrixXd::Zero(n, 1);
 
 	printf("num interior vs: %d \n", n);
-
-    // for (const auto& pair : boundary) {
-	// 	compute_circle_pos(pair.second);
-    // }
 
 	generate_circle();
 
