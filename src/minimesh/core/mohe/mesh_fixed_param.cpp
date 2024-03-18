@@ -138,9 +138,9 @@ void Mesh_fixed_param::compute_interior_pos()
     // Eigen::MatrixXd U = A.partialPivLu().solve(Ubar);
     // Eigen::MatrixXd V = A.partialPivLu().solve(Vbar);
 
-	std::cout << "A: " << A << std::endl;
-	std::cout << "Ubar: " << Ubar << std::endl;
-	std::cout << "Vbar: " << Vbar << std::endl;
+	// std::cout << "A: " << A << std::endl;
+	// std::cout << "Ubar: " << Ubar << std::endl;
+	// std::cout << "Vbar: " << Vbar << std::endl;
 
   	Eigen::SimplicialLDLT< Eigen::SparseMatrix<double> > solver;
 	solver.compute(A);
@@ -150,15 +150,14 @@ void Mesh_fixed_param::compute_interior_pos()
 	Eigen::MatrixXd U = solver.solve(Ubar);
 	Eigen::MatrixXd V = solver.solve(Vbar);
 
-
-	std::cout << "U: " << U << std::endl;
-	std::cout << "V: " << V << std::endl;
+	// std::cout << "U: " << U << std::endl;
+	// std::cout << "V: " << V << std::endl;
 
     for (int i = 0; i < U.rows(); ++i) {
 		float u = U(i);
 		float v = V(i);
 		// printf("u = %f , v = %f \n", u, v);
-        new_positions[interior_rev[i]] = Eigen::Vector3d(U(i), V(i), 0.0);
+        new_positions[interior_rev[i]] = Eigen::Vector3d(u, v, 0.0);
     }
 }
 
@@ -168,7 +167,9 @@ void Mesh_fixed_param::compute_interior_pos()
 void Mesh_fixed_param::compute_A_i(int vid, int i)
 {
 	// A_elem.push_back(Eigen::Triplet<double>(i, i, 1.0));
-	float sum = 0.0;
+	// float sum = lambda_ij(vid,vid);
+	float sum = 1.0;
+	
 	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(vid);
 	do // *points to*
 	{
@@ -178,8 +179,8 @@ void Mesh_fixed_param::compute_A_i(int vid, int i)
 			int j = interior[v_j.index()];
 			// A(i, j) = -lambda_ij(vid,v_j.index());
 			A_elem.push_back(Eigen::Triplet<double>(i, j, -lambda_ij(vid,v_j.index())));
-			sum += 1.0;
-			//sum += lambda_ij(vid,v_j.index());
+			// sum += 1.0;
+			// sum += lambda_ij(vid,v_j.index());
 			// printf("aij = %f \n", A(i,j));
 
 		}
@@ -200,16 +201,22 @@ void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 	
 	do // *points to*
 	{
-		Mesh_connectivity::Vertex_iterator v_j = ring.half_edge().origin();
-		if (v_j.is_boundary())
+		Mesh_connectivity::Vertex_iterator j = ring.half_edge().origin();
+		if (j.is_boundary())
 		{
-			int j = interior[v_j.index()];
-			u_sum += lambda_ij(vid,v_j.index()) * new_positions[v_j.index()][0]; // k_ij * u_j
-			v_sum += lambda_ij(vid,v_j.index()) * new_positions[v_j.index()][1];
+			int jid = j.index();
+			float k_ij = lambda_ij(vid,jid);
+			float u_j = new_positions[jid][0];
+			float v_j = new_positions[jid][1];
+
+			float u_ij = k_ij * u_j;
+			float v_ij = k_ij * v_j;
+			u_sum += u_ij;
+			v_sum += v_ij;
+			// printf("k_ij= %f, u_j= %f, u_ij= %f \n", k_ij, u_j, u_ij);	
+			// printf("k_ij= %f, v_j= %f, v_ij= %f \n", k_ij, v_j, v_ij);	
 		}
 	} while(ring.advance());
-	// printf("ui = %f \n", Ubar(i));
-	// printf("vi = %f \n", Vbar(i));
 
 	Ubar(i) = u_sum;
 	Vbar(i) = v_sum;
@@ -241,14 +248,18 @@ float Mesh_fixed_param::lambda_ij(int i, int j)
 		compute_angles(ring.half_edge().index(), i_pos, k_pos, a_ik, b_ki);
 		w_ik = (tan(a_ik/2.0) + tan(b_ki/2.0)) / r_ik;
 
-		if (k==j) { w_ij = w_ik; }
+		if (k==j) { 
+			// w_ij = w_ik; 
+			w_ij = 1.0; 
+		}
 		
-		w_sum += w_ik;
+		// w_sum += w_ik;
+		w_sum += 1.0;
 
 	} while(ring.advance());
 
-	//return w_ij / w_sum;
-	return 1.0;
+	return w_ij / w_sum;
+	// return 1.0;
 }
 
 void Mesh_fixed_param::compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Vector3d k_pos, float& a_ik, float& b_ki)
@@ -275,28 +286,14 @@ void Mesh_fixed_param::compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Ve
 //
 void Mesh_fixed_param::parametrize()
 {
-	// iterated over vertices to find boundary/nonboundary vertices
 	flag_boundary();
-	printf("flags done \n");
-	force_assert( mesh().check_sanity_slowly() );
 	
 	math();
-	printf("math done \n");
-
-	force_assert( mesh().check_sanity_slowly() );
-
 
 	compute_interior_pos();
-	printf("interior done \n");
-
-	force_assert( mesh().check_sanity_slowly() );
-
 
 	update_vertex_pos();
-	printf("update done \n");
-
 	force_assert( mesh().check_sanity_slowly() );
-
 
 	reset_flags();
 }
@@ -307,7 +304,6 @@ void Mesh_fixed_param::parametrize()
 //
 void Mesh_fixed_param::math() 
 {
-	printf("start");
 	
 	// int n = mesh().n_total_vertices() - boundary.size();
 	int n = mesh().n_total_vertices() - boundary_ids.size();
@@ -317,7 +313,7 @@ void Mesh_fixed_param::math()
 	Ubar = Eigen::MatrixXd::Zero(n, 1);
 	Vbar = Eigen::MatrixXd::Zero(n, 1);
 
-	printf("y%d", n);
+	printf("num interior vs: %d \n", n);
 
     // for (const auto& pair : boundary) {
 	// 	compute_circle_pos(pair.second);
@@ -338,6 +334,10 @@ void Mesh_fixed_param::math()
 			i++;
 		}
 	}
+
+	printf("interior size: %d \n", interior.size());
+	printf("interior_rev size: %d \n", interior_rev.size());
+
 
 	for (const auto& pair : interior) {
 		compute_A_i(pair.first, pair.second);

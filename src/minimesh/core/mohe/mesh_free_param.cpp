@@ -132,14 +132,15 @@ void Mesh_free_param::A_matrix()
     // Construct matrix A
     A.resize(2 * MF1.rows(), 2 * MF1.cols());
     A.reserve(2 * MF1.nonZeros() + 2 * MF2.nonZeros());
-    A.topLeftCorner(MF1.rows(), MF1.cols()) = MF1;
-    A.bottomRightCorner(MF1.rows(), MF1.cols()) = MF1;
-    A.topRightCorner(MF2.rows(), MF2.cols()) = -MF2;
-    A.bottomLeftCorner(MF2.rows(), MF2.cols()) = MF2;
+    // A.topLeftCorner(MF1.rows(), MF1.cols()) = MF1;
+    // A.bottomRightCorner(MF1.rows(), MF1.cols()) = MF1;
+    // A.topRightCorner(MF2.rows(), MF2.cols()) = -MF2;
+    // A.bottomLeftCorner(MF2.rows(), MF2.cols()) = MF2;
 }
 
 void Mesh_free_param::b_matrix()
 {
+	// TODO IS THIS RIGHT??
     b = -(Eigen::kroneckerProduct(MP1, Eigen::MatrixXd::Identity(UP1.cols(), UP1.cols())) * UP1 +
         Eigen::kroneckerProduct(MP2, Eigen::MatrixXd::Identity(UP2.cols(), UP2.cols())) * UP2);
 }
@@ -271,6 +272,9 @@ void Mesh_free_param::init_matrices()
     MF2.setZero();
     MP1.setZero();
     MP2.setZero();
+
+	// A.resize(2 * MF1.rows(), 2 * MF1.cols());
+    // A.setZero();
 }
 
 void Mesh_free_param::set_matrices() 
