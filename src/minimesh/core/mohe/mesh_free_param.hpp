@@ -41,13 +41,13 @@ public:
 	void get_pinned();
 	void mass_matrix();
 	void u_matrix();
-	float geo_dist(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2);
+	double geo_dist(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2);
 	void init_matrices();
 	void set_matrices();
 	void get_vertices(std::vector<int>& ids, int f_id, int& v1, int& v2, int& v3);
-	float compute_dt(int& v1, int& v2, int& v3);
+	double compute_dt(int& v1, int& v2, int& v3);
 	std::pair<bool, int> is_pinned(int& v);
-	std::pair<float, float> compute_w(int& v2, int& v3);
+	std::pair<double, double> compute_w(int& v2, int& v3);
 	void A_matrix();
 	void b_matrix();
 	void solve_system();
@@ -73,11 +73,13 @@ private:
 
     Eigen::SparseMatrix<double> MF1;
 	std::vector<Eigen::Triplet<double>> MF1_elem;
-    Eigen::SparseMatrix<double> MP1;
+    // Eigen::SparseMatrix<double> MP1;
+    Eigen::MatrixXd MP1;
 	std::vector<Eigen::Triplet<double>> MP1_elem;
     Eigen::SparseMatrix<double> MF2;
 	std::vector<Eigen::Triplet<double>> MF2_elem;
-    Eigen::SparseMatrix<double> MP2;
+    // Eigen::SparseMatrix<double> MP2;
+    Eigen::MatrixXd MP2;
 	std::vector<Eigen::Triplet<double>> MP2_elem;
 
 	Eigen::MatrixXd UP1;

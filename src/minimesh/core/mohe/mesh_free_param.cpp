@@ -12,64 +12,54 @@ namespace mohe
 
 void Mesh_free_param::get_pinned()
 {
-
-	// get boundary vertex positions
-	for(int he_id = 0 ; he_id < mesh().n_total_half_edges() ; ++he_id)
+	for(int vid = 0 ; vid < mesh().n_total_vertices() ; ++vid)
 	{
-		Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_id);
 
-		if (!he.is_split()) {
+		Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(vid);
 
-			// half edge is on boundary
-			if (is_boundary(he_id)) 
+		// find a vertex on the boundary
+		if (ring.reset_boundary()) {
+			Mesh_connectivity::Half_edge_iterator he = ring.half_edge();
+			int he_id = he.index();
+
+			// make sure he is on the outside of boundary for easy traversal
+			if (!is_boundary(he.next().index())) 
 			{
+				he = he.twin();
+				he_id = he.index();
+			}
 
-				if (!is_boundary(he.next().index())) {
-					he = he.twin();
-					he_id = he.index();
-				}
-				int start_he_id = he_id;
-				int start_v_id = he.origin().index();
-				int curr_v_id = start_v_id;
-				int curr_he_id = start_he_id;
-				int next_v_id = curr_v_id;
-				int next_he_id = curr_he_id;
-				do
-				{
-					// boundary_ids.push(curr_v_id);
+			int start_he_id = he_id;
+			int start_v_id = he.origin().index();
 
-					Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(curr_he_id);
-					Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(curr_v_id);
-					boundary_ids.push_back(curr_v_id);
-					v.data().is_boundary = true;
-					Mesh_connectivity::Half_edge_iterator next_he = he.next();
+			int curr_he_id = start_he_id;
+			int curr_v_id = start_v_id;
+			
+			do
+			{
+				Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(curr_he_id);
+				Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(curr_v_id);
+				v.data().is_boundary = true;
+				boundary_ids.push_back(curr_v_id);
 
-					next_he_id = next_he.index();
-					next_v_id = next_he.origin().index();
-
-					curr_v_id = next_v_id;
-					curr_he_id = next_he_id;
-					
-				} while (start_v_id != curr_v_id);
-				break;
-			} 
-			he.data().is_split = true;
-			split_half_edges.push(he.index());
-
-			he.twin().data().is_split = true;
-			split_half_edges.push(he.twin().index());
+				Mesh_connectivity::Half_edge_iterator next_he = he.next();
+				curr_he_id = next_he.index();
+				curr_v_id = next_he.origin().index();
+				
+			} while (start_v_id != curr_v_id);
+			break;
 		}
 	}
-
+	
 	// find max dist pair
-    float max_distance = 0.0;
+    double max_distance = 0.0;
 
     for (size_t i = 0; i < boundary_ids.size(); ++i) {
         for (size_t j = i + 1; j < boundary_ids.size(); ++j) {
 			Mesh_connectivity::Vertex_iterator v_i = mesh().vertex_at(boundary_ids[i]);
 			Mesh_connectivity::Vertex_iterator v_j = mesh().vertex_at(boundary_ids[j]);
 			
-            float d = geo_dist(v_i.xyz(), v_j.xyz());
+            double d = geo_dist(v_i.xyz(), v_j.xyz());
             if (d > max_distance) {
                 max_distance = d;
                 p1 = boundary_ids[i];
@@ -106,7 +96,7 @@ void Mesh_free_param::mass_matrix()
 		std::vector<int> ids;
 		get_vertices(ids, f_id, v1_id, v2_id, v3_id);
 
-		float d_t = compute_dt(v2_id, v2_id, v3_id); 
+		double d_t = compute_dt(v2_id, v2_id, v3_id); 
 		auto w = compute_w(v2_id, v3_id);
 
     	for (int i = 0; i < ids.size(); ++i) {
@@ -126,23 +116,63 @@ void Mesh_free_param::mass_matrix()
 
 	set_matrices();
 }
-
 void Mesh_free_param::A_matrix()
 {
     // Construct matrix A
     A.resize(2 * MF1.rows(), 2 * MF1.cols());
     A.reserve(2 * MF1.nonZeros() + 2 * MF2.nonZeros());
-    // A.topLeftCorner(MF1.rows(), MF1.cols()) = MF1;
-    // A.bottomRightCorner(MF1.rows(), MF1.cols()) = MF1;
-    // A.topRightCorner(MF2.rows(), MF2.cols()) = -MF2;
-    // A.bottomLeftCorner(MF2.rows(), MF2.cols()) = MF2;
+
+    std::vector<Eigen::Triplet<double>> triplets;
+
+    // Fill the top-left corner with MF1
+    for (int k = 0; k < MF1.outerSize(); ++k) {
+        for (typename Eigen::SparseMatrix<double>::InnerIterator it(MF1, k); it; ++it) {
+            triplets.push_back(Eigen::Triplet<double>(it.row(), it.col(), it.value()));
+        }
+    }
+
+    // Fill the bottom-right corner with MF1
+    for (int k = 0; k < MF1.outerSize(); ++k) {
+        for (typename Eigen::SparseMatrix<double>::InnerIterator it(MF1, k); it; ++it) {
+            triplets.push_back(Eigen::Triplet<double>(it.row() + MF1.rows(), it.col() + MF1.cols(), it.value()));
+        }
+    }
+
+    // Fill the top-right corner with -MF2
+    for (int k = 0; k < MF2.outerSize(); ++k) {
+        for (typename Eigen::SparseMatrix<double>::InnerIterator it(MF2, k); it; ++it) {
+            triplets.push_back(Eigen::Triplet<double>(it.row(), it.col() + MF1.cols(), -it.value()));
+        }
+    }
+
+    // Fill the bottom-left corner with MF2
+    for (int k = 0; k < MF2.outerSize(); ++k) {
+        for (typename Eigen::SparseMatrix<double>::InnerIterator it(MF2, k); it; ++it) {
+            triplets.push_back(Eigen::Triplet<double>(it.row() + MF1.rows(), it.col(), it.value()));
+        }
+    }
+
+    // Set the triplets into matrix A
+    A.setFromTriplets(triplets.begin(), triplets.end());
 }
+
 
 void Mesh_free_param::b_matrix()
 {
-	// TODO IS THIS RIGHT??
-    b = -(Eigen::kroneckerProduct(MP1, Eigen::MatrixXd::Identity(UP1.cols(), UP1.cols())) * UP1 +
-        Eigen::kroneckerProduct(MP2, Eigen::MatrixXd::Identity(UP2.cols(), UP2.cols())) * UP2);
+    // Construct the larger matrices by concatenating the smaller matrices
+    Eigen::MatrixXd combined_MP(2 * MP1.rows(), MP1.cols() + MP2.cols());
+    combined_MP << MP1, -MP2,
+                   MP2, MP1;
+
+    Eigen::MatrixXd combined_UP(UP1.rows() + UP2.rows(), UP1.cols());
+    combined_UP << UP1,
+                   UP2;
+
+    // Compute the result
+    Eigen::VectorXd b_temp = combined_MP * combined_UP;
+
+    // Negate the result to obtain the final b matrix
+    b = -b_temp;
 }
 
 void Mesh_free_param::solve_system()
@@ -209,25 +239,25 @@ void Mesh_free_param::parametrize()
 	update_positions();
 }
 
-float Mesh_free_param::compute_dt(int& v1_id, int& v2_id, int& v3_id)
+double Mesh_free_param::compute_dt(int& v1_id, int& v2_id, int& v3_id)
 {
 	Mesh_connectivity::Vertex_iterator v1 = mesh().vertex_at(v1_id);
 	Mesh_connectivity::Vertex_iterator v2 = mesh().vertex_at(v2_id);
 	Mesh_connectivity::Vertex_iterator v3 = mesh().vertex_at(v3_id);
 
-	float a = v1.xyz()[0] * v2.xyz()[1] - v1.xyz()[1] * v2.xyz()[0]; // x1y2 - y1x2
-	float b = v2.xyz()[0] * v3.xyz()[1] - v2.xyz()[1] * v3.xyz()[0]; // x2y3 - y2x3
-	float c = v3.xyz()[0] * v1.xyz()[1] - v3.xyz()[1] * v1.xyz()[0]; // x3y1 - y3x1
+	double a = v1.xyz()[0] * v2.xyz()[1] - v1.xyz()[1] * v2.xyz()[0]; // x1y2 - y1x2
+	double b = v2.xyz()[0] * v3.xyz()[1] - v2.xyz()[1] * v3.xyz()[0]; // x2y3 - y2x3
+	double c = v3.xyz()[0] * v1.xyz()[1] - v3.xyz()[1] * v1.xyz()[0]; // x3y1 - y3x1
 
 	return a+b+c;
 }
 
-std::pair<float, float> Mesh_free_param::compute_w(int& v2_id, int& v3_id)
+std::pair<double, double> Mesh_free_param::compute_w(int& v2_id, int& v3_id)
 {
 	Mesh_connectivity::Vertex_iterator v2 = mesh().vertex_at(v2_id);
 	Mesh_connectivity::Vertex_iterator v3 = mesh().vertex_at(v3_id);
-	float w_real = v3.xyz()[0] - v2.xyz()[0]; // x_3 - x_2
-	float w_imag = v3.xyz()[1] - v2.xyz()[1]; // y_3 - y_2
+	double w_real = v3.xyz()[0] - v2.xyz()[0]; // x_3 - x_2
+	double w_imag = v3.xyz()[1] - v2.xyz()[1]; // y_3 - y_2
 	return {w_real, w_imag};
 }
 
@@ -256,7 +286,7 @@ bool Mesh_free_param::is_boundary(const int he_id)
 	return he.twin().face().index() < 0 || he.face().index() < 0; 
 }
 
-float Mesh_free_param::geo_dist(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2) 
+double Mesh_free_param::geo_dist(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2) 
 {
     return (p1 - p2).norm();
 }
@@ -266,12 +296,16 @@ void Mesh_free_param::init_matrices()
 	int p = 2;
 	MF1.resize(mesh().n_total_faces(), mesh().n_total_vertices()-p);
 	MF2.resize(mesh().n_total_faces(), mesh().n_total_vertices()-p);
-	MP1.resize(mesh().n_total_faces(), p);
-	MP2.resize(mesh().n_total_faces(), p);
+	// MP1.resize(mesh().n_total_faces(), p);
+	// MP2.resize(mesh().n_total_faces(), p);
     MF1.setZero();
     MF2.setZero();
     MP1.setZero();
     MP2.setZero();
+
+	MP1 = Eigen::MatrixXd::Zero(mesh().n_total_faces(), 2);
+    MP2 = Eigen::MatrixXd::Zero(mesh().n_total_faces(), 2);
+
 
 	// A.resize(2 * MF1.rows(), 2 * MF1.cols());
     // A.setZero();
@@ -281,8 +315,16 @@ void Mesh_free_param::set_matrices()
 {
 	MF1.setFromTriplets(MF1_elem.begin(), MF1_elem.end());
 	MF2.setFromTriplets(MF2_elem.begin(), MF2_elem.end());
-	MP1.setFromTriplets(MP1_elem.begin(), MP1_elem.end());
-	MP2.setFromTriplets(MP2_elem.begin(), MP2_elem.end());
+	// MP1.setFromTriplets(MP1_elem.begin(), MP1_elem.end());
+	// MP2.setFromTriplets(MP2_elem.begin(), MP2_elem.end());
+
+    for (const auto& triplet : MP1_elem) {
+        MP1(triplet.row(), triplet.col()) = triplet.value();
+    }
+
+    for (const auto& triplet : MP2_elem) {
+        MP2(triplet.row(), triplet.col()) = triplet.value();
+    }
 }
 
 std::pair<bool, int> Mesh_free_param::is_pinned(int& v) {

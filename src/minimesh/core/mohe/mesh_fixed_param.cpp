@@ -11,55 +11,48 @@ namespace minimesh
 {
 namespace mohe
 {
-	
+
 //
 // flag all vertices that are on the boundary
 //
 void Mesh_fixed_param::flag_boundary()
 {
-	for(int he_id = 0 ; he_id < mesh().n_total_half_edges() ; ++he_id)
+	for(int vid = 0 ; vid < mesh().n_total_vertices() ; ++vid)
 	{
-		Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_id);
 
-		if (!he.is_split()) {
+		Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(vid);
 
-			// half edge is on boundary
-			if (is_boundary(he_id)) 
+		// find a vertex on the boundary
+		if (ring.reset_boundary()) {
+			Mesh_connectivity::Half_edge_iterator he = ring.half_edge();
+			int he_id = he.index();
+
+			// make sure he is on the outside of boundary for easy traversal
+			if (!is_boundary(he.next().index())) 
 			{
+				he = he.twin();
+				he_id = he.index();
+			}
 
-				if (!is_boundary(he.next().index())) {
-					he = he.twin();
-					he_id = he.index();
-				}
-				int start_he_id = he_id;
-				int start_v_id = he.origin().index();
-				int curr_v_id = start_v_id;
-				int curr_he_id = start_he_id;
-				int next_v_id = curr_v_id;
-				int next_he_id = curr_he_id;
-				do
-				{
-					boundary_ids.push(curr_v_id);
+			int start_he_id = he_id;
+			int start_v_id = he.origin().index();
 
-					Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(curr_he_id);
-					Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(curr_v_id);
-					v.data().is_boundary = true;
-					Mesh_connectivity::Half_edge_iterator next_he = he.next();
+			int curr_he_id = start_he_id;
+			int curr_v_id = start_v_id;
+			
+			do
+			{
+				Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(curr_he_id);
+				Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(curr_v_id);
+				v.data().is_boundary = true;
+				boundary_ids.push(curr_v_id);
 
-					next_he_id = next_he.index();
-					next_v_id = next_he.origin().index();
-
-					curr_v_id = next_v_id;
-					curr_he_id = next_he_id;
-					
-				} while (start_v_id != curr_v_id);
-				break;
-			} 
-			he.data().is_split = true;
-			split_half_edges.push(he.index());
-
-			he.twin().data().is_split = true;
-			split_half_edges.push(he.twin().index());
+				Mesh_connectivity::Half_edge_iterator next_he = he.next();
+				curr_he_id = next_he.index();
+				curr_v_id = next_he.origin().index();
+				
+			} while (start_v_id != curr_v_id);
+			break;
 		}
 	}
 }
@@ -81,16 +74,15 @@ bool Mesh_fixed_param::is_boundary(const int he_id)
 void Mesh_fixed_param::generate_circle()
 {
 
-	int size = boundary_ids.size();
-
+	int size = static_cast<int>(boundary_ids.size());
     double angle_increment = 2 * M_PI / size;
     double angle = 0.0;
 
     while (!boundary_ids.empty()) {
         int vid = boundary_ids.top();
 
-        float x_new = RADIUS * cos(angle);
-        float y_new = RADIUS * sin(angle);
+        double x_new = RADIUS * cos(angle);
+        double y_new = RADIUS * sin(angle);
 
         new_positions[vid] = Eigen::Vector3d(x_new, y_new, 0.0);
 
@@ -119,9 +111,7 @@ void Mesh_fixed_param::compute_interior_pos()
 	// std::cout << "V: " << V << std::endl;
 
     for (int i = 0; i < U.rows(); ++i) {
-		float u = U(i);
-		float v = V(i);
-        new_positions[interior_rev[i]] = Eigen::Vector3d(u, v, 0.0);
+        new_positions[interior_rev[i]] = Eigen::Vector3d(U(i), V(i), 0.0);
     }
 }
 
@@ -130,9 +120,6 @@ void Mesh_fixed_param::compute_interior_pos()
 //
 void Mesh_fixed_param::compute_A_i(int vid, int i)
 {
-	// A_elem.push_back(Eigen::Triplet<double>(i, i, 1.0));
-	// float sum = lambda_ij(vid,vid);
-	float sum = 1.0;
 	
 	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(vid);
 	do // *points to*
@@ -141,16 +128,11 @@ void Mesh_fixed_param::compute_A_i(int vid, int i)
 		if (!v_j.is_boundary())
 		{
 			int j = interior[v_j.index()];
-			// A(i, j) = -lambda_ij(vid,v_j.index());
 			A_elem.push_back(Eigen::Triplet<double>(i, j, -lambda_ij(vid,v_j.index())));
-			// sum += 1.0;
-			// sum += lambda_ij(vid,v_j.index());
-			// printf("aij = %f \n", A(i,j));
-
 		}
 	} while(ring.advance());
 
-	A_elem.push_back(Eigen::Triplet<double>(i, i, sum));
+	A_elem.push_back(Eigen::Triplet<double>(i, i, 1.0));
 }
 
 //
@@ -159,7 +141,7 @@ void Mesh_fixed_param::compute_A_i(int vid, int i)
 void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 {
 	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(vid);
-	float u_sum, v_sum = 0.0;
+	double u_sum, v_sum = 0.0;
 	
 	do // *points to*
 	{
@@ -167,12 +149,15 @@ void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 		if (j.is_boundary())
 		{
 			int jid = j.index();
-			float k_ij = lambda_ij(vid,jid);
-			float u_j = new_positions[jid][0];
-			float v_j = new_positions[jid][1];
+			double k_ij = lambda_ij(vid,jid);
 
-			float u_ij = k_ij * u_j;
-			float v_ij = k_ij * v_j;
+			double u_j = new_positions[jid][0];
+			double v_j = new_positions[jid][1];
+			// double u_j = j.xyz()[0];
+			// double v_j = j.xyz()[1];
+
+			double u_ij = k_ij * u_j;
+			double v_ij = k_ij * v_j;
 			u_sum += u_ij;
 			v_sum += v_ij;
 			// printf("k_ij= %f, u_j= %f, u_ij= %f \n", k_ij, u_j, u_ij);	
@@ -187,59 +172,61 @@ void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 //
 // compute mean-value weights given vertices with index i and j
 //
-float Mesh_fixed_param::lambda_ij(int i, int j)
+double Mesh_fixed_param::lambda_ij(int i, int j)
 {
  	Mesh_connectivity::Vertex_iterator v_i = mesh().vertex_at(i);
  	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
-	float w_sum = 0.0;
-	float w_ij = 0.0;
+	double w_sum = 0.0;
+	double w_ij = 0.0;
 
 	do // *points to*
 	{
 		Mesh_connectivity::Vertex_iterator v_k = ring.half_edge().origin();
 		int k = v_k.index();
-		float w_ik;
+		double w_ik;
 
 		Eigen::Vector3d i_pos = v_i.xyz();
 		Eigen::Vector3d k_pos = v_k.xyz();
 		
 		Eigen::Vector3d diff = k_pos - i_pos;
-   		float r_ik = diff.norm();
+   		double r_ik = diff.norm();
 
-		float a_ik, b_ki;
+		double a_ik, b_ki;
 		compute_angles(ring.half_edge().index(), i_pos, k_pos, a_ik, b_ki);
 		w_ik = (tan(a_ik/2.0) + tan(b_ki/2.0)) / r_ik;
 
+		w_ik = 1.0; // UNIFORM. TODO. USE MVW
+
 		if (k==j) { 
-			// w_ij = w_ik; 
-			w_ij = 1.0; 
+			w_ij = w_ik; 
 		}
 		
-		// w_sum += w_ik;
-		w_sum += 1.0;
+		w_sum += w_ik;
 
 	} while(ring.advance());
 
 	return w_ij / w_sum;
-	// return 1.0;
 }
 
-void Mesh_fixed_param::compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Vector3d k_pos, float& a_ik, float& b_ki)
+void Mesh_fixed_param::compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Vector3d j_pos, double& a_ik, double& b_ki)
 {
-	Mesh_connectivity::Half_edge_iterator r = mesh().half_edge_at(r_id); // points to i, origin at k
+	Mesh_connectivity::Half_edge_iterator r = mesh().half_edge_at(r_id); // points to i, origin at j
 
-	Eigen::Vector3d A_pos = r.twin().next().dest().xyz();
-	Eigen::Vector3d B_pos = r.next().dest().xyz();
+	Eigen::Vector3d B_pos = r.twin().next().dest().xyz();
+	Eigen::Vector3d A_pos = r.next().dest().xyz();
 
-   	Eigen::Vector3d IJ = k_pos - i_pos;
+   	Eigen::Vector3d IJ = j_pos - i_pos;
    	Eigen::Vector3d A = A_pos - i_pos;
    	Eigen::Vector3d B = B_pos - i_pos;
-	float A_n = A.norm();
-	float B_n = B.norm();
-	float IJ_n = IJ.norm();
+	double A_n = A.norm();
+	double B_n = B.norm();
+	double IJ_n = IJ.norm();
+	// IJ / IJ_n;
+	// A / A_n;
+	// B / B_n;
 
 	a_ik = acos(A.dot(IJ) / (A_n * IJ_n));
-	b_ki = acos(B.dot(IJ) / (B_n * IJ_n));
+	b_ki = acos(IJ.dot(B) / (B_n * IJ_n));
 }
 
 
@@ -249,7 +236,9 @@ void Mesh_fixed_param::compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Ve
 void Mesh_fixed_param::parametrize()
 {
 	flag_boundary();
-	
+
+	generate_circle();
+
 	math();
 
 	compute_interior_pos();
@@ -265,19 +254,12 @@ void Mesh_fixed_param::parametrize()
 // compute vertex updates
 //
 void Mesh_fixed_param::math() 
-{
-	
-	// int n = mesh().n_total_vertices() - boundary.size();
+{	
 	int n = mesh().n_total_vertices() - boundary_ids.size();
-	// A = Eigen::MatrixXd::Zero(n, n);
 	A.resize(n, n);
     A.setZero();
 	Ubar = Eigen::MatrixXd::Zero(n, 1);
 	Vbar = Eigen::MatrixXd::Zero(n, 1);
-
-	printf("num interior vs: %d \n", n);
-
-	generate_circle();
 
 	int i = 0;
 	// TODO - slow to iterate over all this, maybe a faster solution?
@@ -289,13 +271,9 @@ void Mesh_fixed_param::math()
 		{
 			interior[vid] = i;
 			interior_rev[i] = vid;
-			i++;
+			i++;	
 		}
 	}
-
-	printf("interior size: %d \n", interior.size());
-	printf("interior_rev size: %d \n", interior_rev.size());
-
 
 	for (const auto& pair : interior) {
 		compute_A_i(pair.first, pair.second);
@@ -312,8 +290,11 @@ void Mesh_fixed_param::update_vertex_pos()
 {
 	for(int vid = 0 ; vid < mesh().n_total_vertices() ; ++vid)
 	{
+		
 		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(vid);
-		v.data().xyz = new_positions[vid];
+		// if (v.is_boundary()) {
+			v.data().xyz = new_positions[vid];
+		// }	
 	}
 }
 

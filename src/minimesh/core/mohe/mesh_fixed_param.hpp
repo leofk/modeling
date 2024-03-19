@@ -49,8 +49,8 @@ public:
 	void compute_interior_pos(); 
 	void update_vertex_pos(); 
 	void math(); 
-	float lambda_ij(const int i, const int j);
-	void compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Vector3d k_pos, float& a_ik, float& b_ki);
+	double lambda_ij(const int i, const int j);
+	void compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Vector3d k_pos, double& a_ik, double& b_ki);
 
 private:
 	// pointer to the mesh that we are working on.
@@ -61,10 +61,11 @@ private:
 
 	// Index of boundary vertices
 	std::stack<int> boundary_ids;
-    std::map<int, int> boundary;
     
-	// Map between interior vertex id and position in matrices
+	// vid -> mat id
 	std::map<int, int> interior;
+
+	// mat id -> vid
 	std::map<int, int> interior_rev;
 
 	// // Index of interior vertices
