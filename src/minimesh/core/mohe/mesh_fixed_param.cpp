@@ -236,7 +236,7 @@ double Mesh_fixed_param::lambda_ij(int i, int j)
 //
 // fixed_param 
 //
-void Mesh_fixed_param::parametrize()
+void Mesh_fixed_param::parameterize()
 {
 	flag_boundary();
 

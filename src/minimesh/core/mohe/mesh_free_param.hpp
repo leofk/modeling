@@ -33,9 +33,9 @@ public:
 	const Mesh_connectivity & mesh() const { return _m; }
 
 	//
-	// parametrize by fixed
+	// parameterize by free boundary lscm
 	//
-	void parametrize();
+	void parameterize();
 
 	bool is_boundary(const int he_id);
 	void get_pinned();

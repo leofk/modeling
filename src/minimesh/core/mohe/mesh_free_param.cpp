@@ -269,7 +269,7 @@ void Mesh_free_param::update_positions()
 //
 // fixed_param 
 //
-void Mesh_free_param::parametrize()
+void Mesh_free_param::parameterize()
 {
 	// find pinned vertices (boundary with max geodesic dist.)
 	get_pinned();

@@ -349,10 +349,10 @@ int main(int argc, char * argv[])
 	GLUI_Button* button_subdivide =  globalvars::glui->add_button("Subdivide Loop", -1, freeglutcallback::subdivide_pressed);
 	button_subdivide->set_w(200);
 
-	GLUI_Button* button_fixed_param =  globalvars::glui->add_button("Harmonic Parametrization", -1, freeglutcallback::fixed_param_pressed);
+	GLUI_Button* button_fixed_param =  globalvars::glui->add_button("Harmonic Parameterization", -1, freeglutcallback::fixed_param_pressed);
 	button_fixed_param->set_w(200);
 
-	GLUI_Button* button_free_param =  globalvars::glui->add_button("LSCM Parametrization", -1, freeglutcallback::free_param_pressed);
+	GLUI_Button* button_free_param =  globalvars::glui->add_button("LSCM Parameterization", -1, freeglutcallback::free_param_pressed);
 	button_free_param->set_w(200);
 
 	//

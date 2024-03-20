@@ -30,13 +30,13 @@ void Mesh_modifier::simplify(int num_entities_to_simplify)
 void Mesh_modifier::fixed_param()
 {
 	Mesh_fixed_param param(mesh());
-	param.parametrize();
+	param.parameterize();
 }
 
 void Mesh_modifier::free_param()
 {
 	Mesh_free_param param(mesh());
-	param.parametrize();
+	param.parameterize();
 }
 
 
