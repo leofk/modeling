@@ -22,3 +22,10 @@ build/src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o
 build/src/minimesh/core/libminimeshcore.a
 build/src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o
 build/src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o
+build/src/minimesh/core/libminimeshcore.a
+build/.ninja_log
+build/.ninja_deps
+build/bin/minimeshgui
+build/src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o
+build/src/minimesh/viz/libminimeshviz.a
+build/src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o
