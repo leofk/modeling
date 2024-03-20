@@ -74,8 +74,8 @@ bool Mesh_fixed_param::is_boundary(const int he_id)
 void Mesh_fixed_param::generate_circle()
 {
 
-	int size = static_cast<int>(boundary_ids.size());
-    double angle_increment = 2 * M_PI / size;
+	num_boundary = static_cast<int>(boundary_ids.size());
+    double angle_increment = 2 * M_PI / num_boundary;
     double angle = 0.0;
 
     while (!boundary_ids.empty()) {
@@ -101,11 +101,11 @@ void Mesh_fixed_param::compute_interior_pos()
 	// std::cout << "Ubar: " << Ubar << std::endl;
 	// std::cout << "Vbar: " << Vbar << std::endl;
 
-  	Eigen::SimplicialLDLT< Eigen::SparseMatrix<double> > solver;
-	solver.compute(A);
-
-	Eigen::MatrixXd U = solver.solve(Ubar);
-	Eigen::MatrixXd V = solver.solve(Vbar);
+    Eigen::SimplicialCholesky<Eigen::SparseMatrix<double>> solver(A);
+    Eigen::MatrixXd U = solver.solve(Ubar);
+    Eigen::MatrixXd V = solver.solve(Vbar);
+    // Eigen::MatrixXd U = solver.solve(Ubar).normalized();
+    // Eigen::MatrixXd V = solver.solve(Vbar).normalized();
 
 	// std::cout << "U: " << U << std::endl;
 	// std::cout << "V: " << V << std::endl;
@@ -127,8 +127,9 @@ void Mesh_fixed_param::compute_A_i(int vid, int i)
 		Mesh_connectivity::Vertex_iterator v_j = ring.half_edge().origin();
 		if (!v_j.is_boundary())
 		{
-			int j = interior[v_j.index()];
-			A_elem.push_back(Eigen::Triplet<double>(i, j, -lambda_ij(vid,v_j.index())));
+			int jid = v_j.index();
+			int j = interior[jid];
+			A_elem.push_back(Eigen::Triplet<double>(i, j, -lambda_ij(vid,jid)));
 		}
 	} while(ring.advance());
 
@@ -136,7 +137,7 @@ void Mesh_fixed_param::compute_A_i(int vid, int i)
 }
 
 //
-// compute values for Ubar and Vbar matrix per interioir vertex
+// compute values for Ubar and Vbar matrix per interior vertex
 //
 void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 {
@@ -145,23 +146,20 @@ void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 	
 	do // *points to*
 	{
-		Mesh_connectivity::Vertex_iterator j = ring.half_edge().origin();
-		if (j.is_boundary())
+		Mesh_connectivity::Vertex_iterator v_j = ring.half_edge().origin();
+		if (v_j.is_boundary())
 		{
-			int jid = j.index();
+			int jid = v_j.index();
 			double k_ij = lambda_ij(vid,jid);
 
 			double u_j = new_positions[jid][0];
 			double v_j = new_positions[jid][1];
-			// double u_j = j.xyz()[0];
-			// double v_j = j.xyz()[1];
 
 			double u_ij = k_ij * u_j;
 			double v_ij = k_ij * v_j;
+
 			u_sum += u_ij;
-			v_sum += v_ij;
-			// printf("k_ij= %f, u_j= %f, u_ij= %f \n", k_ij, u_j, u_ij);	
-			// printf("k_ij= %f, v_j= %f, v_ij= %f \n", k_ij, v_j, v_ij);	
+			v_sum += v_ij;	
 		}
 	} while(ring.advance());
 
@@ -221,9 +219,6 @@ void Mesh_fixed_param::compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Ve
 	double A_n = A.norm();
 	double B_n = B.norm();
 	double IJ_n = IJ.norm();
-	// IJ / IJ_n;
-	// A / A_n;
-	// B / B_n;
 
 	a_ik = acos(A.dot(IJ) / (A_n * IJ_n));
 	b_ki = acos(IJ.dot(B) / (B_n * IJ_n));
@@ -255,7 +250,7 @@ void Mesh_fixed_param::parametrize()
 //
 void Mesh_fixed_param::math() 
 {	
-	int n = mesh().n_total_vertices() - boundary_ids.size();
+	int n = mesh().n_total_vertices() - num_boundary;
 	A.resize(n, n);
     A.setZero();
 	Ubar = Eigen::MatrixXd::Zero(n, 1);

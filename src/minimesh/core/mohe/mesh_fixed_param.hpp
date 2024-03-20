@@ -61,6 +61,7 @@ private:
 
 	// Index of boundary vertices
 	std::stack<int> boundary_ids;
+	int num_boundary;
     
 	// vid -> mat id
 	std::map<int, int> interior;
