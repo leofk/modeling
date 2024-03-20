@@ -1,6 +1,17 @@
 # CPSC 524 - Leo Foord-Kelcey
 UBC # 83974592
 
+## A3 - Parametrization
+Implemented two parametrization methods:
+1. Fixed convex boundary with mean-value weights
+2. Free boundary Least-Squares Conformal Method
+
+Entry point:
+- `mesh_fixed_param.hpp`
+- `mesh_fixed_param.cpp`
+- `mesh_free_param.hpp`
+- `mesh_free_param.cpp`
+  
 ## A2 - Simplification
 Implemented Edge-Collapse based simplification algorithm.
 
