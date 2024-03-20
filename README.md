@@ -1,8 +1,8 @@
 # CPSC 524 - Leo Foord-Kelcey
 UBC # 83974592
 
-## A3 - Parametrization
-Implemented two parametrization methods:
+## A3 - Parameterization
+Implemented two parameterization methods:
 1. Fixed convex boundary with mean-value weights
 2. Free boundary Least-Squares Conformal Method
 
