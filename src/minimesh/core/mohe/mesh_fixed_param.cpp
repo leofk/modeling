@@ -114,7 +114,7 @@ void Mesh_fixed_param::compute_interior_pos()
     solver.factorize(A);
     Eigen::MatrixXd U = solver.solve(Ubar);
     Eigen::MatrixXd V = solver.solve(Vbar);
-	
+
     for (int i = 0; i < U.rows(); ++i) {
         new_positions[interior_rev[i]] = Eigen::Vector3d(U(i), V(i), 0.0);
     }
@@ -166,14 +166,8 @@ void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 
 			u_sum += u_ij;
 			v_sum += v_ij;	
-			// printf("kij: %f,uj: %f,usum: %f \n", k_ij, u_j, u_sum);
-
 		}
 	} while(ring.advance());
-	// printf("i%d \n", i);
-	// printf("usum: %f \n", u_sum);
-	// printf("vsum: %f \n", v_sum);
-	// printf("\n");
 
 	Ubar(i) = u_sum;
 	Vbar(i) = v_sum;
@@ -186,31 +180,6 @@ double Mesh_fixed_param::get_angle(const Eigen::Vector3d &v1, const Eigen::Vecto
 	return std::acos(v1.dot(v2) / (v1.norm() * v2.norm()));
 }
 
-
-void Mesh_fixed_param::basis_coords(std::vector<Eigen::Vector2d>& coords, const std::vector<Eigen::Vector3d>& positions)
-{
-    if (positions.size() != 4) {
-        std::cerr << "Error: Four vectors are required for computing an orthonormal basis." << std::endl;
-        return;
-    }
-
-    Eigen::Vector3d x = positions[1] - positions[0];
-    Eigen::Vector3d y = positions[2] - positions[0];
-    Eigen::Vector3d z = positions[3] - positions[0];
-    
-    // Compute orthonormal basis using Gram-Schmidt process
-    Eigen::Vector3d xhat = x.normalized(); // Unit vector in the direction of x
-    Eigen::Vector3d zhat = (xhat.cross(y)).normalized(); // Normal to the plane formed by x and y
-    Eigen::Vector3d yhat = (zhat.cross(xhat)).normalized(); // Completing the basis
-
-    // Project positions onto the local basis and extract 2D coordinates
-    for (const auto& pos : positions) {
-        Eigen::Vector3d pos_local = pos - positions[0];
-        double x_coord = pos_local.dot(xhat);
-        double y_coord = pos_local.dot(yhat);
-        coords.push_back(Eigen::Vector2d(x_coord, y_coord));
-    }
-}
 
 double Mesh_fixed_param::get_wik(int he_index) 
 {
@@ -227,35 +196,15 @@ double Mesh_fixed_param::get_wik(int he_index)
 	Eigen::Vector3d P_xyz = P.xyz();
 	Eigen::Vector3d Q_xyz = Q.xyz();
 
-	// // Assuming Mesh_fixed_param::basis_coords(std::vector<Eigen::Vector2d>& coords, const std::vector<Eigen::Vector3d>& positions)
-	// std::vector<Eigen::Vector2d> local_basis_coords;
-	// std::vector<Eigen::Vector3d> positions = {I_xyz, J_xyz, P_xyz, Q_xyz};
-	// Mesh_fixed_param::basis_coords(local_basis_coords, positions);
-
-	// Eigen::Vector2d I_xy = local_basis_coords[0];
-	// Eigen::Vector2d J_xy = local_basis_coords[1];
-	// Eigen::Vector2d P_xy = local_basis_coords[2];
-	// Eigen::Vector2d Q_xy = local_basis_coords[3];
-	// // Eigen::Vector2d I_xy = Eigen::Vector2d(I_xyz[0], I_xyz[1]);
-	// // Eigen::Vector2d J_xy = Eigen::Vector2d(J_xyz[0], J_xyz[1]);
-	// // Eigen::Vector2d P_xy = Eigen::Vector2d(P_xyz[0], P_xyz[1]);
-	// // Eigen::Vector2d Q_xy = Eigen::Vector2d(Q_xyz[0], Q_xyz[1]);
-
-	// Eigen::Vector2d IJ = J_xy-I_xy;
-	// Eigen::Vector2d IP = P_xy-I_xy;
-	// Eigen::Vector2d IQ = Q_xy-I_xy;
-
 	Eigen::Vector3d IJ = J_xyz-I_xyz;
 	Eigen::Vector3d IP = P_xyz-I_xyz;
 	Eigen::Vector3d IQ = Q_xyz-I_xyz;
 
-	// should these be 3vecs or 2vecs?
 	double alpha = get_angle(IJ, IP);
 	double beta = get_angle(IJ, IQ);
 	double r = IJ.norm();
 
 	return (std::tan(alpha / 2) + std::tan(beta / 2)) / r;
-	// return 1.0;
 }
 
 //
@@ -267,7 +216,6 @@ double Mesh_fixed_param::lambda_ij(int i, int j)
  	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
 	double w_sum = 0.0;
 	double w_ij = 0.0;
-			// printf("start\n");
 
 	do // *points to*
 	{
@@ -299,7 +247,6 @@ void Mesh_fixed_param::parametrize()
 	compute_interior_pos();
 
 	update_vertex_pos();
-	force_assert( mesh().check_sanity_slowly() );
 
 	reset_flags();
 }
@@ -331,11 +278,8 @@ void Mesh_fixed_param::update_vertex_pos()
 {
 	for(int vid = 0 ; vid < mesh().n_total_vertices() ; ++vid)
 	{
-		
 		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(vid);
-		// if (v.is_boundary()) {
-			v.data().xyz = new_positions[vid];
-		// }	
+		v.data().xyz = new_positions[vid];
 	}
 }
 
@@ -353,16 +297,6 @@ void Mesh_fixed_param::reset_flags()
 	}
 
 	assert(split_half_edges.empty());
-
-
-	// while(!boundary.empty()) {
-	// 	int index = boundary.top();
-	// 	Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(index);
-	// 	v.data().is_boundary = false;
-	// 	boundary.pop();
-	// }
-
-	// assert(boundary.empty());
 }
 
 } // end of mohe
