@@ -4,7 +4,8 @@
 #include <Eigen/Sparse>
 #include <unsupported/Eigen/KroneckerProduct>
 #include <set>
-
+#include <iostream>
+#include <sstream>
 namespace minimesh
 {
 namespace mohe
@@ -69,6 +70,24 @@ void Mesh_free_param::get_pinned()
     }
 }
 
+void Mesh_free_param::basis_coords(std::vector<Eigen::Vector2d>& coords, const std::vector<Eigen::Vector3d>& positions)
+{
+    Eigen::Vector3d x = positions[1] - positions[0];
+    Eigen::Vector3d y = positions[2] - positions[0];
+    
+    // compute orthonormal basis
+    Eigen::Vector3d xhat = x; xhat.normalize();
+    Eigen::Vector3d zhat = xhat.cross(y); 
+	zhat.normalize();
+    Eigen::Vector3d yhat = zhat.cross(xhat); 
+	yhat.normalize();
+    
+    // compute coordinates in local basis
+    coords.push_back(Eigen::Vector2d(0, 0));
+    coords.push_back(Eigen::Vector2d(x.norm(), 0));
+    coords.push_back(Eigen::Vector2d(y.dot(xhat), y.dot(yhat)));
+}
+
 void Mesh_free_param::u_matrix()
 {
 	UP1 = Eigen::MatrixXd::Zero(2, 1);
@@ -77,10 +96,16 @@ void Mesh_free_param::u_matrix()
 	Mesh_connectivity::Vertex_iterator vp1 = mesh().vertex_at(p1);
 	Mesh_connectivity::Vertex_iterator vp2 = mesh().vertex_at(p2);
 
-	UP1(0) = vp1.xyz()[0]; // p1.x
-	UP2(0) = vp1.xyz()[1]; // p1.y
-	UP1(1) = vp2.xyz()[0]; // p2.x
-	UP2(1) = vp2.xyz()[1]; // p2.y
+	std::vector<Eigen::Vector3d> pos;
+	pos.push_back(vp1.xyz());
+	pos.push_back(vp2.xyz());
+	std::vector<Eigen::Vector2d> coords;
+	basis_coords(coords, pos);
+
+	UP1(0) = coords[0][0]; // p1.x
+	UP2(0) = coords[0][1]; // p1.y
+	UP1(1) = coords[1][0]; // p2.x
+	UP2(1) = coords[1][1]; // p2.y
 }
 
 void Mesh_free_param::mass_matrix()
@@ -88,28 +113,54 @@ void Mesh_free_param::mass_matrix()
 
 	init_matrices();
 
-	int i = 0;
+	int count = 0;
+	int first_id = -1;
 
 	for(int f_id = 0 ; f_id < mesh().n_total_faces() ; ++f_id)
 	{
-		int v1_id, v2_id, v3_id;
+		int v1_id,  v2_id, v3_id;
 		std::vector<int> ids;
-		get_vertices(ids, f_id, v1_id, v2_id, v3_id);
+		std::vector<Eigen::Vector3d> pos;
+		get_vertices(ids, pos, f_id, v1_id, v2_id, v3_id);
+			
+		std::vector<Eigen::Vector2d> coords;
+		basis_coords(coords, pos);
 
-		double d_t = compute_dt(v2_id, v2_id, v3_id); 
-		auto w = compute_w(v2_id, v3_id);
+		// twice the area of the triangle (shouldnt be 0)
+		double d_t = compute_dt(coords); 
 
     	for (int i = 0; i < ids.size(); ++i) {
 			auto res = is_pinned(ids[i]);
+
+			std::pair<double, double> w = {0,0};
+			if (i==0) { 
+				w = compute_w(coords[2], coords[1]);
+			} else if (i==1) {
+				w = compute_w(coords[0], coords[2]);
+			} else if (i==2) {
+				w = compute_w(coords[1], coords[0]);
+			}
+			
 			if (res.first) // vid is p1 or p2
 			{
-				MP1_elem.push_back(Eigen::Triplet<double>(f_id, res.second, w.first/d_t));
-				MP2_elem.push_back(Eigen::Triplet<double>(f_id, res.second, w.second/d_t));
+				MP1_elem.push_back(Eigen::Triplet<double>(f_id, res.second, w.first/std::sqrt(d_t)));
+				MP2_elem.push_back(Eigen::Triplet<double>(f_id, res.second, w.second/std::sqrt(d_t)));
 			} else { 
-				free[i] = res.second;
-				MF1_elem.push_back(Eigen::Triplet<double>(f_id, i, w.first/d_t));
-				MF2_elem.push_back(Eigen::Triplet<double>(f_id, i, w.second/d_t));
-				i++;
+				// check that res.second is not already given a mat_id
+				
+				int mat_id = free_rev[res.second];
+
+				if (mat_id == 0 && res.second != first_id)
+				{
+					if (count == 0) first_id = res.second;
+					mat_id = count;
+					free[mat_id] = res.second;
+					free_rev[res.second] = mat_id;
+					count++;
+				}
+
+				MF1_elem.push_back(Eigen::Triplet<double>(f_id, mat_id, w.first/std::sqrt(d_t)));
+				MF2_elem.push_back(Eigen::Triplet<double>(f_id, mat_id, w.second/std::sqrt(d_t)));
 			}
 		}
 	}
@@ -177,35 +228,41 @@ void Mesh_free_param::b_matrix()
 
 void Mesh_free_param::solve_system()
 {
-	// Solve ax=b
-  	Eigen::SimplicialLDLT< Eigen::SparseMatrix<double> > solver;
-	solver.compute(A);
-	X = solver.solve(b);
+	// Solve AtAx=Atb
+
+	// initialize
+    Eigen::SparseMatrix<double> At = A.transpose();
+    Eigen::SimplicialCholesky<Eigen::SparseMatrix<double>> solver(At * A);
+    Eigen::VectorXd Atb = At * b;
+    
+    // backsolve
+    X = solver.solve(Atb);
+
 }
 
 void Mesh_free_param::update_positions()
 {
 	// update free vertices
 	// X : 2(n-p) * 1; u for all free, then v for all free
-    int num_rows = X.rows();
-    int half_rows = num_rows / 2;
+    int n = X.rows();
+    int half = n / 2;
+
+    // std::cout << "X: " << X << std::endl; 
 
     // Outer loop for iterating over the halves of the rows
-    for (int half = 0; half < 2; ++half) {
+    for (int i = 0; i < half; ++i) {
+		int vid = free[i];
+		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(vid);
+		v.data().xyz = Eigen::Vector3d(X(i), X(i+half), 0.0);
+	}
 
-        // Inner loop for iterating over the rows within each half
-        for (int i = half * half_rows; i < (half + 1) * half_rows; ++i) {
-			int vid = free[half];
-			Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(vid);
-			v.data().xyz = Eigen::Vector3d(X(half), X(i), 0.0);
-        }
-    }
 
 	// project pinned vertices
+	
 	Mesh_connectivity::Vertex_iterator vp1 = mesh().vertex_at(p1);
-	vp1.data().xyz = Eigen::Vector3d(vp1.xyz()[0], vp1.xyz()[1], 0.0);
+	vp1.data().xyz = Eigen::Vector3d(UP1(0), UP2(0), 0.0);
 	Mesh_connectivity::Vertex_iterator vp2 = mesh().vertex_at(p2);
-	vp2.data().xyz = Eigen::Vector3d(vp2.xyz()[0], vp2.xyz()[1], 0.0);
+	vp2.data().xyz = Eigen::Vector3d(UP1(1), UP2(1), 0.0);
 }
 
 //
@@ -239,40 +296,41 @@ void Mesh_free_param::parametrize()
 	update_positions();
 }
 
-double Mesh_free_param::compute_dt(int& v1_id, int& v2_id, int& v3_id)
+double Mesh_free_param::compute_dt(std::vector<Eigen::Vector2d>& uv)
 {
-	Mesh_connectivity::Vertex_iterator v1 = mesh().vertex_at(v1_id);
-	Mesh_connectivity::Vertex_iterator v2 = mesh().vertex_at(v2_id);
-	Mesh_connectivity::Vertex_iterator v3 = mesh().vertex_at(v3_id);
-
-	double a = v1.xyz()[0] * v2.xyz()[1] - v1.xyz()[1] * v2.xyz()[0]; // x1y2 - y1x2
-	double b = v2.xyz()[0] * v3.xyz()[1] - v2.xyz()[1] * v3.xyz()[0]; // x2y3 - y2x3
-	double c = v3.xyz()[0] * v1.xyz()[1] - v3.xyz()[1] * v1.xyz()[0]; // x3y1 - y3x1
-
+	double a = uv[0][0] * uv[1][1] - uv[0][1] * uv[1][0]; // x1y2 - y1x2
+	double b = uv[1][0] * uv[2][1] - uv[1][1] * uv[2][0];  // x2y3 - y2x3
+	double c = uv[2][0] * uv[0][1] - uv[2][1] * uv[0][0];  // x3y1 - y3x1
 	return a+b+c;
 }
 
-std::pair<double, double> Mesh_free_param::compute_w(int& v2_id, int& v3_id)
+std::pair<double, double> Mesh_free_param::compute_w(Eigen::Vector2d& f, Eigen::Vector2d& s)
 {
-	Mesh_connectivity::Vertex_iterator v2 = mesh().vertex_at(v2_id);
-	Mesh_connectivity::Vertex_iterator v3 = mesh().vertex_at(v3_id);
-	double w_real = v3.xyz()[0] - v2.xyz()[0]; // x_3 - x_2
-	double w_imag = v3.xyz()[1] - v2.xyz()[1]; // y_3 - y_2
+	double w_real = f[0] - s[0]; // x_f - x_s
+	double w_imag = f[1] - s[1]; // y_f - y_s
 	return {w_real, w_imag};
 }
 
-void Mesh_free_param::get_vertices(std::vector<int>& ids, int f_id, int& v1, int& v2, int& v3)
+void Mesh_free_param::get_vertices(std::vector<int>& ids,std::vector<Eigen::Vector3d>& pos, int f_id, int& v1, int& v2, int& v3)
 {
 	Mesh_connectivity::Face_iterator f = mesh().face_at(f_id);
 	Mesh_connectivity::Half_edge_iterator he = f.half_edge();
 
 	v1 = he.origin().index();
+	Mesh_connectivity::Vertex_iterator vv1 = mesh().vertex_at(v1);
 	v2 = he.dest().index();
+	Mesh_connectivity::Vertex_iterator vv2 = mesh().vertex_at(v2);
 	v3 = he.next().dest().index();
+	Mesh_connectivity::Vertex_iterator vv3 = mesh().vertex_at(v3);
+
 
 	ids.push_back(v1);
 	ids.push_back(v2);
 	ids.push_back(v3);
+
+	pos.push_back(vv1.xyz());
+	pos.push_back(vv2.xyz());
+	pos.push_back(vv3.xyz());
 }
 
 //
