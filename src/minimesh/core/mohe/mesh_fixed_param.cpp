@@ -17,6 +17,9 @@ namespace mohe
 //
 void Mesh_fixed_param::flag_boundary()
 {
+	int i = 0;
+	bool break_out = false;
+
 	for(int vid = 0 ; vid < mesh().n_total_vertices() ; ++vid)
 	{
 
@@ -24,35 +27,42 @@ void Mesh_fixed_param::flag_boundary()
 
 		// find a vertex on the boundary
 		if (ring.reset_boundary()) {
-			Mesh_connectivity::Half_edge_iterator he = ring.half_edge();
-			int he_id = he.index();
-
-			// make sure he is on the outside of boundary for easy traversal
-			if (!is_boundary(he.next().index())) 
+			if (break_out == false)
 			{
-				he = he.twin();
-				he_id = he.index();
-			}
+				Mesh_connectivity::Half_edge_iterator he = ring.half_edge();
+				int he_id = he.index();
 
-			int start_he_id = he_id;
-			int start_v_id = he.origin().index();
+				// make sure he is on the outside of boundary for easy traversal
+				if (!is_boundary(he.next().index())) 
+				{
+					he = he.twin();
+					he_id = he.index();
+				}
 
-			int curr_he_id = start_he_id;
-			int curr_v_id = start_v_id;
-			
-			do
-			{
-				Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(curr_he_id);
-				Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(curr_v_id);
-				v.data().is_boundary = true;
-				boundary_ids.push(curr_v_id);
+				int start_he_id = he_id;
+				int start_v_id = he.origin().index();
 
-				Mesh_connectivity::Half_edge_iterator next_he = he.next();
-				curr_he_id = next_he.index();
-				curr_v_id = next_he.origin().index();
+				int curr_he_id = start_he_id;
+				int curr_v_id = start_v_id;
 				
-			} while (start_v_id != curr_v_id);
-			break;
+				do
+				{
+					Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(curr_he_id);
+					Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(curr_v_id);
+					v.data().is_boundary = true;
+					boundary_ids.push(curr_v_id);
+
+					Mesh_connectivity::Half_edge_iterator next_he = he.next();
+					curr_he_id = next_he.index();
+					curr_v_id = next_he.origin().index();
+					
+				} while (start_v_id != curr_v_id);
+				break_out = true;
+			}
+		} else {		
+			interior[vid] = i;
+			interior_rev[i] = vid;
+			i++;	
 		}
 	}
 }
@@ -116,7 +126,7 @@ void Mesh_fixed_param::compute_interior_pos()
 }
 
 //
-// compute values for A matrix per interioir vertex
+// compute values for A matrix per interior vertex
 //
 void Mesh_fixed_param::compute_A_i(int vid, int i)
 {
@@ -237,13 +247,13 @@ double Mesh_fixed_param::get_wik(int he_index)
 	Eigen::Vector3d IP = P_xyz-I_xyz;
 	Eigen::Vector3d IQ = Q_xyz-I_xyz;
 
-	// should these be 3vecs of 2vecs?
+	// should these be 3vecs or 2vecs?
 	double alpha = get_angle(IJ, IP);
 	double beta = get_angle(IJ, IQ);
 	double r = IJ.norm();
 
-	return (std::tan(alpha / 2) + std::tan(beta / 2)) / r;
-	// return 1.0;
+	// return (std::tan(alpha / 2) + std::tan(beta / 2)) / r;
+	return 1.0;
 }
 
 //
@@ -304,21 +314,8 @@ void Mesh_fixed_param::math()
 	Ubar = Eigen::MatrixXd::Zero(n, 1);
 	Vbar = Eigen::MatrixXd::Zero(n, 1);
 
-	int i = 0;
-	// TODO - slow to iterate over all this, maybe a faster solution?
-	for(int vid = 0 ; vid < mesh().n_total_vertices() ; ++vid)
+	for (const auto& pair : interior) 
 	{
-		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(vid);
-
-		if (!v.is_boundary())
-		{
-			interior[vid] = i;
-			interior_rev[i] = vid;
-			i++;	
-		}
-	}
-
-	for (const auto& pair : interior) {
 		compute_A_i(pair.first, pair.second);
 		compute_UVbar_i(pair.first, pair.second);
     }
