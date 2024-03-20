@@ -167,6 +167,85 @@ void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 	Vbar(i) = v_sum;
 }
 
+// get angle between 2 vectors
+// double Mesh_fixed_param::get_angle(const Eigen::Vector2d &v1, const Eigen::Vector2d &v2) 
+double Mesh_fixed_param::get_angle(const Eigen::Vector3d &v1, const Eigen::Vector3d &v2) 
+{
+	return std::acos(v1.dot(v2) / (v1.norm() * v2.norm()));
+}
+
+
+void Mesh_fixed_param::basis_coords(std::vector<Eigen::Vector2d>& coords, const std::vector<Eigen::Vector3d>& positions)
+{
+    if (positions.size() != 4) {
+        std::cerr << "Error: Four vectors are required for computing an orthonormal basis." << std::endl;
+        return;
+    }
+
+    Eigen::Vector3d x = positions[1] - positions[0];
+    Eigen::Vector3d y = positions[2] - positions[0];
+    Eigen::Vector3d z = positions[3] - positions[0];
+    
+    // Compute orthonormal basis using Gram-Schmidt process
+    Eigen::Vector3d xhat = x.normalized(); // Unit vector in the direction of x
+    Eigen::Vector3d zhat = (xhat.cross(y)).normalized(); // Normal to the plane formed by x and y
+    Eigen::Vector3d yhat = (zhat.cross(xhat)).normalized(); // Completing the basis
+
+    // Project positions onto the local basis and extract 2D coordinates
+    for (const auto& pos : positions) {
+        Eigen::Vector3d pos_local = pos - positions[0];
+        double x_coord = pos_local.dot(xhat);
+        double y_coord = pos_local.dot(yhat);
+        coords.push_back(Eigen::Vector2d(x_coord, y_coord));
+    }
+}
+
+double Mesh_fixed_param::get_wik(int he_index) 
+{
+	// points to i from j
+	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_index); 
+
+	Mesh_connectivity::Vertex_iterator I = he.dest();
+	Mesh_connectivity::Vertex_iterator J = he.origin();  
+	Mesh_connectivity::Vertex_iterator P = he.twin().next().dest(); 
+	Mesh_connectivity::Vertex_iterator Q = he.next().dest(); 
+
+	Eigen::Vector3d I_xyz = I.xyz();
+	Eigen::Vector3d J_xyz = J.xyz();
+	Eigen::Vector3d P_xyz = P.xyz();
+	Eigen::Vector3d Q_xyz = Q.xyz();
+
+	// // Assuming Mesh_fixed_param::basis_coords(std::vector<Eigen::Vector2d>& coords, const std::vector<Eigen::Vector3d>& positions)
+	// std::vector<Eigen::Vector2d> local_basis_coords;
+	// std::vector<Eigen::Vector3d> positions = {I_xyz, J_xyz, P_xyz, Q_xyz};
+	// Mesh_fixed_param::basis_coords(local_basis_coords, positions);
+
+	// Eigen::Vector2d I_xy = local_basis_coords[0];
+	// Eigen::Vector2d J_xy = local_basis_coords[1];
+	// Eigen::Vector2d P_xy = local_basis_coords[2];
+	// Eigen::Vector2d Q_xy = local_basis_coords[3];
+	// // Eigen::Vector2d I_xy = Eigen::Vector2d(I_xyz[0], I_xyz[1]);
+	// // Eigen::Vector2d J_xy = Eigen::Vector2d(J_xyz[0], J_xyz[1]);
+	// // Eigen::Vector2d P_xy = Eigen::Vector2d(P_xyz[0], P_xyz[1]);
+	// // Eigen::Vector2d Q_xy = Eigen::Vector2d(Q_xyz[0], Q_xyz[1]);
+
+	// Eigen::Vector2d IJ = J_xy-I_xy;
+	// Eigen::Vector2d IP = P_xy-I_xy;
+	// Eigen::Vector2d IQ = Q_xy-I_xy;
+
+	Eigen::Vector3d IJ = J_xyz-I_xyz;
+	Eigen::Vector3d IP = P_xyz-I_xyz;
+	Eigen::Vector3d IQ = Q_xyz-I_xyz;
+
+	// should these be 3vecs of 2vecs?
+	double alpha = get_angle(IJ, IP);
+	double beta = get_angle(IJ, IQ);
+	double r = IJ.norm();
+
+	return (std::tan(alpha / 2) + std::tan(beta / 2)) / r;
+	// return 1.0;
+}
+
 //
 // compute mean-value weights given vertices with index i and j
 //
@@ -176,24 +255,12 @@ double Mesh_fixed_param::lambda_ij(int i, int j)
  	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
 	double w_sum = 0.0;
 	double w_ij = 0.0;
+			// printf("start\n");
 
 	do // *points to*
 	{
-		Mesh_connectivity::Vertex_iterator v_k = ring.half_edge().origin();
-		int k = v_k.index();
-		double w_ik;
-
-		Eigen::Vector3d i_pos = v_i.xyz();
-		Eigen::Vector3d k_pos = v_k.xyz();
-		
-		Eigen::Vector3d diff = k_pos - i_pos;
-   		double r_ik = diff.norm();
-
-		double a_ik, b_ki;
-		compute_angles(ring.half_edge().index(), i_pos, k_pos, a_ik, b_ki);
-		w_ik = (tan(a_ik/2.0) + tan(b_ki/2.0)) / r_ik;
-
-		w_ik = 1.0; // UNIFORM. TODO. USE MVW
+		int k = ring.half_edge().origin().index();
+		double w_ik = get_wik(ring.half_edge().index());
 
 		if (k==j) { 
 			w_ij = w_ik; 
@@ -205,25 +272,6 @@ double Mesh_fixed_param::lambda_ij(int i, int j)
 
 	return w_ij / w_sum;
 }
-
-void Mesh_fixed_param::compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Vector3d j_pos, double& a_ik, double& b_ki)
-{
-	Mesh_connectivity::Half_edge_iterator r = mesh().half_edge_at(r_id); // points to i, origin at j
-
-	Eigen::Vector3d B_pos = r.twin().next().dest().xyz();
-	Eigen::Vector3d A_pos = r.next().dest().xyz();
-
-   	Eigen::Vector3d IJ = j_pos - i_pos;
-   	Eigen::Vector3d A = A_pos - i_pos;
-   	Eigen::Vector3d B = B_pos - i_pos;
-	double A_n = A.norm();
-	double B_n = B.norm();
-	double IJ_n = IJ.norm();
-
-	a_ik = acos(A.dot(IJ) / (A_n * IJ_n));
-	b_ki = acos(IJ.dot(B) / (B_n * IJ_n));
-}
-
 
 //
 // fixed_param 

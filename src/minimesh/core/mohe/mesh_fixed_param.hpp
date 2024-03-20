@@ -50,7 +50,9 @@ public:
 	void update_vertex_pos(); 
 	void math(); 
 	double lambda_ij(const int i, const int j);
-	void compute_angles(int r_id, Eigen::Vector3d i_pos, Eigen::Vector3d k_pos, double& a_ik, double& b_ki);
+	double get_wik(int he_index);
+	double get_angle(const Eigen::Vector3d &v1, const Eigen::Vector3d &v2);
+	void basis_coords(std::vector<Eigen::Vector2d>& coords, const std::vector<Eigen::Vector3d>& positions);
 
 private:
 	// pointer to the mesh that we are working on.

@@ -76,7 +76,8 @@ void Mesh_free_param::basis_coords(std::vector<Eigen::Vector2d>& coords, const s
     Eigen::Vector3d y = positions[2] - positions[0];
     
     // compute orthonormal basis
-    Eigen::Vector3d xhat = x; xhat.normalize();
+    Eigen::Vector3d xhat = x; 
+	xhat.normalize();
     Eigen::Vector3d zhat = xhat.cross(y); 
 	zhat.normalize();
     Eigen::Vector3d yhat = zhat.cross(xhat); 
