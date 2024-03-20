@@ -33,17 +33,14 @@ public:
 	const Mesh_connectivity & mesh() const { return _m; }
 
 	//
-	// parameterize by fixed boundary
+	// Harmonic Parameterization
+	// Fixed boundary parameterization for a open manifold mesh 
+	// Fixed to the unit circle using mean-value weights
 	//
 	void parameterize();
-
 	bool is_boundary(const int he_id);
-	
 	void flag_boundary();
-
-	void reset_flags(); 
 	void generate_circle(); 
-	
 	void compute_A_i(int vid, int i); 
 	void compute_UVbar_i(int vid, int i); 
 	void compute_interior_pos(); 
@@ -52,7 +49,6 @@ public:
 	double lambda_ij(const int i, const int j);
 	double get_wik(int he_index);
 	double get_angle(const Eigen::Vector3d &v1, const Eigen::Vector3d &v2);
-	void basis_coords(std::vector<Eigen::Vector2d>& coords, const std::vector<Eigen::Vector3d>& positions);
 
 private:
 	// pointer to the mesh that we are working on.
@@ -71,14 +67,11 @@ private:
 	// mat id -> vid
 	std::map<int, int> interior_rev;
 
-	// // Index of interior vertices
-	// std::stack<int> interior;
-
 	// map of new vertex positions
     std::map<int, Eigen::Vector3d> new_positions;
 
 	int RADIUS = 1;
-	// Eigen::MatrixXd A;
+
 	Eigen::MatrixXd Ubar;
 	Eigen::MatrixXd Vbar;
     Eigen::SparseMatrix<double> A;

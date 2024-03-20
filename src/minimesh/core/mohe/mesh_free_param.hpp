@@ -33,10 +33,11 @@ public:
 	const Mesh_connectivity & mesh() const { return _m; }
 
 	//
-	// parameterize by free boundary lscm
+	// LSCM Parameterization
+	// Free boundary parameterization for a open manifold mesh 
+	// Implemented using method outlines in Levy et al. (2002)
 	//
 	void parameterize();
-
 	bool is_boundary(const int he_id);
 	void get_pinned();
 	void mass_matrix();
@@ -54,17 +55,14 @@ public:
 	void update_positions();
 	void basis_coords(std::vector<Eigen::Vector2d>& coords, const std::vector<Eigen::Vector3d>& positions);
 
-	
 private:
 	// pointer to the mesh that we are working on.
 	Mesh_connectivity & _m;
 
-	// Split half edges
-	std::stack<int> split_half_edges;
-
-	// Index of boundary vertices
-	// std::stack<int> boundary_ids;
+	// list of boundary vertices
 	std::vector<int> boundary_ids;
+
+	// index of pinned vertices
 	int p1;
 	int p2;
     
@@ -72,28 +70,22 @@ private:
 	std::map<int, int> free;
 	std::map<int, int> free_rev; //reverse
 
-	// std::map<int, int> interior_rev;
 	// map of new vertex positions
     std::map<int, Eigen::Vector3d> new_positions;
 
     Eigen::SparseMatrix<double> MF1;
 	std::vector<Eigen::Triplet<double>> MF1_elem;
-    // Eigen::SparseMatrix<double> MP1;
     Eigen::MatrixXd MP1;
 	std::vector<Eigen::Triplet<double>> MP1_elem;
     Eigen::SparseMatrix<double> MF2;
 	std::vector<Eigen::Triplet<double>> MF2_elem;
-    // Eigen::SparseMatrix<double> MP2;
     Eigen::MatrixXd MP2;
 	std::vector<Eigen::Triplet<double>> MP2_elem;
-
 	Eigen::MatrixXd UP1;
 	Eigen::MatrixXd UP2;
-
     Eigen::SparseMatrix<double> A;
 	Eigen::MatrixXd b;
 	Eigen::MatrixXd X;
-
 };
 
 

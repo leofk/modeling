@@ -11,11 +11,14 @@ namespace minimesh
 namespace mohe
 {
 
+//
+// tabulate boundary vertices and then identify a pair with the greatest geodesic distance
+// we call said pair the pinned vertices
+//
 void Mesh_free_param::get_pinned()
 {
 	for(int vid = 0 ; vid < mesh().n_total_vertices() ; ++vid)
 	{
-
 		Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(vid);
 
 		// find a vertex on the boundary
@@ -70,6 +73,9 @@ void Mesh_free_param::get_pinned()
     }
 }
 
+//
+// compute 2d coordinates of vertices on the plane spanned by an orthonal basis for the vertices on a triangle
+//
 void Mesh_free_param::basis_coords(std::vector<Eigen::Vector2d>& coords, const std::vector<Eigen::Vector3d>& positions)
 {
     Eigen::Vector3d x = positions[1] - positions[0];
@@ -89,6 +95,9 @@ void Mesh_free_param::basis_coords(std::vector<Eigen::Vector2d>& coords, const s
     coords.push_back(Eigen::Vector2d(y.dot(xhat), y.dot(yhat)));
 }
 
+//
+// setup matrices for pinned vertices
+//
 void Mesh_free_param::u_matrix()
 {
 	UP1 = Eigen::MatrixXd::Zero(2, 1);
@@ -109,6 +118,9 @@ void Mesh_free_param::u_matrix()
 	UP2(1) = coords[1][1]; // p2.y
 }
 
+//
+// setup mass matrices
+//
 void Mesh_free_param::mass_matrix()
 {
 
@@ -123,7 +135,8 @@ void Mesh_free_param::mass_matrix()
 		std::vector<int> ids;
 		std::vector<Eigen::Vector3d> pos;
 		get_vertices(ids, pos, f_id, v1_id, v2_id, v3_id);
-			
+		
+		// get 2d coords for triangle vertices
 		std::vector<Eigen::Vector2d> coords;
 		basis_coords(coords, pos);
 
@@ -133,6 +146,7 @@ void Mesh_free_param::mass_matrix()
     	for (int i = 0; i < ids.size(); ++i) {
 			auto res = is_pinned(ids[i]);
 
+			// compute w dependent on vertex i
 			std::pair<double, double> w = {0,0};
 			if (i==0) { 
 				w = compute_w(coords[2], coords[1]);
@@ -142,15 +156,19 @@ void Mesh_free_param::mass_matrix()
 				w = compute_w(coords[1], coords[0]);
 			}
 			
-			if (res.first) // vid is p1 or p2
+			// handle pinned/free vertices differently
+			if (res.first) 
 			{
+				// the vertex i is on of the pinned vertices
 				MP1_elem.push_back(Eigen::Triplet<double>(f_id, res.second, w.first/std::sqrt(d_t)));
 				MP2_elem.push_back(Eigen::Triplet<double>(f_id, res.second, w.second/std::sqrt(d_t)));
 			} else { 
-				// check that res.second is not already given a mat_id
+				// vertex i is a free vertex
 				
+				// check that res.second (vid of vertex i) is not already given a mat_id
 				int mat_id = free_rev[res.second];
 
+				// define mapping between mesh vertex id and mass matrix index for vertex i
 				if (mat_id == 0 && res.second != first_id)
 				{
 					if (count == 0) first_id = res.second;
@@ -168,6 +186,10 @@ void Mesh_free_param::mass_matrix()
 
 	set_matrices();
 }
+
+//
+// populate A matrix from mass matrices
+//
 void Mesh_free_param::A_matrix()
 {
     // Construct matrix A
@@ -208,7 +230,9 @@ void Mesh_free_param::A_matrix()
     A.setFromTriplets(triplets.begin(), triplets.end());
 }
 
-
+//
+// populate b vector from mass and U matrices
+//
 void Mesh_free_param::b_matrix()
 {
     // Construct the larger matrices by concatenating the smaller matrices
@@ -227,6 +251,9 @@ void Mesh_free_param::b_matrix()
     b = -b_temp;
 }
 
+//
+// solve linear system using least squares approximation
+//
 void Mesh_free_param::solve_system()
 {
 	// Solve AtAx=Atb
@@ -241,25 +268,23 @@ void Mesh_free_param::solve_system()
 
 }
 
+//
+// update all vertex positions 
+//
 void Mesh_free_param::update_positions()
 {
 	// update free vertices
 	// X : 2(n-p) * 1; u for all free, then v for all free
     int n = X.rows();
-    int half = n / 2;
+    int half = n / 2; 
 
-    // std::cout << "X: " << X << std::endl; 
-
-    // Outer loop for iterating over the halves of the rows
     for (int i = 0; i < half; ++i) {
 		int vid = free[i];
 		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(vid);
 		v.data().xyz = Eigen::Vector3d(X(i), X(i+half), 0.0);
 	}
 
-
 	// project pinned vertices
-	
 	Mesh_connectivity::Vertex_iterator vp1 = mesh().vertex_at(p1);
 	vp1.data().xyz = Eigen::Vector3d(UP1(0), UP2(0), 0.0);
 	Mesh_connectivity::Vertex_iterator vp2 = mesh().vertex_at(p2);
@@ -267,7 +292,9 @@ void Mesh_free_param::update_positions()
 }
 
 //
-// fixed_param 
+// LSCM Parameterization
+// Free boundary parameterization for a open manifold mesh 
+// Implemented using method outlines in Levy et al. (2002)
 //
 void Mesh_free_param::parameterize()
 {
@@ -297,6 +324,9 @@ void Mesh_free_param::parameterize()
 	update_positions();
 }
 
+//
+// compute d_t - twice the area of the triangle 
+//
 double Mesh_free_param::compute_dt(std::vector<Eigen::Vector2d>& uv)
 {
 	double a = uv[0][0] * uv[1][1] - uv[0][1] * uv[1][0]; // x1y2 - y1x2
@@ -305,6 +335,9 @@ double Mesh_free_param::compute_dt(std::vector<Eigen::Vector2d>& uv)
 	return a+b+c;
 }
 
+//
+// compute w_j - for a vertex in a triangle
+//
 std::pair<double, double> Mesh_free_param::compute_w(Eigen::Vector2d& f, Eigen::Vector2d& s)
 {
 	double w_real = f[0] - s[0]; // x_f - x_s
@@ -312,6 +345,9 @@ std::pair<double, double> Mesh_free_param::compute_w(Eigen::Vector2d& f, Eigen::
 	return {w_real, w_imag};
 }
 
+//
+// get the vertex ids and positions for the vertices in a given triangle
+//
 void Mesh_free_param::get_vertices(std::vector<int>& ids,std::vector<Eigen::Vector3d>& pos, int f_id, int& v1, int& v2, int& v3)
 {
 	Mesh_connectivity::Face_iterator f = mesh().face_at(f_id);
@@ -323,7 +359,6 @@ void Mesh_free_param::get_vertices(std::vector<int>& ids,std::vector<Eigen::Vect
 	Mesh_connectivity::Vertex_iterator vv2 = mesh().vertex_at(v2);
 	v3 = he.next().dest().index();
 	Mesh_connectivity::Vertex_iterator vv3 = mesh().vertex_at(v3);
-
 
 	ids.push_back(v1);
 	ids.push_back(v2);
@@ -345,38 +380,38 @@ bool Mesh_free_param::is_boundary(const int he_id)
 	return he.twin().face().index() < 0 || he.face().index() < 0; 
 }
 
+//
+// get the distance between two vectors
+//
 double Mesh_free_param::geo_dist(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2) 
 {
     return (p1 - p2).norm();
 }
 
+//
+// initialize matrices needed for the linear system
+//
 void Mesh_free_param::init_matrices() 
 {
 	int p = 2;
 	MF1.resize(mesh().n_total_faces(), mesh().n_total_vertices()-p);
 	MF2.resize(mesh().n_total_faces(), mesh().n_total_vertices()-p);
-	// MP1.resize(mesh().n_total_faces(), p);
-	// MP2.resize(mesh().n_total_faces(), p);
     MF1.setZero();
     MF2.setZero();
     MP1.setZero();
     MP2.setZero();
-
 	MP1 = Eigen::MatrixXd::Zero(mesh().n_total_faces(), 2);
     MP2 = Eigen::MatrixXd::Zero(mesh().n_total_faces(), 2);
-
-
-	// A.resize(2 * MF1.rows(), 2 * MF1.cols());
-    // A.setZero();
 }
 
+//
+// populate matrices for the linear system
+//
 void Mesh_free_param::set_matrices() 
 {
 	MF1.setFromTriplets(MF1_elem.begin(), MF1_elem.end());
 	MF2.setFromTriplets(MF2_elem.begin(), MF2_elem.end());
-	// MP1.setFromTriplets(MP1_elem.begin(), MP1_elem.end());
-	// MP2.setFromTriplets(MP2_elem.begin(), MP2_elem.end());
-
+	
     for (const auto& triplet : MP1_elem) {
         MP1(triplet.row(), triplet.col()) = triplet.value();
     }
@@ -386,8 +421,11 @@ void Mesh_free_param::set_matrices()
     }
 }
 
-std::pair<bool, int> Mesh_free_param::is_pinned(int& v) {
-
+//
+// determine if a given vertex is a pinned vertex 
+//
+std::pair<bool, int> Mesh_free_param::is_pinned(int& v) 
+{
 	if (v == p1) {
 		return {true, 0};
 	}
