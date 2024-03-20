@@ -107,32 +107,14 @@ void Mesh_fixed_param::generate_circle()
 //
 void Mesh_fixed_param::compute_interior_pos()
 {
-	// std::cout << "A: " << A << std::endl;
-	// int row = 7;
-	// std::cout << "Row " << row << ": ";
-    // for (int j = 0; j < A.cols(); ++j) {
-    //     double val = A.coeff(row, j); // Access the coefficient at row 'row' and column 'j'
-    //     std::cout << val << " ";
-    // }
-    // std::cout << std::endl;
-	// std::cout << "Ubar: " << Ubar << std::endl;
-	// std::cout << "Vbar: " << Vbar << std::endl;
 
-	// Eigen::SimplicialLDLT< Eigen::SparseMatrix<double> > solver;
-    // Eigen::SimplicialCholesky<Eigen::SparseMatrix<double>> solver;
-	// solver.compute(A);
 
 	Eigen::SparseLU<Eigen::SparseMatrix<double>> solver;
     solver.analyzePattern(A);
     solver.factorize(A);
     Eigen::MatrixXd U = solver.solve(Ubar);
     Eigen::MatrixXd V = solver.solve(Vbar);
-    // Eigen::MatrixXd U = solver.solve(Ubar).normalized();
-    // Eigen::MatrixXd V = solver.solve(Vbar).normalized();
-
-	// std::cout << "U: " << U << std::endl;
-	// std::cout << "V: " << V << std::endl;
-
+	
     for (int i = 0; i < U.rows(); ++i) {
         new_positions[interior_rev[i]] = Eigen::Vector3d(U(i), V(i), 0.0);
     }
