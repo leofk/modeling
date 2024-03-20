@@ -3,7 +3,7 @@ UBC # 83974592
 
 ## A3 - Parameterization
 Implemented two parameterization methods:
-1. Fixed convex boundary with mean-value weights
+1. Fixed convex boundary (unit circle) with mean-value weights
 2. Free boundary Least-Squares Conformal Method
 
 Entry point:
