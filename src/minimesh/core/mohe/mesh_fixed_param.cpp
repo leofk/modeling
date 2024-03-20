@@ -108,10 +108,23 @@ void Mesh_fixed_param::generate_circle()
 void Mesh_fixed_param::compute_interior_pos()
 {
 	// std::cout << "A: " << A << std::endl;
+	// int row = 7;
+	// std::cout << "Row " << row << ": ";
+    // for (int j = 0; j < A.cols(); ++j) {
+    //     double val = A.coeff(row, j); // Access the coefficient at row 'row' and column 'j'
+    //     std::cout << val << " ";
+    // }
+    // std::cout << std::endl;
 	// std::cout << "Ubar: " << Ubar << std::endl;
 	// std::cout << "Vbar: " << Vbar << std::endl;
 
-    Eigen::SimplicialCholesky<Eigen::SparseMatrix<double>> solver(A);
+	// Eigen::SimplicialLDLT< Eigen::SparseMatrix<double> > solver;
+    // Eigen::SimplicialCholesky<Eigen::SparseMatrix<double>> solver;
+	// solver.compute(A);
+
+	Eigen::SparseLU<Eigen::SparseMatrix<double>> solver;
+    solver.analyzePattern(A);
+    solver.factorize(A);
     Eigen::MatrixXd U = solver.solve(Ubar);
     Eigen::MatrixXd V = solver.solve(Vbar);
     // Eigen::MatrixXd U = solver.solve(Ubar).normalized();
@@ -152,7 +165,8 @@ void Mesh_fixed_param::compute_A_i(int vid, int i)
 void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 {
 	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(vid);
-	double u_sum, v_sum = 0.0;
+	double u_sum = 0.0;
+	double v_sum = 0.0;
 	
 	do // *points to*
 	{
@@ -170,8 +184,14 @@ void Mesh_fixed_param::compute_UVbar_i(int vid, int i)
 
 			u_sum += u_ij;
 			v_sum += v_ij;	
+			// printf("kij: %f,uj: %f,usum: %f \n", k_ij, u_j, u_sum);
+
 		}
 	} while(ring.advance());
+	// printf("i%d \n", i);
+	// printf("usum: %f \n", u_sum);
+	// printf("vsum: %f \n", v_sum);
+	// printf("\n");
 
 	Ubar(i) = u_sum;
 	Vbar(i) = v_sum;
@@ -252,8 +272,8 @@ double Mesh_fixed_param::get_wik(int he_index)
 	double beta = get_angle(IJ, IQ);
 	double r = IJ.norm();
 
-	// return (std::tan(alpha / 2) + std::tan(beta / 2)) / r;
-	return 1.0;
+	return (std::tan(alpha / 2) + std::tan(beta / 2)) / r;
+	// return 1.0;
 }
 
 //
@@ -313,7 +333,6 @@ void Mesh_fixed_param::math()
     A.setZero();
 	Ubar = Eigen::MatrixXd::Zero(n, 1);
 	Vbar = Eigen::MatrixXd::Zero(n, 1);
-
 	for (const auto& pair : interior) 
 	{
 		compute_A_i(pair.first, pair.second);
