@@ -1,74 +1,86 @@
 [
 {
-  "directory": "/Users/leofk/Documents/524/modeling/build",
-  "command": "/usr/bin/clang++ -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/util/foldertools.cpp.o -c /Users/leofk/Documents/524/modeling/src/minimesh/core/util/foldertools.cpp",
-  "file": "/Users/leofk/Documents/524/modeling/src/minimesh/core/util/foldertools.cpp",
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/util/foldertools.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/util/foldertools.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/core/util/foldertools.cpp",
   "output": "src/minimesh/core/CMakeFiles/minimeshcore.dir/util/foldertools.cpp.o"
 },
 {
-  "directory": "/Users/leofk/Documents/524/modeling/build",
-  "command": "/usr/bin/clang++ -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/util/get_basefilename.cpp.o -c /Users/leofk/Documents/524/modeling/src/minimesh/core/util/get_basefilename.cpp",
-  "file": "/Users/leofk/Documents/524/modeling/src/minimesh/core/util/get_basefilename.cpp",
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/util/get_basefilename.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/util/get_basefilename.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/core/util/get_basefilename.cpp",
   "output": "src/minimesh/core/CMakeFiles/minimeshcore.dir/util/get_basefilename.cpp.o"
 },
 {
-  "directory": "/Users/leofk/Documents/524/modeling/build",
-  "command": "/usr/bin/clang++ -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_connectivity.cpp.o -c /Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_connectivity.cpp",
-  "file": "/Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_connectivity.cpp",
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_connectivity.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_connectivity.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_connectivity.cpp",
   "output": "src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_connectivity.cpp.o"
 },
 {
-  "directory": "/Users/leofk/Documents/524/modeling/build",
-  "command": "/usr/bin/clang++ -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_io.cpp.o -c /Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_io.cpp",
-  "file": "/Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_io.cpp",
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_io.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_io.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_io.cpp",
   "output": "src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_io.cpp.o"
 },
 {
-  "directory": "/Users/leofk/Documents/524/modeling/build",
-  "command": "/usr/bin/clang++ -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o -c /Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_modifier.cpp",
-  "file": "/Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_modifier.cpp",
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_modifier.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_modifier.cpp",
   "output": "src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o"
 },
 {
-  "directory": "/Users/leofk/Documents/524/modeling/build",
-  "command": "/usr/bin/clang++ -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_subdivision.cpp.o -c /Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_subdivision.cpp",
-  "file": "/Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_subdivision.cpp",
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_subdivision.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_subdivision.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_subdivision.cpp",
   "output": "src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_subdivision.cpp.o"
 },
 {
-  "directory": "/Users/leofk/Documents/524/modeling/build",
-  "command": "/usr/bin/clang++ -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o -c /Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_simplify.cpp",
-  "file": "/Users/leofk/Documents/524/modeling/src/minimesh/core/mohe/mesh_simplify.cpp",
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_simplify.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_simplify.cpp",
   "output": "src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o"
 },
 {
-  "directory": "/Users/leofk/Documents/524/modeling/build",
-  "command": "/usr/bin/clang++ -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o -c /Users/leofk/Documents/524/modeling/src/minimesh/cli/main.cpp",
-  "file": "/Users/leofk/Documents/524/modeling/src/minimesh/cli/main.cpp",
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_fixed_param.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_fixed_param.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_fixed_param.cpp",
+  "output": "src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_fixed_param.cpp.o"
+},
+{
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_free_param.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_free_param.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_free_param.cpp",
+  "output": "src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_free_param.cpp.o"
+},
+{
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/cli/main.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/cli/main.cpp",
   "output": "src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o"
 },
 {
-  "directory": "/Users/leofk/Documents/524/modeling/build",
-  "command": "/usr/bin/clang++ -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_buffer.cpp.o -c /Users/leofk/Documents/524/modeling/src/minimesh/viz/mesh_buffer.cpp",
-  "file": "/Users/leofk/Documents/524/modeling/src/minimesh/viz/mesh_buffer.cpp",
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_buffer.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/viz/mesh_buffer.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/viz/mesh_buffer.cpp",
   "output": "src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_buffer.cpp.o"
 },
 {
-  "directory": "/Users/leofk/Documents/524/modeling/build",
-  "command": "/usr/bin/clang++ -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_viewer.cpp.o -c /Users/leofk/Documents/524/modeling/src/minimesh/viz/mesh_viewer.cpp",
-  "file": "/Users/leofk/Documents/524/modeling/src/minimesh/viz/mesh_viewer.cpp",
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_viewer.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/viz/mesh_viewer.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/viz/mesh_viewer.cpp",
   "output": "src/minimesh/viz/CMakeFiles/minimeshviz.dir/mesh_viewer.cpp.o"
 },
 {
-  "directory": "/Users/leofk/Documents/524/modeling/build",
-  "command": "/usr/bin/clang++ -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG -I/Users/leofk/Documents/524/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/viz/CMakeFiles/minimeshviz.dir/util/glui_slider.cpp.o -c /Users/leofk/Documents/524/modeling/src/minimesh/viz/util/glui_slider.cpp",
-  "file": "/Users/leofk/Documents/524/modeling/src/minimesh/viz/util/glui_slider.cpp",
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/viz/CMakeFiles/minimeshviz.dir/util/glui_slider.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/viz/util/glui_slider.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/viz/util/glui_slider.cpp",
   "output": "src/minimesh/viz/CMakeFiles/minimeshviz.dir/util/glui_slider.cpp.o"
 },
 {
-  "directory": "/Users/leofk/Documents/524/modeling/build",
-  "command": "/usr/bin/clang++ -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DEIGEN_NO_DEBUG -DGL_SILENCE_DEPRECATION=1 -DMINIMESH_NO_DEBUG -DNDEBUG -I/Users/leofk/Documents/524/modeling/src -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /usr/local/include/eigen3 -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -O3 -DNDEBUG -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o -c /Users/leofk/Documents/524/modeling/src/minimesh/gui/main.cpp",
-  "file": "/Users/leofk/Documents/524/modeling/src/minimesh/gui/main.cpp",
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -iframework /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /usr/local/include/eigen3 -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/gui/main.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/gui/main.cpp",
   "output": "src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o"
 }
 ]

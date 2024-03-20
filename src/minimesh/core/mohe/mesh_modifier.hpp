@@ -50,6 +50,8 @@ public:
 	// subdivision
 	//
 	void subdivision();
+	void free_param();
+	void fixed_param();
 
 	//
 	// simplify

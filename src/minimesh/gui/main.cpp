@@ -163,6 +163,28 @@ void subdivide_pressed(int)
 	glutPostRedisplay();
 }
 
+void fixed_param_pressed(int)
+{
+	globalvars::modi.fixed_param();
+
+	// reload the mesh in the viewer
+	mohe::Mesh_connectivity::Defragmentation_maps defrag;
+	globalvars::mesh.compute_defragmention_maps(defrag);
+	globalvars::viewer.get_mesh_buffer().rebuild(globalvars::mesh, defrag);
+	glutPostRedisplay();
+}
+
+void free_param_pressed(int)
+{
+	globalvars::modi.free_param();
+
+	// reload the mesh in the viewer
+	mohe::Mesh_connectivity::Defragmentation_maps defrag;
+	globalvars::mesh.compute_defragmention_maps(defrag);
+	globalvars::viewer.get_mesh_buffer().rebuild(globalvars::mesh, defrag);
+	glutPostRedisplay();
+}
+
 
 void simplify_pressed(int)
 {
@@ -217,20 +239,25 @@ int main(int argc, char * argv[])
 	if(argc == 1)
 	{
 		// FOR MESHES W/O BOUNDARY
-		foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/");
+		foldertools::makeandsetdir("/Users/leofk/Documents/GitHub/modeling/mesh/");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
-		mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("sphere1.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("camel.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("octopus.obj");
 
 		// FOR MESHES W BOUNDARY
-		// foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/with_boundary");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("pyramid.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("hexagon.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cat.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("saddle.obj");
+		mohe::Mesh_io(globalvars::mesh).read_auto("camel_head.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("hex_more.obj");
 	}
 	else // otherwise use the address specified in the command line
 	{
+		foldertools::makeandsetdir("/Users/leofk/Documents/524/modeling/mesh/");
+
 		mohe::Mesh_io(globalvars::mesh).read_auto(argv[1]);
 	}
 
@@ -321,6 +348,12 @@ int main(int argc, char * argv[])
 	//
 	GLUI_Button* button_subdivide =  globalvars::glui->add_button("Subdivide Loop", -1, freeglutcallback::subdivide_pressed);
 	button_subdivide->set_w(200);
+
+	GLUI_Button* button_fixed_param =  globalvars::glui->add_button("Harmonic Parametrization", -1, freeglutcallback::fixed_param_pressed);
+	button_fixed_param->set_w(200);
+
+	GLUI_Button* button_free_param =  globalvars::glui->add_button("LSCM Parametrization", -1, freeglutcallback::free_param_pressed);
+	button_free_param->set_w(200);
 
 	//
 	// Add simplify button and a spinner to read how many entities to remove

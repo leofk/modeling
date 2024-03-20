@@ -67,6 +67,8 @@ public:
 
 		// Is this vertex new or old
 		bool is_new = false;
+		
+		bool is_boundary = false;
 
 		// has this vertex had its position computed
 		bool is_done = false;
@@ -187,6 +189,9 @@ public:
 
 		// Is this vertex new or old
 		bool is_new();
+
+		// Is this vertex on the boundary
+		bool is_boundary();
 
 		// has this vertex had its position computed
 		bool is_done();
