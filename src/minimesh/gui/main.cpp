@@ -166,6 +166,7 @@ void subdivide_pressed(int)
 void fixed_param_pressed(int)
 {
 	globalvars::modi.fixed_param();
+    // mohe::Mesh_io(globalvars::mesh).write_obj("fixed_param.obj");
 
 	// reload the mesh in the viewer
 	mohe::Mesh_connectivity::Defragmentation_maps defrag;
@@ -177,6 +178,7 @@ void fixed_param_pressed(int)
 void free_param_pressed(int)
 {
 	globalvars::modi.free_param();
+    // mohe::Mesh_io(globalvars::mesh).write_obj( "free_param.obj");
 
 	// reload the mesh in the viewer
 	mohe::Mesh_connectivity::Defragmentation_maps defrag;

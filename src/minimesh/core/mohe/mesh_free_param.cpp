@@ -193,37 +193,32 @@ void Mesh_free_param::mass_matrix()
 void Mesh_free_param::A_matrix()
 {
     // Construct matrix A
-    A.resize(2 * MF1.rows(), 2 * MF1.cols());
-    A.reserve(2 * MF1.nonZeros() + 2 * MF2.nonZeros());
+	auto MF1_rows = mesh().n_total_faces();
+	auto MF1_cols = mesh().n_total_vertices()-2;
+
+    A.resize(2 * MF1_rows, 2 * MF1_cols);
+    // A.reserve(2 * MF1.nonZeros() + 2 * MF2.nonZeros());
 
     std::vector<Eigen::Triplet<double>> triplets;
 
-    // Fill the top-left corner with MF1
-    for (int k = 0; k < MF1.outerSize(); ++k) {
-        for (typename Eigen::SparseMatrix<double>::InnerIterator it(MF1, k); it; ++it) {
-            triplets.push_back(Eigen::Triplet<double>(it.row(), it.col(), it.value()));
-        }
+    // Fill the top-left corner with MF1_elem
+    for (const auto& triplet : MF1_elem) {
+        triplets.push_back(Eigen::Triplet<double>(triplet.row(), triplet.col(), triplet.value()));
     }
 
-    // Fill the bottom-right corner with MF1
-    for (int k = 0; k < MF1.outerSize(); ++k) {
-        for (typename Eigen::SparseMatrix<double>::InnerIterator it(MF1, k); it; ++it) {
-            triplets.push_back(Eigen::Triplet<double>(it.row() + MF1.rows(), it.col() + MF1.cols(), it.value()));
-        }
+    // Fill the bottom-right corner with MF1_elem
+    for (const auto& triplet : MF1_elem) {
+        triplets.push_back(Eigen::Triplet<double>(triplet.row() + MF1_rows, triplet.col() + MF1_cols, triplet.value()));
     }
 
-    // Fill the top-right corner with -MF2
-    for (int k = 0; k < MF2.outerSize(); ++k) {
-        for (typename Eigen::SparseMatrix<double>::InnerIterator it(MF2, k); it; ++it) {
-            triplets.push_back(Eigen::Triplet<double>(it.row(), it.col() + MF1.cols(), -it.value()));
-        }
+    // Fill the top-right corner with -MF2_elem
+    for (const auto& triplet : MF2_elem) {
+        triplets.push_back(Eigen::Triplet<double>(triplet.row(), triplet.col() + MF1_cols, -triplet.value()));
     }
 
-    // Fill the bottom-left corner with MF2
-    for (int k = 0; k < MF2.outerSize(); ++k) {
-        for (typename Eigen::SparseMatrix<double>::InnerIterator it(MF2, k); it; ++it) {
-            triplets.push_back(Eigen::Triplet<double>(it.row() + MF1.rows(), it.col(), it.value()));
-        }
+    // Fill the bottom-left corner with MF2_elem
+    for (const auto& triplet : MF2_elem) {
+        triplets.push_back(Eigen::Triplet<double>(triplet.row() + MF1_rows, triplet.col(), triplet.value()));
     }
 
     // Set the triplets into matrix A
@@ -393,13 +388,6 @@ double Mesh_free_param::geo_dist(const Eigen::Vector3d& p1, const Eigen::Vector3
 //
 void Mesh_free_param::init_matrices() 
 {
-	int p = 2;
-	MF1.resize(mesh().n_total_faces(), mesh().n_total_vertices()-p);
-	MF2.resize(mesh().n_total_faces(), mesh().n_total_vertices()-p);
-    MF1.setZero();
-    MF2.setZero();
-    MP1.setZero();
-    MP2.setZero();
 	MP1 = Eigen::MatrixXd::Zero(mesh().n_total_faces(), 2);
     MP2 = Eigen::MatrixXd::Zero(mesh().n_total_faces(), 2);
 }
@@ -409,9 +397,6 @@ void Mesh_free_param::init_matrices()
 //
 void Mesh_free_param::set_matrices() 
 {
-	MF1.setFromTriplets(MF1_elem.begin(), MF1_elem.end());
-	MF2.setFromTriplets(MF2_elem.begin(), MF2_elem.end());
-	
     for (const auto& triplet : MP1_elem) {
         MP1(triplet.row(), triplet.col()) = triplet.value();
     }

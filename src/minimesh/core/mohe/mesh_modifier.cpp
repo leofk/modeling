@@ -4,6 +4,9 @@
 #include <minimesh/core/mohe/mesh_simplify.hpp>
 #include <minimesh/core/mohe/mesh_fixed_param.hpp>
 #include <minimesh/core/mohe/mesh_free_param.hpp>
+#include <chrono>
+#include <sstream>
+#include <iostream>
 
 namespace minimesh
 {
@@ -29,16 +32,39 @@ void Mesh_modifier::simplify(int num_entities_to_simplify)
 
 void Mesh_modifier::fixed_param()
 {
+    // Start the timer
+    auto start_time = std::chrono::high_resolution_clock::now();
+
+    // Perform parameterization
 	Mesh_fixed_param param(mesh());
 	param.parameterize();
+
+    // End the timer
+    auto end_time = std::chrono::high_resolution_clock::now();
+
+    // Calculate the duration
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
+    // Output the duration
+    std::cout << "Fixed Param took " << duration.count() << "sec." << std::endl;
 }
 
 void Mesh_modifier::free_param()
 {
-	Mesh_free_param param(mesh());
-	param.parameterize();
-}
+    // Start the timer
+    auto start_time = std::chrono::high_resolution_clock::now();
 
+    // Perform parameterization
+    Mesh_free_param param(mesh());
+    param.parameterize();
+
+    // End the timer
+    auto end_time = std::chrono::high_resolution_clock::now();
+
+    // Calculate the duration
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
+    // Output the duration
+    std::cout << "Free Param took " << duration.count() << " sec." << std::endl;
+}
 
 //
 // Given two vertices, this function return the index of the half-edge going from v0 to v1.

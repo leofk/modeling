@@ -74,7 +74,8 @@
 		"dense": "cpp",
 		"sparselu": "cpp",
 		"sparse": "cpp",
-		"list": "cpp"
+		"list": "cpp",
+		"kroneckerproduct": "cpp"
 	},
 	"C_Cpp.errorSquiggles": "enabled"
 }
