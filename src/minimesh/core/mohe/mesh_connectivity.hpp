@@ -72,6 +72,7 @@ public:
 
 		// has this vertex had its position computed
 		bool is_done = false;
+		int n_neighbours;
 
 	private:
 		// Is this vertex present in the mesh, or is it deleted, i.e.,
@@ -195,6 +196,8 @@ public:
 
 		// has this vertex had its position computed
 		bool is_done();
+
+		int get_num_neighbours();
 
 		// Deletes the vertex
 		void deactivate();
