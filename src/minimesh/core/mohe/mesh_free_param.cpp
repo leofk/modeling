@@ -55,7 +55,7 @@ void Mesh_free_param::get_pinned()
 		}
 	}
 	
-	// find max dist pair
+	// find the two vertices maximizing the length of the shorted path between them (i.e. the graph diameter)
     double max_distance = 0.0;
 
     for (size_t i = 0; i < boundary_ids.size(); ++i) {
@@ -75,6 +75,8 @@ void Mesh_free_param::get_pinned()
 
 //
 // compute 2d coordinates of vertices on the plane spanned by an orthonal basis for the vertices on a triangle
+// "each triangle is provided with a local orthonormal basis, where (x1, y1), (x2, y2), (x3, y3) 
+// are the coordinates of its vertices in this basis (i.e., the normal is along the z-axis)"
 //
 void Mesh_free_param::basis_coords(std::vector<Eigen::Vector2d>& coords, const std::vector<Eigen::Vector3d>& positions)
 {

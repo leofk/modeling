@@ -178,7 +178,7 @@ void fixed_param_pressed(int)
 void free_param_pressed(int)
 {
 	globalvars::modi.free_param();
-    // mohe::Mesh_io(globalvars::mesh).write_obj( "free_param.obj");
+    mohe::Mesh_io(globalvars::mesh).write_obj( "free_param.obj");
 
 	// reload the mesh in the viewer
 	mohe::Mesh_connectivity::Defragmentation_maps defrag;
@@ -253,7 +253,10 @@ int main(int argc, char * argv[])
 		// mohe::Mesh_io(globalvars::mesh).read_auto("hexagon.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cat.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("saddle.obj");
-		mohe::Mesh_io(globalvars::mesh).read_auto("camel_head.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("camel_head.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("mannequin.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("lion.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("balls.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("hex_more.obj");
 	}
 	else // otherwise use the address specified in the command line
