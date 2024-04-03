@@ -95,8 +95,9 @@ void Mesh_deform::deform(std::vector<int> _constraint_vids, int _handle_vid)
 		// compute energy
 	bool converged = false;
 	bool first = true;
+	double energy_prev = 15;
+	double energy;
 
-	int i;
 	while(!converged)
 	{
 		if (!first) { 
@@ -112,11 +113,13 @@ void Mesh_deform::deform(std::vector<int> _constraint_vids, int _handle_vid)
 		p_prev = p_prime;
 		
 		solve_system();
+		
+		energy = compute_energy();
 
-		// TODO perhaps below can be just do done after i iterations?
-		// if (compute_energy() <= THRESHOLD) converged = true;
-		if (i==10) converged = true;
-		i++;
+		// perhaps below can be just do done after i iterations?
+		if (abs(energy_prev - energy) < THRESHOLD) converged = true;
+
+		energy_prev = energy;
 	}
 
 	update_positions();
@@ -233,7 +236,24 @@ void Mesh_deform::solve_system()
 
 double Mesh_deform::compute_energy()
 {
-	return 0.0;
+    double energy= 0.0;
+	int n = mesh().n_total_vertices();
+
+    for(int i = 0; i < n; i++){
+
+		Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
+        double cell_energy = 0;
+
+		do // *points to*
+		{
+			int j = ring.half_edge().origin().index();
+			Eigen::Vector3d v = (p_prime.row(i) - p_prime.row(j)) - (r_matrices[i] * (p_prev.row(i) - p_prev.row(j)));
+            cell_energy += W(i, j) * v.squaredNorm();
+		} while(ring.advance());
+
+        energy += W(i, i) * cell_energy;   
+    }
+    return energy;
 }
 
 void Mesh_deform::update_positions()
