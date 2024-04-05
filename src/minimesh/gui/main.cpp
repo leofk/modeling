@@ -73,13 +73,15 @@ void keyboard_pressed(unsigned char c, int x, int y)
 {
 	bool should_redraw = false;
 	should_redraw = should_redraw || globalvars::viewer.keyboard_pressed(c, x, y);
-
+	// TODO IF THIS CHANGES WE SHOUD REINIT 
 	if (c == 'f') {
 		globalvars::arap.append_fixed(globalvars::arap.clickedVertex, globalvars::arap.clickedVertex);
+		globalvars::arap.needs_reinit();
 	}
 
 	if (c == 'h') {
 		globalvars::arap.append_handle(globalvars::arap.clickedVertex, globalvars::arap.clickedVertex);
+		globalvars::arap.needs_reinit();
 	}
 
 	if(should_redraw)
@@ -145,7 +147,7 @@ void mouse_moved(int x, int y)
 
 			// globalvars::mesh.vertex_at(pulled_vert).data().xyz += pull_amount.cast<double>();
 
-			if (globalvars::viewer.deform() == 1 && pulled_vert == globalvars::arap.get_handle()) {
+			if (globalvars::viewer.deform() == 1 && globalvars::arap.is_handle(pulled_vert)) {
 				// printf("1");
 
 				// deform the mesh

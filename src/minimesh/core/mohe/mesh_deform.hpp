@@ -47,7 +47,7 @@ public:
 		// append data to map
 		_handle[key] = value;
 		_constraints[key] = value;
-		handle_id = value;
+		// handle_id = value;
 
 		// constraint_vids.push_back(value);
 
@@ -68,7 +68,13 @@ public:
 		// std::cout << "[" << key << "," << value << "]" << std::endl;
 	}
 
-	int get_handle() { return handle_id; };
+	bool is_handle(int id) { 
+		return _handle.count(id) > 0;
+	};
+
+	void needs_reinit() {
+		primed = false;
+	}
 	// clicked var
 	int clickedVertex = -1;
 
@@ -100,20 +106,28 @@ private:
 
 	bool primed = false;
 	bool xc_done = false;
+	// bool first = true;
 
 	std::map<int, int> _handle = {
-			{22,22},
+			{22,22}, 
+			{0,0}, 
+			{11,11}, 
 	};
 	std::map<int, int> _fixed = {
-			{0,0},
+			{35,35}, 
+			{46,46}, 
 	};
 	std::map<int, int> _constraints = {
-			{0,0},
-			{22,22},
+			{35,35}, 
+			{46,46}, 
+			{22,22}, 
+			{0,0}, 
+			{11,11}, 
 	};
 	int handle_id = 22;
 	
     std::map<int, Eigen::MatrixXd> r_matrices;
+    std::map<int, Eigen::MatrixXd> I_matrices;
 	// std::vector<int> constraint_vids;
 	std::map<int, int> free; // vid -> matid
 	std::map<int, int> free_rev; // matid -> vid
@@ -132,6 +146,7 @@ private:
 	Eigen::MatrixXd Afc;
 	// Eigen::MatrixXd Aff;
 	Eigen::Vector3d pp_handle;
+	std::map<int, Eigen::Vector3d> pp_handles;
 	Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> solver;
 
 	double THRESHOLD = 1.0e-3;

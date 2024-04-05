@@ -71,9 +71,10 @@ void Mesh_deform::build_W_matrix() {
 		v.data().n_neighbours = count;
 		W(i, i) = 1.0;
 
+		// I_matrices[i] = Eigen::MatrixXd::Identity(3, 3);
 		r_matrices[i] = Eigen::MatrixXd::Identity(3, 3);
 		// p_prev.row(i) = v.xyz();
-	}
+	} 
 }
 
 void Mesh_deform::build_L_matrix(Eigen::SparseMatrix<double> &Aff) {
@@ -113,7 +114,12 @@ void Mesh_deform::build_L_matrix(Eigen::SparseMatrix<double> &Aff) {
 
 			Aff_elem.push_back(Eigen::Triplet<double>(mat_i, mat_i, sum));
 			// Aff(mat_i,mat_i) = sum;
+		} else {
+		// if the item is a handle.
+		if(_handle.count(i)>0){
+			pp_handles[i] = mesh().vertex_at(i).xyz();
 		}
+	}
 	}
 
 	Aff.setFromTriplets(Aff_elem.begin(), Aff_elem.end());
@@ -131,7 +137,11 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 
 	handle_id = _handle_id;
 	Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(handle_id);
-	pp_handle = v.xyz() + pull_amount.cast<double>();
+	// pp_handle = v.xyz() + pull_amount.cast<double>();
+	// shift all the handles by the pull amount
+	for(auto &pair: pp_handles){
+		pp_handles[pair.first] = pair.second + pull_amount.cast<double>();
+	}
 
 	// while not converged
 	// compute rotation mats per vertex (when i>0)
@@ -142,11 +152,13 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 	bool converged = false;
 	bool first = true;
 
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 1; i++) {
 		if (!first) {
 			// use identify matrices in R for first iteration
 			compute_r_matrices();
+			// printf("r \n");
 		} else {
+			// r_matrices = I_matrices;
 			first = false;
 		}
 
@@ -181,7 +193,8 @@ void Mesh_deform::compute_r_matrices() {
 		
 		Eigen::Vector3d ppi = v.xyz();
 		if (!is_constraint(i)) ppi = p_prime.row(free[i]);
-		if (i==handle_id) ppi = pp_handle;
+		// if (i==handle_id) ppi = pp_handle;
+		if (pp_handles.count(i)>0) ppi = pp_handles[i];
 
 		int c = 0;
 		do // *points to*
@@ -191,7 +204,8 @@ void Mesh_deform::compute_r_matrices() {
 
 			Eigen::Vector3d ppj = vj.xyz();
 			if (!is_constraint(j)) ppj = p_prime.row(free[j]);
-			if (j==handle_id) ppj = pp_handle;
+			// if (j==handle_id) ppj = pp_handle;
+			if (pp_handles.count(j)>0) ppj = pp_handles[j];
 
 			Pp.col(c) = ppi - ppj;; // this should be new pos
 			P.col(c) = v.xyz() - vj.xyz(); // this should be old pos
@@ -232,7 +246,8 @@ void Mesh_deform::build_b_matrix() {
 			// TODO IS THIS THE CASE FOR THE HANDLE? OR SHOULD WE HANDLE THE HANDLE INDIV
 			// if not, make sure we update the position when handle if first assignment in modifier
 			Eigen::Vector3d res = v.xyz();
-			if (i==handle_id) res = pp_handle;
+			// if (i==handle_id) res = pp_handle;
+			if (pp_handles.count(i)>0) res = pp_handles[i];
 			xc.row(c_map[i]) = res;
 		} 
 
@@ -302,8 +317,14 @@ void Mesh_deform::update_positions() {
 		}
 	}
 
-	Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(handle_id);
-	v.data().xyz = pp_handle;
+	// Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(handle_id);
+	// v.data().xyz = pp_handle;
+
+	for(auto &pair: pp_handles)
+	{
+		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(pair.first);
+		v.data().xyz = pair.second;
+	}
 }
 
 // 
