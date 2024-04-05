@@ -19,6 +19,7 @@ void Mesh_viewer::initialize(const Eigen::AlignedBox<float, 3> & bounding_box)
 	_draw_edges = 1;
 	_draw_faces = 1;
 	_draw_axis = 1;
+	_deform = 0;
 	_mouse_button = invalid_index;
 
 	_light_dir0 = Eigen::Vector4f((float)sqrt(1. / 3), (float)sqrt(1. / 3), (float)sqrt(1. / 3), 0.0f);
