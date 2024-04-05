@@ -80,7 +80,6 @@ void keyboard_pressed(unsigned char c, int x, int y)
 
 	if (c == 'h') {
 		globalvars::arap.append_handle(globalvars::arap.clickedVertex, globalvars::arap.clickedVertex);
-	//            globalvars::viewer.
 	}
 
 	if(should_redraw)
@@ -146,7 +145,7 @@ void mouse_moved(int x, int y)
 
 			// globalvars::mesh.vertex_at(pulled_vert).data().xyz += pull_amount.cast<double>();
 
-			if (globalvars::viewer.deform() == 1) {
+			if (globalvars::viewer.deform() == 1 && pulled_vert == globalvars::arap.get_handle()) {
 				// printf("1");
 
 				// deform the mesh
@@ -230,8 +229,8 @@ void show_spheres_pressed(int)
 {
 
 	// define anchor colors
-	std::map<int, int> anchors = globalvars::arap.ROI_ANCHOR();
-	std::map<int, int> handles = globalvars::arap.ROI_HANDLE();
+	std::map<int, int> anchors = globalvars::arap.fixed_map();
+	std::map<int, int> handles = globalvars::arap.handle_map();
 
 	int a_size = static_cast<int>(anchors.size());
 	int h_size = static_cast<int>(handles.size());
@@ -357,17 +356,17 @@ int main(int argc, char * argv[])
 	//
 	// Add radio buttons to choose mesh
 	//
-	GLUI_Panel * panel_mesh = globalvars::glui->add_panel("Choose Mesh");
-	GLUI_RadioGroup * radio_group_mesh = globalvars::glui->add_radiogroup_to_panel(panel_mesh, &globalvars::viewer.get_mesh());
-	for(int i = 0; i < Mesh_viewer::MESH_INVALID; ++i)
-	{
-		if(i == Mesh_viewer::MESH_CUBE)
-			globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Cube");
-		if(i == Mesh_viewer::MESH_COW)
-			globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Cow");
-		if(i == Mesh_viewer::MESH_PYRAMID)
-			globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Pyramid (w/ boundary)");
-	}
+	// GLUI_Panel * panel_mesh = globalvars::glui->add_panel("Choose Mesh");
+	// GLUI_RadioGroup * radio_group_mesh = globalvars::glui->add_radiogroup_to_panel(panel_mesh, &globalvars::viewer.get_mesh());
+	// for(int i = 0; i < Mesh_viewer::MESH_INVALID; ++i)
+	// {
+	// 	if(i == Mesh_viewer::MESH_CUBE)
+	// 		globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Cube");
+	// 	if(i == Mesh_viewer::MESH_COW)
+	// 		globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Cow");
+	// 	if(i == Mesh_viewer::MESH_PYRAMID)
+	// 		globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Pyramid (w/ boundary)");
+	// }
 
 	//
 	// Add radio buttons to see which mesh components to view

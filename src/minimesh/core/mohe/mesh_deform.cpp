@@ -3,6 +3,7 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <iostream>
+#include <omp.h>
 
 namespace minimesh {
 namespace mohe {
@@ -132,10 +133,6 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 	Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(handle_id);
 	pp_handle = v.xyz() + pull_amount.cast<double>();
 
-	// update_L_matrix();
-
-
-
 	// while not converged
 	// compute rotation mats per vertex (when i>0)
 	// compute b matrix
@@ -145,7 +142,7 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 	bool converged = false;
 	bool first = true;
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 2; i++) {
 		if (!first) {
 			// use identify matrices in R for first iteration
 			compute_r_matrices();
@@ -155,17 +152,14 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 
 		build_b_matrix();
 
-		// solve_system();
 		Eigen::MatrixXd b = bf - Afc * xc;
 		p_prime = solver.solve(b);
-
-		// std::cout << "Iteration " << i << std::endl;
-		// std::cout << p_prime << std::endl;
-
 	}
+	xc_done = false;
 
 	update_positions();
 }
+
 
 void Mesh_deform::compute_r_matrices() {
 	// for each vertex
@@ -174,6 +168,7 @@ void Mesh_deform::compute_r_matrices() {
 	// r = VU^T
 	int n = mesh().n_total_vertices();
 
+	#pragma omp parallel for
 	for (int i = 0; i < n; i++) {
 		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(i);
 		int n_neighbours = v.get_num_neighbours();
@@ -233,14 +228,16 @@ void Mesh_deform::build_b_matrix() {
 	for (int i = 0; i < n; i++) {
 		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(i);
 
-		if (is_constraint(i)) {
+		if (is_constraint(i) && !xc_done) {
 			// TODO IS THIS THE CASE FOR THE HANDLE? OR SHOULD WE HANDLE THE HANDLE INDIV
 			// if not, make sure we update the position when handle if first assignment in modifier
 			Eigen::Vector3d res = v.xyz();
 			if (i==handle_id) res = pp_handle;
 			xc.row(c_map[i]) = res;
+		} 
 
-		} else {
+		if (!is_constraint(i))
+		{
 			Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
 			Eigen::Vector3d out = Eigen::Vector3d(0.0, 0.0, 0.0);
 
@@ -255,10 +252,9 @@ void Mesh_deform::build_b_matrix() {
 
 			} while (ring.advance());
 			bf.row(free[i]) = out;
-
 		}
-
 	}
+	xc_done = true;
 }
 
 bool Mesh_deform::is_constraint(int vid) {

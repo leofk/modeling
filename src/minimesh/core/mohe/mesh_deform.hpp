@@ -47,11 +47,13 @@ public:
 		// append data to map
 		_handle[key] = value;
 		_constraints[key] = value;
+		handle_id = value;
 
 		// constraint_vids.push_back(value);
 
 		// std::cout << "[" << key << "," << value << "]" << std::endl;
 	}
+
 	void append_fixed(int key, int value) {
 
 		// reject invalid indexes
@@ -66,12 +68,13 @@ public:
 		// std::cout << "[" << key << "," << value << "]" << std::endl;
 	}
 
+	int get_handle() { return handle_id; };
 	// clicked var
 	int clickedVertex = -1;
 
 	// get the region of interest
-	std::map<int, int> ROI_ANCHOR() { return _fixed; };
-	std::map<int, int> ROI_HANDLE() { return _handle; };
+	std::map<int, int> fixed_map() { return _fixed; };
+	std::map<int, int> handle_map() { return _handle; };
 
 	//
 	// Mesh Deformation
@@ -108,6 +111,7 @@ private:
 			{0,0},
 			{22,22},
 	};
+	int handle_id = 22;
 	
     std::map<int, Eigen::MatrixXd> r_matrices;
 	// std::vector<int> constraint_vids;
@@ -128,7 +132,6 @@ private:
 	Eigen::MatrixXd Afc;
 	// Eigen::MatrixXd Aff;
 	Eigen::Vector3d pp_handle;
-	int handle_id;
 	Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> solver;
 
 	double THRESHOLD = 1.0e-3;
