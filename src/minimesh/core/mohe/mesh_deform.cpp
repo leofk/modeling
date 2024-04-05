@@ -9,23 +9,27 @@ namespace mohe {
 
 void Mesh_deform::init() {
 	int n = mesh().n_total_vertices();
-	int c = _roi_constraints.size();
+	int c = _constraints.size();
 	bf = Eigen::MatrixXd::Zero(n-c, 3);
-	b = Eigen::MatrixXd::Zero(n-c, 3);
 	xc = Eigen::MatrixXd::Zero(c, 3);
-	L = Eigen::MatrixXd::Zero(n, n);
 	Afc = Eigen::MatrixXd::Zero(n-c, c);
-	Aff = Eigen::MatrixXd::Zero(n-c, n-c);
+
+	// Aff = Eigen::MatrixXd::Zero(n-c, n-c);
+    Eigen::SparseMatrix<double> Aff;
+	Aff.resize(n-c,n-c);
 
 	build_c_map();
 	build_W_matrix();
-	build_L_matrix();
+	build_L_matrix(Aff);
+
+	solver.compute(Aff);
+
 }
 
 void Mesh_deform::build_c_map() 
 {
 	int i = 0;
-	for (const auto& pair : _roi_constraints) 
+	for (const auto& pair : _constraints) 
 	{
 		c_map[pair.first] = i;
 		i++;
@@ -71,7 +75,7 @@ void Mesh_deform::build_W_matrix() {
 	}
 }
 
-void Mesh_deform::build_L_matrix() {
+void Mesh_deform::build_L_matrix(Eigen::SparseMatrix<double> &Aff) {
 	// build nxn mat
 	// sum wij for j in N(i) ; when i==j
 	// -wij ; when j in N(i)
@@ -79,6 +83,8 @@ void Mesh_deform::build_L_matrix() {
 
 	int n = mesh().n_total_vertices();
 	
+	std::vector<Eigen::Triplet<double>> Aff_elem;
+
 
 	for (int i = 0; i < n; i++) {
 		if (!is_constraint(i))
@@ -94,8 +100,8 @@ void Mesh_deform::build_L_matrix() {
 				{
 					int mat_j = free[j];
 					sum += W(i, j);
-					// L_elem.push_back(Eigen::Triplet<double>(i, j, -W(i, j)));
-					Aff(mat_i,mat_j) = -W(i, j);
+					Aff_elem.push_back(Eigen::Triplet<double>(mat_i, mat_j, -W(i, j)));
+					// Aff(mat_i,mat_j) = -W(i, j);
 				} else {
 					int mat_j = c_map[j];
 					sum += W(i, j);
@@ -104,24 +110,21 @@ void Mesh_deform::build_L_matrix() {
 
 			} while (ring.advance());
 
-			// L_elem.push_back(Eigen::Triplet<double>(i, i, sum));
-			Aff(mat_i,mat_i) = sum;
+			Aff_elem.push_back(Eigen::Triplet<double>(mat_i, mat_i, sum));
+			// Aff(mat_i,mat_i) = sum;
 		}
 	}
 
-	// L.setFromTriplets(L_elem.begin(), L_elem.end());
+	Aff.setFromTriplets(Aff_elem.begin(), Aff_elem.end());
 }
 
 void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount) 
 {
-	// printf("deform");
 
 	if (!primed) {
 		init();
-		primed = true;
 
-		Eigen::SparseMatrix<double> Aff_sparse = Aff.sparseView();
-		solver.compute(Aff_sparse);
+		primed = true;
 		printf("primed");
 	}
 
@@ -142,12 +145,10 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 	bool converged = false;
 	bool first = true;
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 3; i++) {
 		if (!first) {
 			// use identify matrices in R for first iteration
 			compute_r_matrices();
-			// p_prev = p_prime;
-
 		} else {
 			first = false;
 		}
@@ -155,7 +156,7 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 		build_b_matrix();
 
 		// solve_system();
-		b = bf - Afc * xc;
+		Eigen::MatrixXd b = bf - Afc * xc;
 		p_prime = solver.solve(b);
 
 		// std::cout << "Iteration " << i << std::endl;
@@ -265,28 +266,7 @@ bool Mesh_deform::is_constraint(int vid) {
 	// 	if (c == vid) return true;
 	// }
 	// return false;
-	return _roi_constraints.count(vid) > 0;
-}
-
-void Mesh_deform::solve_system() {
-	// solve L*p_prime = b using sparse cholesky solver
-    Eigen::SparseMatrix<double> L_sparse = L.sparseView();
-
-    // Eigen::SparseMatrix<double> Lt = L_sparse.transpose();
-    // Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> solver(Lt * L_sparse);
-    // Eigen::VectorXd Ltb = Lt * b;
-    
-    // // backsolve
-    // p_prime = solver.solve(Ltb);
-
-
-	Eigen::SparseLU<Eigen::SparseMatrix<double>> solver;
-
-	// Compute the symbolic decomposition
-	solver.compute(L_sparse);
-
-	// Solve the system
-	p_prime = solver.solve(bf);
+	return _constraints.count(vid) > 0;
 }
 
 double Mesh_deform::compute_energy() {
@@ -328,33 +308,6 @@ void Mesh_deform::update_positions() {
 
 	Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(handle_id);
 	v.data().xyz = pp_handle;
-}
-
-void Mesh_deform::update_L_matrix() {
-	// for i in constraint_vids
-	// Lij =
-	// 1 ; when i==j
-	// 0 ; otherwise
-
-	// for (int i = 0; i < constraint_vids.size(); i++) {
-	// 	int vid = constraint_vids[i];
-	// 	// Modify L(i, j) for each row i
-	// 	for (int j = 0; j < L.cols(); j++) {
-	// 		if (vid == j) {
-	// 			// Set L(i, j) to 1 if i == j
-	// 			L.coeffRef(vid, j) = 1.0;
-	// 		} else {
-	// 			// Set L(i, j) to 0 otherwise
-	// 			L.coeffRef(vid, j) = 0.0;
-	// 		}
-	// 	}
-	// }
-
-	for (int c : constraint_vids) {
-		L.row(c).setZero();
-		L.col(c).setZero();
-		L(c, c) = 1.0;
-	}
 }
 
 // 

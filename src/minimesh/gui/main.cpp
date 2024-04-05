@@ -74,12 +74,12 @@ void keyboard_pressed(unsigned char c, int x, int y)
 	bool should_redraw = false;
 	should_redraw = should_redraw || globalvars::viewer.keyboard_pressed(c, x, y);
 
-	if (c == 'm') {
-		globalvars::arap.appendToROIANCHOR(globalvars::arap.clickedVertex, globalvars::arap.clickedVertex);
+	if (c == 'f') {
+		globalvars::arap.append_fixed(globalvars::arap.clickedVertex, globalvars::arap.clickedVertex);
 	}
 
 	if (c == 'h') {
-		globalvars::arap.appendToROIHANDLE(globalvars::arap.clickedVertex, globalvars::arap.clickedVertex);
+		globalvars::arap.append_handle(globalvars::arap.clickedVertex, globalvars::arap.clickedVertex);
 	//            globalvars::viewer.
 	}
 
@@ -264,7 +264,7 @@ void show_spheres_pressed(int)
 void clear_roi_pressed(int) {
 	// clears the region of interest
 
-	globalvars::arap.clearROI();
+	globalvars::arap.clear_constraints();
 }
 
 int main(int argc, char * argv[])
@@ -279,9 +279,20 @@ int main(int argc, char * argv[])
 	{
 		// FOR MESHES W/O BOUNDARY
 		foldertools::makeandsetdir("/Users/leofk/Documents/GitHub/modeling/mesh/");
+
+		// A4
+		mohe::Mesh_io(globalvars::mesh).read_auto("a4/woody-lo.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/woody-hi.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/bar.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/cactus.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/bumpy_plan.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/cylinder.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/hand.obj");
+		
+
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
-		mohe::Mesh_io(globalvars::mesh).read_auto("sphere1.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("sphere1.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("camel.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("octopus.obj");
 

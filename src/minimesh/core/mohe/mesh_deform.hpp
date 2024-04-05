@@ -36,32 +36,32 @@ public:
 
 
 	// clear the region of interest
-	void clearROI() { _roi_handle.clear(); _roi_anchor.clear(); _roi_constraints.clear();};
+	void clear_constraints() { _handle.clear(); _fixed.clear(); _constraints.clear();};
 
 	// append to item to region of interest
-	void appendToROIHANDLE(int key, int value) {
+	void append_handle(int key, int value) {
 
 		// reject invalid indexes
 		if (key < 0) return;
 
 		// append data to map
-		_roi_handle[key] = value;
-		_roi_constraints[key] = value;
+		_handle[key] = value;
+		_constraints[key] = value;
 
-		constraint_vids.push_back(value);
+		// constraint_vids.push_back(value);
 
 		// std::cout << "[" << key << "," << value << "]" << std::endl;
 	}
-	void appendToROIANCHOR(int key, int value) {
+	void append_fixed(int key, int value) {
 
 		// reject invalid indexes
 		if (key < 0) return;
 
 		// append data to map
-		_roi_anchor[key] = value;
-		_roi_constraints[key] = value;
+		_fixed[key] = value;
+		_constraints[key] = value;
 
-		constraint_vids.push_back(value);
+		// constraint_vids.push_back(value);
 
 		// std::cout << "[" << key << "," << value << "]" << std::endl;
 	}
@@ -70,15 +70,15 @@ public:
 	int clickedVertex = -1;
 
 	// get the region of interest
-	std::map<int, int> ROI_ANCHOR() { return _roi_anchor; };
-	std::map<int, int> ROI_HANDLE() { return _roi_handle; };
+	std::map<int, int> ROI_ANCHOR() { return _fixed; };
+	std::map<int, int> ROI_HANDLE() { return _handle; };
 
 	//
 	// Mesh Deformation
 	//
 	void init();
 	void build_W_matrix();
-	void build_L_matrix();
+	void build_L_matrix(Eigen::SparseMatrix<double> &Aff);
 	void update_L_matrix();
 	void deform(int _handle_id, Eigen::Vector3f pull_amount);
 	void build_b_matrix();
@@ -90,42 +90,43 @@ public:
 	double compute_wij(int he_id);
 	double get_angle(const Eigen::Vector3d &v1, const Eigen::Vector3d &v2);
 	bool is_constraint(int vid);
-	std::vector<int> get_constraints_vids(){ return constraint_vids; };
 
 private:
 	// pointer to the mesh that we are working on.
 	Mesh_connectivity & _m;
 
 	bool primed = false;
-	std::map<int, int> _roi_handle = {
-			{2,2},
+	bool xc_done = false;
+
+	std::map<int, int> _handle = {
+			{22,22},
 	};
-	std::map<int, int> _roi_anchor = {
-			{5,5},
+	std::map<int, int> _fixed = {
+			{0,0},
 	};
-	std::map<int, int> _roi_constraints = {
-			{2,2},
-			{5,5},
+	std::map<int, int> _constraints = {
+			{0,0},
+			{22,22},
 	};
 	
     std::map<int, Eigen::MatrixXd> r_matrices;
-	std::vector<int> constraint_vids;
+	// std::vector<int> constraint_vids;
 	std::map<int, int> free; // vid -> matid
 	std::map<int, int> free_rev; // matid -> vid
 	std::map<int, int> c_map; // vid -> matid
 
-    // Eigen::SparseMatrix<double> L;
-	Eigen::MatrixXd L;
+    // Eigen::SparseMatrix<double> Aff;
+	// Eigen::MatrixXd L;
+	// std::vector<Eigen::Triplet<double>> Aff_elem;
 
-	std::vector<Eigen::Triplet<double>> L_elem;
 	Eigen::MatrixXd bf;
-	Eigen::MatrixXd b;
+	// Eigen::MatrixXd b;
 	Eigen::MatrixXd xc;
 	Eigen::MatrixXd p_prime;
-	Eigen::MatrixXd p_prev;
+	// Eigen::MatrixXd p_prev;
 	Eigen::MatrixXd W;
 	Eigen::MatrixXd Afc;
-	Eigen::MatrixXd Aff;
+	// Eigen::MatrixXd Aff;
 	Eigen::Vector3d pp_handle;
 	int handle_id;
 	Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> solver;
