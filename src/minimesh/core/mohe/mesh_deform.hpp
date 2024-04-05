@@ -128,6 +128,7 @@ private:
 	Eigen::MatrixXd Aff;
 	Eigen::Vector3d pp_handle;
 	int handle_id;
+	Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> solver;
 
 	double THRESHOLD = 1.0e-3;
 };

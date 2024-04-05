@@ -119,7 +119,10 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 	if (!primed) {
 		init();
 		primed = true;
-		// std::cout << L << std::endl;
+
+		Eigen::SparseMatrix<double> Aff_sparse = Aff.sparseView();
+		solver.compute(Aff_sparse);
+		printf("primed");
 	}
 
 	handle_id = _handle_id;
@@ -128,9 +131,6 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 
 	// update_L_matrix();
 
-	Eigen::SparseMatrix<double> Aff_sparse = Aff.sparseView();
-	Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> solver;
-	solver.compute(Aff_sparse);
 
 
 	// while not converged
