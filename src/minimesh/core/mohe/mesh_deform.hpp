@@ -96,6 +96,7 @@ public:
 	double compute_energy();
 	void update_positions();
 	void compute_r_matrices();
+	void compute_r_i(int vid);
 	double compute_wij(int he_id);
 	double get_angle(const Eigen::Vector3d &v1, const Eigen::Vector3d &v2);
 	bool is_constraint(int vid);
@@ -106,25 +107,26 @@ private:
 
 	bool primed = false;
 	bool xc_done = false;
-	// bool first = true;
+	bool first = true;
 
 	std::map<int, int> _handle = {
 			{22,22}, 
-			{0,0}, 
-			{11,11}, 
+			// {0,0}, 
+			// {11,11}, 
 	};
 	std::map<int, int> _fixed = {
-			{35,35}, 
-			{46,46}, 
+			// {35,35}, 
+			// {46,46},
+			{0,0}, 
 	};
 	std::map<int, int> _constraints = {
-			{35,35}, 
-			{46,46}, 
+			// {35,35}, 
+			// {46,46}, 
 			{22,22}, 
 			{0,0}, 
-			{11,11}, 
+			// {11,11}, 
 	};
-	int handle_id = 22;
+	// int handle_id = 22;
 	
     std::map<int, Eigen::MatrixXd> r_matrices;
     std::map<int, Eigen::MatrixXd> I_matrices;

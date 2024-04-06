@@ -19,7 +19,8 @@ option(MINIMESH_WITH_EXTRAS "The contents of the private REPO are present" 0)
 minimesh_set_policy_to_new(CMP0072) #related to how OpenGL is found
 minimesh_set_policy_to_new(CMP0074) #FindPackage uses ..._ROOT
 
-
+find_package(OpenMP REQUIRED)
+set(OPEN_MP_LIBRARIES OpenMP::OpenMP_CXX)
 
 ##
 ##  Find libraries that are shared among all projects
