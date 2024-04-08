@@ -131,6 +131,7 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 	if (!primed) {
 		init();
 		primed = true;
+		first = true;
 	}
 	
 	for(auto &pair: pp_handles){
@@ -145,18 +146,18 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 	// compute energy
 	bool converged = false;
 	// bool first = true;
+	int last = 3;
 
-	for (int i = 0; i < 2; i++) {
-
+	for (int i = 1; i <= last; i++) {
 		build_b_matrix();
-		r_matrices.clear();
+		if (i!=last) r_matrices.clear();
 
 		Eigen::MatrixXd b = bf - Afc * xc;
 		p_prime = solver.solve(b);
 		if (i == 0) first = false;
 	}
 	xc_done = false;
-	first = true;
+	// first = true;
 	update_positions();
 }
 
@@ -369,12 +370,37 @@ double Mesh_deform::get_angle(const Eigen::Vector3d &v1, const Eigen::Vector3d &
 	return std::acos(v1.dot(v2) / (v1.norm() * v2.norm()));
 }
 
+// is boundary edge
+bool Mesh_deform::is_boundary_edge(int he_index) {
+	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_index);
+
+	// see if the face for given half edge (or its twin) has negative index
+	return he.twin().face().index() < 0 || he.face().index() < 0;
+}
+
 //
 // compute cotangent weights for a half edge
 //
 double Mesh_deform::compute_wij(int he_id) {
 	// points to i from j
 	Mesh_connectivity::Half_edge_iterator he = mesh().half_edge_at(he_id);
+            // if we are on the boundary
+	if (is_boundary_edge(he_id)) {
+
+		// get the edge inside the mesh
+		if (he.face().index() < 0) he = he.twin();
+
+		Mesh_connectivity::Vertex_iterator p1 = he.dest();
+		Mesh_connectivity::Vertex_iterator p2 = he.origin();
+		Mesh_connectivity::Vertex_iterator p3 = he.next().dest();
+
+		Eigen::Vector3d v1 = p3.xyz() - p1.xyz();
+		Eigen::Vector3d v2 = p3.xyz() - p2.xyz();
+
+		double alpha = get_angle(v1, v2);
+		double cot_alpha = 0.5 * (1 / std::tan(alpha));
+		return cot_alpha;
+	}
 
 	Mesh_connectivity::Vertex_iterator I = he.dest();
 	Mesh_connectivity::Vertex_iterator J = he.origin();
