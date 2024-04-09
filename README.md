@@ -1,6 +1,13 @@
 # CPSC 524 - Leo Foord-Kelcey
 UBC # 83974592
 
+## A4 - Deformation
+Implemented the As-Rigid-As-Possible (ARAP) mesh deformation algorithm.
+
+Entry point:
+- `mesh_deform.hpp`
+- `mesh_deform.cpp`
+  
 ## A3 - Parameterization
 Implemented two parameterization methods:
 1. Fixed convex boundary (unit circle) with mean-value weights
