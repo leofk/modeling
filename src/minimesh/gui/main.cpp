@@ -285,6 +285,7 @@ int main(int argc, char * argv[])
 		mohe::Mesh_io(globalvars::mesh).read_auto("a4/woody-lo.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/woody-hi.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/bar.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/bar_lo.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/cactus.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/bumpy_plan.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/cylinder.obj");

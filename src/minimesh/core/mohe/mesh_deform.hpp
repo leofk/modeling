@@ -111,20 +111,20 @@ private:
 	bool first = true;
 
 	std::map<int, int> _handle = {
-			// {22,22}, 
+			{22,22}, 
 			// {0,0}, 
 			// {11,11}, 
 	};
 	std::map<int, int> _fixed = {
 			// {35,35}, 
 			// {46,46},
-			// {0,0}, 
+			{0,0}, 
 	};
 	std::map<int, int> _constraints = {
 			// {35,35}, 
 			// {46,46}, 
-			// {22,22}, 
-			// {0,0}, 
+			{22,22}, 
+			{0,0}, 
 			// {11,11}, 
 	};
 	// int handle_id = 22;
@@ -150,6 +150,9 @@ private:
 	// Eigen::MatrixXd Aff;
 	Eigen::Vector3d pp_handle;
 	std::map<int, Eigen::Vector3d> pp_handles;
+	std::map<int, Eigen::Vector3d> p_free;
+	std::map<int, Eigen::Vector3d> p_handles;
+	
 	Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> solver;
 
 	double THRESHOLD = 1.0e-3;

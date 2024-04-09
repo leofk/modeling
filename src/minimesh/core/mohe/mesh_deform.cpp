@@ -59,6 +59,7 @@ void Mesh_deform::build_W_matrix() {
 			free[i] = x;
 			free_rev[x] = i;
 			x++;
+			p_free[i] = v.xyz();
 		}	
 
 		do // *points to*
@@ -117,7 +118,7 @@ void Mesh_deform::build_L_matrix(Eigen::SparseMatrix<double> &Aff) {
 		} else {
 			// if the item is a handle.
 			if (_handle.count(i)>0) {
-				pp_handles[i] = mesh().vertex_at(i).xyz();
+				p_handles[i] = mesh().vertex_at(i).xyz();
 			}
 		}
 	}
@@ -134,8 +135,9 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 		first = true;
 	}
 	
-	for(auto &pair: pp_handles){
-		pp_handles[pair.first] = pair.second + pull_amount.cast<double>();
+	for(auto &pair: _handle){
+		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(pair.first);
+		pp_handles[pair.first] = v.xyz() + pull_amount.cast<double>();
 	}
 
 	// while not converged
@@ -154,69 +156,13 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 
 		Eigen::MatrixXd b = bf - Afc * xc;
 		p_prime = solver.solve(b);
-		if (i == 0) first = false;
+		if (i == 1) first = false;
 	}
 	xc_done = false;
 	// first = true;
 	update_positions();
 }
 
-
-void Mesh_deform::compute_r_matrices() {
-	// for each vertex
-	// setup P, P_prime, D
-	// compute SVD
-	// r = VU^T
-	int n = mesh().n_total_vertices();
-
-	#pragma omp parallel for
-	for (int i = 0; i < n; i++) {
-		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(i);
-		int n_neighbours = v.get_num_neighbours();
-
-		Eigen::MatrixXd Pp = Eigen::MatrixXd::Zero(3, n_neighbours);
-		Eigen::MatrixXd P = Eigen::MatrixXd::Zero(3, n_neighbours);
-		Eigen::MatrixXd D = Eigen::MatrixXd::Zero(n_neighbours, n_neighbours);
-
-		Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
-		
-		Eigen::Vector3d ppi = v.xyz();
-		if (!is_constraint(i)) ppi = p_prime.row(free[i]);
-		// if (i==handle_id) ppi = pp_handle;
-		if (pp_handles.count(i)>0) ppi = pp_handles[i];
-
-		int c = 0;
-		do // *points to*
-		{
-			Mesh_connectivity::Vertex_iterator vj = ring.half_edge().origin();
-			int j = vj.index();
-
-			Eigen::Vector3d ppj = vj.xyz();
-			if (!is_constraint(j)) ppj = p_prime.row(free[j]);
-			// if (j==handle_id) ppj = pp_handle;
-			if (pp_handles.count(j)>0) ppj = pp_handles[j];
-
-			Pp.col(c) = ppi - ppj;; // this should be new pos
-			P.col(c) = v.xyz() - vj.xyz(); // this should be old pos
-			D(c, c) = W(i, j);
-			c++;
-		} while (ring.advance());
-
-		Eigen::JacobiSVD<Eigen::MatrixXd> SVD(P * D * Pp.transpose(),
-												Eigen::ComputeThinU | Eigen::ComputeThinV);
-		Eigen::Matrix3d r = SVD.matrixV() * SVD.matrixU().transpose();
-
-		// up to changing the sign of the column of Ui corresponding
-		// to the smallest singular value, such that det (Ri) > 0.
-		if (r.determinant() < 0) {
-			Eigen::MatrixXd U = SVD.matrixU();
-			U.rightCols(1) = U.rightCols(1) * -1;
-			r = SVD.matrixV() * U.transpose();
-		}
-
-		r_matrices[i] = r;
-	}
-}
 
 
 void Mesh_deform::compute_r_i(int i) {
@@ -226,32 +172,78 @@ void Mesh_deform::compute_r_i(int i) {
 
 	Eigen::MatrixXd S = Eigen::MatrixXd::Zero(3, 3);
 	Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
-	
+
+	Eigen::MatrixXd Pp_MAT = Eigen::MatrixXd::Zero(3, n_neighbours);
+	Eigen::MatrixXd P_MAT = Eigen::MatrixXd::Zero(3, n_neighbours);
+	Eigen::MatrixXd D = Eigen::MatrixXd::Zero(n_neighbours, n_neighbours);
+	int c = 0;
+
+	// anchor never moves i is an anchor 
 	Eigen::Vector3d ppi = v.xyz();
-	if (!is_constraint(i)) ppi = p_prime.row(free[i]);
-	if (pp_handles.count(i)>0) ppi = pp_handles[i];
+	Eigen::Vector3d pi = v.xyz();
+
+	// if i is a free vertex
+	if (!is_constraint(i)) {
+		ppi = p_prime.row(free[i]); 
+		pi = p_free[i];
+	}
+
+	if (_handle.count(i)>0) {
+		ppi = pp_handles[i];
+		pi = p_handles[i];
+	}
 
 	do // *points to*
 	{
 		Mesh_connectivity::Vertex_iterator vj = ring.half_edge().origin();
 		int j = vj.index();
 
+		// if j is fixed (nonhandle) constraint vertex
 		Eigen::Vector3d ppj = vj.xyz();
-		if (!is_constraint(j)) ppj = p_prime.row(free[j]);
-		if (pp_handles.count(j)>0) ppj = pp_handles[j];
+		Eigen::Vector3d pj = vj.xyz();
+
+		if (!is_constraint(j)) {
+			ppj = p_prime.row(free[j]);
+			pj = p_free[i];
+		}
+		if (_handle.count(j)>0) {
+			ppj = pp_handles[j];
+			pj = p_handles[j];
+		}
 	
 		Eigen::Vector3d Pp = ppi - ppj;
-		Eigen::Vector3d P = v.xyz() - vj.xyz(); 
-		S += W(i,j) * Pp * P.transpose();
+		Eigen::Vector3d P = pi - pj; 
+		// S += W(i,j) * P * Pp.transpose();
 
-	} while (ring.advance());
+		Pp_MAT.col(c) = Pp; 
+		P_MAT.col(c) = P; 
+		D(c, c) = W(i, j);
+		c++;
 
-	Eigen::JacobiSVD<Eigen::MatrixXd> SVD(S, Eigen::ComputeThinU | Eigen::ComputeThinV);
+	} while (ring.advance());	
 
-	Eigen::Matrix3d r = SVD.matrixU() * SVD.matrixV().transpose();
-	Eigen::MatrixXd id = Eigen::MatrixXd::Identity(3, 3);
-	id(2,2) = r.determinant();
-	r_matrices[i] =  SVD.matrixU() * id * SVD.matrixV().transpose();
+	Eigen::JacobiSVD<Eigen::MatrixXd> SVD(P_MAT * D * Pp_MAT.transpose(),
+											Eigen::ComputeThinU | Eigen::ComputeThinV);
+	Eigen::Matrix3d r = SVD.matrixV() * SVD.matrixU().transpose();
+
+	// up to changing the sign of the column of Ui corresponding
+	// to the smallest singular value, such that det (Ri) > 0.
+	if (r.determinant() < 0) {
+		Eigen::MatrixXd U = SVD.matrixU();
+		U.rightCols(1) = U.rightCols(1) * -1;
+		r = SVD.matrixV() * U.transpose();
+	}
+
+	r_matrices[i] = r;
+
+	// Eigen::JacobiSVD<Eigen::MatrixXd> SVD(S, Eigen::ComputeThinU | Eigen::ComputeThinV);
+
+	// Eigen::Matrix3d r = SVD.matrixV() * SVD.matrixU().transpose();
+	// Eigen::MatrixXd id = Eigen::MatrixXd::Identity(3, 3);
+	// id(2,2) = r.determinant();
+	// r_matrices[i] =  SVD.matrixV() * id * SVD.matrixU().transpose();
+
+	
 }
 
 void Mesh_deform::build_b_matrix() {
@@ -274,7 +266,9 @@ void Mesh_deform::build_b_matrix() {
 
 		if (is_constraint(i) && !xc_done) {
 			Eigen::Vector3d res = v.xyz();
-			if (pp_handles.count(i)>0) res = pp_handles[i];
+			if (_handle.count(i)>0) {
+				res = pp_handles[i];
+			}
 			xc.row(c_map[i]) = res;
 		} 
 
@@ -282,6 +276,8 @@ void Mesh_deform::build_b_matrix() {
 		{
 			Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
 			Eigen::Vector3d out = Eigen::Vector3d(0.0, 0.0, 0.0);
+			
+			Eigen::Vector3d pi = p_free[i]; 
 	
 			do // *points to*
 			{
@@ -289,9 +285,16 @@ void Mesh_deform::build_b_matrix() {
 				int j = vj.index();
 				if (r_matrices.count(j)==0 && !first) compute_r_i(j);
 
-				Eigen::Vector3d pos = v.xyz() - vj.xyz();
-				Eigen::MatrixXd mul;
+				Eigen::Vector3d pj = vj.xyz(); 
+				if (!is_constraint(j)) {
+					pj = p_free[j];
+				}
+				if (_handle.count(j)>0) {
+					pj = p_handles[j];
+				}
+				Eigen::Vector3d pos = pi - pj;
 
+				Eigen::MatrixXd mul;
 				if (first) {
 					mul = Eigen::MatrixXd::Identity(3, 3) + Eigen::MatrixXd::Identity(3, 3);
 				} else {
@@ -393,9 +396,23 @@ double Mesh_deform::compute_wij(int he_id) {
 		Mesh_connectivity::Vertex_iterator p1 = he.dest();
 		Mesh_connectivity::Vertex_iterator p2 = he.origin();
 		Mesh_connectivity::Vertex_iterator p3 = he.next().dest();
+		
+		Eigen::Vector3d p3_xyz = p3.xyz();
+		// if (!is_constraint(p3.index())) {
+		// 	p3_xyz = p_free[p3.index()]; 
+		// }
 
-		Eigen::Vector3d v1 = p3.xyz() - p1.xyz();
-		Eigen::Vector3d v2 = p3.xyz() - p2.xyz();
+		Eigen::Vector3d p2_xyz = p2.xyz();
+		// if (!is_constraint(p2.index())) {
+		// 	p2_xyz = p_free[p2.index()]; 
+		// }
+		Eigen::Vector3d p1_xyz = p1.xyz();
+		// if (!is_constraint(p1.index())) {
+		// 	p1_xyz = p_free[p1.index()]; 
+		// }
+
+		Eigen::Vector3d v1 = p3_xyz - p1_xyz;
+		Eigen::Vector3d v2 = p3_xyz - p2_xyz;
 
 		double alpha = get_angle(v1, v2);
 		double cot_alpha = 0.5 * (1 / std::tan(alpha));
@@ -408,9 +425,21 @@ double Mesh_deform::compute_wij(int he_id) {
 	Mesh_connectivity::Vertex_iterator Q = he.next().dest();
 
 	Eigen::Vector3d I_xyz = I.xyz();
+	// if (!is_constraint(I.index())) {
+	// 	I_xyz = p_free[I.index()]; 
+	// }
 	Eigen::Vector3d J_xyz = J.xyz();
+	// if (!is_constraint(J.index())) {
+	// 	J_xyz = p_free[J.index()]; 
+	// }
 	Eigen::Vector3d P_xyz = P.xyz();
+	// if (!is_constraint(P.index())) {
+	// 	P_xyz = p_free[P.index()]; 
+	// }
 	Eigen::Vector3d Q_xyz = Q.xyz();
+	// if (!is_constraint(Q.index())) {
+	// 	Q_xyz = p_free[Q.index()]; 
+	// }
 
 	Eigen::Vector3d IP = P_xyz - I_xyz;
 	Eigen::Vector3d JP = P_xyz - J_xyz;
@@ -421,6 +450,7 @@ double Mesh_deform::compute_wij(int he_id) {
 	double beta = get_angle(IP, JP);
 
 	return 0.5 * ((1 / std::tan(alpha)) + (1 / std::tan(beta)));
+	// return 1.0;
 }
 
 } // end of mohe
