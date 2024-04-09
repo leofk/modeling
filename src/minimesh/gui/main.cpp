@@ -151,7 +151,7 @@ void mouse_moved(int x, int y)
 				// printf("1");
 
 				// deform the mesh
-				globalvars::arap.deform(pulled_vert, pull_amount);
+				globalvars::arap.deform(pull_amount);
 
 				// redraw
 				{

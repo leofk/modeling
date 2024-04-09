@@ -88,15 +88,11 @@ public:
 	//
 	void init();
 	void build_W_matrix();
-	void build_L_matrix();
-	void update_L_matrix();
-	void deform(int _handle_id, Eigen::Vector3f pull_amount);
-	void build_b_matrix();
-	void build_c_map();
-	void solve_system();
-	double compute_energy();
+	void build_Afn_matrix();
+	void deform(Eigen::Vector3f pull_amount);
+	void build_b_matrix(Eigen::MatrixXd &b);
+	double compute_energy(Eigen::MatrixXd &p_prev);
 	void update_positions();
-	void compute_r_matrices();
 	void compute_r_i(int vid);
 	double compute_wij(int he_id);
 	double get_angle(const Eigen::Vector3d &v1, const Eigen::Vector3d &v2);
@@ -108,8 +104,6 @@ private:
 	Mesh_connectivity & _m;
 
 	bool primed = false;
-	bool xc_done = false;
-	bool first = true;
 
 	std::map<int, int> _handle = {
 			// {22,22}, 
@@ -128,36 +122,20 @@ private:
 			// {0,0}, 
 			// {11,11}, 
 	};
-	// int handle_id = 22;
-	
+
     std::map<int, Eigen::MatrixXd> r_matrices;
-    std::map<int, Eigen::MatrixXd> I_matrices;
-	// std::vector<int> constraint_vids;
 	std::map<int, int> free; // vid -> matid
 	std::map<int, int> free_rev; // matid -> vid
-	std::map<int, int> c_map; // vid -> matid
 
     Eigen::SparseMatrix<double> Afn;
-	// Eigen::MatrixXd L;
-	// std::vector<Eigen::Triplet<double>> Aff_elem;
-
-	Eigen::MatrixXd bf;
-	Eigen::MatrixXd b;
-	Eigen::MatrixXd xc;
 	Eigen::MatrixXd p_prime;
-	// Eigen::MatrixXd p_prev;
 	Eigen::MatrixXd W;
-	Eigen::MatrixXd Afc;
-	// Eigen::MatrixXd Aff;
-	Eigen::Vector3d pp_handle;
 	std::map<int, Eigen::Vector3d> pp_handles;
-	std::map<int, Eigen::Vector3d> p_free;
 	std::map<int, Eigen::Vector3d> p_all;
-	std::map<int, Eigen::Vector3d> p_handles;
 	
 	Eigen::SparseLU<Eigen::SparseMatrix<double>> solver;
 
-	double THRESHOLD = 1.0e-3;
+	double THRESHOLD = 1.0e-2;
 };
 
 
