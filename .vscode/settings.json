@@ -75,7 +75,8 @@
 		"sparselu": "cpp",
 		"sparse": "cpp",
 		"list": "cpp",
-		"kroneckerproduct": "cpp"
+		"kroneckerproduct": "cpp",
+		"sparsecholesky": "cpp"
 	},
 	"C_Cpp.errorSquiggles": "enabled"
 }

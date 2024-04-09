@@ -55,6 +55,12 @@
 },
 {
   "directory": "/Users/leofk/Documents/GitHub/modeling/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_deform.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_deform.cpp",
+  "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_deform.cpp",
+  "output": "src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_deform.cpp.o"
+},
+{
+  "directory": "/Users/leofk/Documents/GitHub/modeling/build",
   "command": "/usr/bin/clang++ -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1 -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o -c /Users/leofk/Documents/GitHub/modeling/src/minimesh/cli/main.cpp",
   "file": "/Users/leofk/Documents/GitHub/modeling/src/minimesh/cli/main.cpp",
   "output": "src/minimesh/cli/CMakeFiles/minimeshcli.dir/main.cpp.o"

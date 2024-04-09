@@ -19,6 +19,7 @@ void Mesh_viewer::initialize(const Eigen::AlignedBox<float, 3> & bounding_box)
 	_draw_edges = 1;
 	_draw_faces = 1;
 	_draw_axis = 1;
+	_deform = 0;
 	_mouse_button = invalid_index;
 
 	_light_dir0 = Eigen::Vector4f((float)sqrt(1. / 3), (float)sqrt(1. / 3), (float)sqrt(1. / 3), 0.0f);
@@ -496,21 +497,27 @@ bool Mesh_viewer::keyboard_pressed(unsigned char c, int x, int y)
 
 	switch(c)
 	{
-		case GLUT_KEY_LEFT:
-			_center_offset += Eigen::Vector3f(-0.05, 0, 0)* std::abs(_view_distance);
+		// case GLUT_KEY_LEFT:
+		// 	_center_offset += Eigen::Vector3f(-0.05, 0, 0)* std::abs(_view_distance);
+		// 	should_redraw = true;
+		// 	break;
+		// case GLUT_KEY_RIGHT:
+		// 	_center_offset += Eigen::Vector3f(0.05, 0, 0)* std::abs(_view_distance);
+		// 	should_redraw = true;
+		// 	break;
+		case GLUT_KEY_DOWN: // ZOOM OUT
+			_view_distance += 0.2f * std::abs(_view_distance);
+			if(_view_distance < 0.0)
+				_view_distance = 0.0;
+			_mouse_button = invalid_index;
 			should_redraw = true;
 			break;
-		case GLUT_KEY_RIGHT:
-			_center_offset += Eigen::Vector3f(0.05, 0, 0)* std::abs(_view_distance);
-			should_redraw = true;
-			break;
-		case GLUT_KEY_UP:
-			_center_offset += Eigen::Vector3f(0, 0.05, 0)* std::abs(_view_distance);
-			should_redraw = true;
-			break;
-		case GLUT_KEY_DOWN:
-			_center_offset += Eigen::Vector3f(0, -0.05, 0)* std::abs(_view_distance);
-			should_redraw = true;
+		case GLUT_KEY_UP: // ZOOM IN
+				_view_distance -= 0.2f * std::abs(_view_distance);
+				if(_view_distance < 0.0)
+					_view_distance = 0.0;
+				_mouse_button = invalid_index;
+				should_redraw = true;
 			break;
 	}
 

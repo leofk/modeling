@@ -66,6 +66,11 @@ bool Mesh_connectivity::Vertex_iterator::is_done()
 	return data().is_done;
 }
 
+int Mesh_connectivity::Vertex_iterator::get_num_neighbours()
+{
+	return data().n_neighbours;
+}
+
 void Mesh_connectivity::Vertex_iterator::deactivate()
 {
 	assert(is_active() && "Attempting to delete already deleted vertex");

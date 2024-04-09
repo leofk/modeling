@@ -84,7 +84,7 @@ public:
 	int & get_draw_edges() { return _draw_edges; }
 	int & get_draw_faces() { return _draw_faces; }
 	int & get_draw_axis() { return _draw_axis; }
-  
+  	int & deform(){ return _deform;}
 	//
 	//  Call these withing freeglut event functions
 	// 
@@ -117,7 +117,8 @@ private:
 	int _draw_edges;
 	int _draw_faces;
 	int _draw_axis;
-
+	int _deform;
+	
 	float _near;
 	float _far;
 	Eigen::Vector4f _view_quaternion;

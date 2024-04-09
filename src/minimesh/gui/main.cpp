@@ -13,6 +13,7 @@
 #include <minimesh/core/mohe/mesh_io.hpp>
 #include <minimesh/core/mohe/mesh_modifier.hpp>
 #include <minimesh/core/mohe/mesh_simplify.hpp>
+#include <minimesh/core/mohe/mesh_deform.hpp>
 #include <minimesh/core/util/assert.hpp>
 #include <minimesh/core/util/foldertools.hpp>
 #include <minimesh/core/util/numbers.hpp>
@@ -33,7 +34,7 @@ Mesh_viewer viewer;
 mohe::Mesh_connectivity mesh;
 mohe::Mesh_modifier modi(mesh);
 mohe::Mesh_simplify simp(mesh);
-
+mohe::Mesh_deform arap(mesh);
 //
 int glut_main_window_id;
 //
@@ -72,9 +73,20 @@ void keyboard_pressed(unsigned char c, int x, int y)
 {
 	bool should_redraw = false;
 	should_redraw = should_redraw || globalvars::viewer.keyboard_pressed(c, x, y);
+	// TODO IF THIS CHANGES WE SHOUD REINIT 
+	if (c == 'f') {
+		globalvars::arap.append_fixed(globalvars::arap.clickedVertex, globalvars::arap.clickedVertex);
+		globalvars::arap.needs_reinit();
+	}
+
+	if (c == 'h') {
+		globalvars::arap.append_handle(globalvars::arap.clickedVertex, globalvars::arap.clickedVertex);
+		globalvars::arap.needs_reinit();
+	}
 
 	if(should_redraw)
 		glutPostRedisplay();
+
 }
 
 
@@ -101,8 +113,10 @@ void mouse_pushed(int button, int state, int x, int y)
 		int clicked_on_vertex;
 		bool did_user_click;
 		globalvars::viewer.get_and_clear_vertex_selection(did_user_click, clicked_on_vertex);
-		if(did_user_click)
+		if (did_user_click) {
+			globalvars::arap.clickedVertex = clicked_on_vertex;
 			printf("User just clicked on vertex %d \n", clicked_on_vertex);
+		}
 	}
 
 	if(should_redraw)
@@ -131,16 +145,21 @@ void mouse_moved(int x, int y)
 		{
 			force_assert(pulled_vert != Mesh_viewer::invalid_index);
 
-			// Get current displacement and apply the change to the mesh renderer
+			// globalvars::mesh.vertex_at(pulled_vert).data().xyz += pull_amount.cast<double>();
 
-			globalvars::displaced_vertex_positions.col(pulled_vert) += pull_amount.cast<double>();
-			// If the mesh was defragmented, you should have done:
-			// Mesh_connectivity::Defragmentation_maps defrag;
-			// globalvars::mesh.compute_defragmention_maps(defrag);
-			// displaced_vertex_positions.col(defrag.old2new_vertex[j]) += pull_amount.cast<double>();
+			if (globalvars::viewer.deform() == 1 && globalvars::arap.is_handle(pulled_vert)) {
+				// printf("1");
 
-			// update positions (only the viewer)
-			globalvars::viewer.get_mesh_buffer().set_vertex_positions(globalvars::displaced_vertex_positions.cast<float>());
+				// deform the mesh
+				globalvars::arap.deform(pull_amount);
+
+				// redraw
+				{
+					mohe::Mesh_connectivity::Defragmentation_maps defrag;
+					globalvars::mesh.compute_defragmention_maps(defrag);
+					globalvars::viewer.get_mesh_buffer().rebuild(globalvars::mesh, defrag);
+				}
+			}
 
 			// Must rerender now.
 			should_redraw = true;
@@ -210,25 +229,44 @@ void simplify_pressed(int)
 
 void show_spheres_pressed(int)
 {
-	// 
-	// Sample of using Mesh_viewer for MESH DEFORMATION ASSIGNMENT
-	// Here I color the vertices (draw spheres on them)
-	// Note that if you call rebuild, you have to redraw everything.
-	//
-	Eigen::VectorXi sphere_indices(3);
-	sphere_indices << 0, 1, 2;
-	Eigen::Matrix4Xf sphere_colors(4, 3);
-	sphere_colors.col(0) << 1, 1, 0, 1;
-	sphere_colors.col(1) << 0, 1, 1, 1;
-	sphere_colors.col(2) << 0, 0, 1, 1;
 
+	// define anchor colors
+	std::map<int, int> anchors = globalvars::arap.fixed_map();
+	std::map<int, int> handles = globalvars::arap.handle_map();
+
+	int a_size = static_cast<int>(anchors.size());
+	int h_size = static_cast<int>(handles.size());
+
+	Eigen::Matrix4Xf sphere_colors(4, a_size + h_size);
+	Eigen::VectorXi sphere_indices(a_size + h_size);
+
+	int i = 0;
+	// update handle colors
+	for (const auto &pair: anchors) {
+		sphere_colors.col(i) << 1, 0, 0, 1;  // red for anchors
+		sphere_indices(i) = pair.first;
+		i++;
+	}
+	// update anchors colors
+	for (const auto &pair: handles) {
+		sphere_colors.col(i) << 0, 0, 1, 1;  // blue for handles
+		sphere_indices(i) = pair.first;
+		i++;
+	}
 	globalvars::viewer.get_mesh_buffer().set_colorful_spheres(sphere_indices, sphere_colors);
 
 	glutPostRedisplay();
+
+	
 }
 
 }
 
+void clear_roi_pressed(int) {
+	// clears the region of interest
+
+	globalvars::arap.clear_constraints();
+}
 
 int main(int argc, char * argv[])
 {
@@ -242,6 +280,18 @@ int main(int argc, char * argv[])
 	{
 		// FOR MESHES W/O BOUNDARY
 		foldertools::makeandsetdir("/Users/leofk/Documents/GitHub/modeling/mesh/");
+
+		// A4
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/woody-lo.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/woody-hi.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/bar.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/bar_lo.obj");
+		mohe::Mesh_io(globalvars::mesh).read_auto("a4/cactus.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/bumpy_plan.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/cylinder.obj");
+		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/hand.obj");
+		
+
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("sphere1.obj");
@@ -309,17 +359,17 @@ int main(int argc, char * argv[])
 	//
 	// Add radio buttons to choose mesh
 	//
-	GLUI_Panel * panel_mesh = globalvars::glui->add_panel("Choose Mesh");
-	GLUI_RadioGroup * radio_group_mesh = globalvars::glui->add_radiogroup_to_panel(panel_mesh, &globalvars::viewer.get_mesh());
-	for(int i = 0; i < Mesh_viewer::MESH_INVALID; ++i)
-	{
-		if(i == Mesh_viewer::MESH_CUBE)
-			globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Cube");
-		if(i == Mesh_viewer::MESH_COW)
-			globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Cow");
-		if(i == Mesh_viewer::MESH_PYRAMID)
-			globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Pyramid (w/ boundary)");
-	}
+	// GLUI_Panel * panel_mesh = globalvars::glui->add_panel("Choose Mesh");
+	// GLUI_RadioGroup * radio_group_mesh = globalvars::glui->add_radiogroup_to_panel(panel_mesh, &globalvars::viewer.get_mesh());
+	// for(int i = 0; i < Mesh_viewer::MESH_INVALID; ++i)
+	// {
+	// 	if(i == Mesh_viewer::MESH_CUBE)
+	// 		globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Cube");
+	// 	if(i == Mesh_viewer::MESH_COW)
+	// 		globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Cow");
+	// 	if(i == Mesh_viewer::MESH_PYRAMID)
+	// 		globalvars::glui->add_radiobutton_to_group(radio_group_mesh, "Pyramid (w/ boundary)");
+	// }
 
 	//
 	// Add radio buttons to see which mesh components to view
@@ -375,6 +425,20 @@ int main(int argc, char * argv[])
 	// Add show spheres button to demo how to draw spheres on top of the vertices
 	//
 	globalvars::glui->add_button("Demo Showing Spheres", -1, freeglutcallback::show_spheres_pressed);
+
+    //
+    // Add ARAP Controls
+    //
+
+    // arap control options
+    GLUI_Panel *arap_panel_options = globalvars::glui->add_panel("ARAP Deformation");
+    globalvars::glui->add_checkbox_to_panel(arap_panel_options, "Deform", &globalvars::viewer.deform());
+
+    // clear roi of interest TODO
+    // GLUI_Button *clear_roi_button = globalvars::glui->add_button("Clear ROI", -1,
+    //                                                              freeglutcallback::clear_roi_pressed);
+    // clear_roi_button->set_w(200);
+
 
 	//
 	// Save the initial vertex positions
