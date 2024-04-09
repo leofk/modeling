@@ -124,6 +124,7 @@ private:
 	};
 
     std::map<int, Eigen::MatrixXd> r_matrices;
+    std::map<int, Eigen::MatrixXd> I_matrices;
 	std::map<int, int> free; // vid -> matid
 	std::map<int, int> free_rev; // matid -> vid
 

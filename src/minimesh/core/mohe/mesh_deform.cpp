@@ -29,7 +29,9 @@ void Mesh_deform::build_W_matrix() {
 	int x = 0;
 
 	for (int i = 0; i < n; i++) {
-		r_matrices[i] = Eigen::MatrixXd::Identity(3,3);
+		I_matrices[i] = Eigen::MatrixXd::Identity(3,3);
+		// r_matrices[i] = Eigen::MatrixXd::Identity(3,3);
+
 		Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
 		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(i);
 		int count = 0;
@@ -94,6 +96,7 @@ void Mesh_deform::deform(Eigen::Vector3f pull_amount)
 
 	if (!primed) {
 		init();
+		r_matrices = I_matrices;
 		primed = true;
 	}
 	
@@ -102,7 +105,10 @@ void Mesh_deform::deform(Eigen::Vector3f pull_amount)
 		pp_handles[pair.first] = v.xyz() + pull_amount.cast<double>();
 	}
 
-	int max = 3;
+	// UNCOMMENT IF WE DONT WANT WEIRD WARPING
+	// r_matrices = I_matrices; 
+
+	int max = 5;
 	for (int i = 1; i <= max; i++) {
 
 		Eigen::MatrixXd b = Eigen::MatrixXd::Zero(mesh().n_total_vertices(), 3);
