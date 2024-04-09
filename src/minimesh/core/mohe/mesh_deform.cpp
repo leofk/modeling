@@ -11,19 +11,22 @@ namespace mohe {
 void Mesh_deform::init() {
 	int n = mesh().n_total_vertices();
 	int c = _constraints.size();
-	bf = Eigen::MatrixXd::Zero(n-c, 3);
-	xc = Eigen::MatrixXd::Zero(c, 3);
-	Afc = Eigen::MatrixXd::Zero(n-c, c);
+	b = Eigen::MatrixXd::Zero(n, 3);
+	// bf = Eigen::MatrixXd::Zero(n-c, 3);
+	// xc = Eigen::MatrixXd::Zero(c, 3);
+	// Afc = Eigen::MatrixXd::Zero(n-c, c);
 
 	// Aff = Eigen::MatrixXd::Zero(n-c, n-c);
-    Eigen::SparseMatrix<double> Aff;
-	Aff.resize(n-c,n-c);
+    // Eigen::SparseMatrix<double> Afn;
+	p_prime = Eigen::MatrixXd::Zero(n-c, 3);
+	Afn.resize(n,n-c);
 
 	build_c_map();
 	build_W_matrix();
-	build_L_matrix(Aff);
+	build_L_matrix();
 
-	solver.compute(Aff);
+    Eigen::SparseMatrix<double> AtA = Afn.transpose() * Afn;
+	solver.compute(AtA);
 
 }
 
@@ -53,24 +56,27 @@ void Mesh_deform::build_W_matrix() {
 		Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
 		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(i);
 		int count = 0;
-
+		p_all[i] = v.xyz();
 		if (!is_constraint(i)) 
 		{
 			free[i] = x;
 			free_rev[x] = i;
+			p_prime.row(x) = p_all[i];
 			x++;
-			p_free[i] = v.xyz();
 		}	
+		double sum = 0.0;
 
 		do // *points to*
 		{
 			int j = ring.half_edge().origin().index();
-			W(i, j) = compute_wij(ring.half_edge().index());
+			double wij = compute_wij(ring.half_edge().index());
+			sum += wij;
+			W(i, j) = wij;
 			count++;
 		} while (ring.advance());
 
 		v.data().n_neighbours = count;
-		W(i, i) = 1.0;
+		W(i, i) = sum;
 
 		// I_matrices[i] = Eigen::MatrixXd::Identity(3, 3);
 		// r_matrices[i] = Eigen::MatrixXd::Identity(3, 3);
@@ -78,7 +84,7 @@ void Mesh_deform::build_W_matrix() {
 	} 
 }
 
-void Mesh_deform::build_L_matrix(Eigen::SparseMatrix<double> &Aff) {
+void Mesh_deform::build_L_matrix() {
 	// build nxn mat
 	// sum wij for j in N(i) ; when i==j
 	// -wij ; when j in N(i)
@@ -86,44 +92,44 @@ void Mesh_deform::build_L_matrix(Eigen::SparseMatrix<double> &Aff) {
 
 	int n = mesh().n_total_vertices();
 	
-	std::vector<Eigen::Triplet<double>> Aff_elem;
+	std::vector<Eigen::Triplet<double>> Afn_elem;
 
 
 	for (int i = 0; i < n; i++) {
-		if (!is_constraint(i))
+		int mat_i = free[i]; 
+		Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
+		double sum = 0.0;
+		
+		do // *points to*
 		{
-			int mat_i = free[i]; 
-			Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
-			double sum = 0.0;
-			
-			do // *points to*
+			int j = ring.half_edge().origin().index();
+			if (!is_constraint(j))
 			{
-				int j = ring.half_edge().origin().index();
-				if (!is_constraint(j))
-				{
-					int mat_j = free[j];
-					sum += W(i, j);
-					Aff_elem.push_back(Eigen::Triplet<double>(mat_i, mat_j, -W(i, j)));
-					// Aff(mat_i,mat_j) = -W(i, j);
-				} else {
-					int mat_j = c_map[j];
-					sum += W(i, j);
-					Afc(mat_i,mat_j) = -W(i, j);
-				}
+				int mat_j = free[j];
+				sum += W(i, j);
+				Afn_elem.push_back(Eigen::Triplet<double>(i, mat_j, -W(i, j)));
 
-			} while (ring.advance());
-
-			Aff_elem.push_back(Eigen::Triplet<double>(mat_i, mat_i, sum));
-			// Aff(mat_i,mat_i) = sum;
-		} else {
-			// if the item is a handle.
-			if (_handle.count(i)>0) {
-				p_handles[i] = mesh().vertex_at(i).xyz();
+				// Afn(mat_i,mat_j) = -W(i, j);
+			} else {
+				int mat_j = c_map[j];
+				sum += W(i, j);
+				// Afc(mat_i,mat_j) = -W(i, j);
 			}
+
+		} while (ring.advance());
+
+		if (!is_constraint(i)){
+			Afn_elem.push_back(Eigen::Triplet<double>(i, mat_i, sum));
 		}
+
+		// if the item is a handle.
+		if (_handle.count(i)>0) {
+			p_handles[i] = mesh().vertex_at(i).xyz();
+		}
+
 	}
 
-	Aff.setFromTriplets(Aff_elem.begin(), Aff_elem.end());
+	Afn.setFromTriplets(Afn_elem.begin(), Afn_elem.end());
 }
 
 void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount) 
@@ -140,6 +146,12 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 		pp_handles[pair.first] = v.xyz() + pull_amount.cast<double>();
 	}
 
+	// for(auto &pair: free){
+	// 	Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(pair.first);
+	// 	p_prime.row(pair.second) = v.xyz() + pull_amount.cast<double>();
+	// }
+
+
 	// while not converged
 	// compute rotation mats per vertex (when i>0)
 	// compute b matrix
@@ -149,14 +161,21 @@ void Mesh_deform::deform(int _handle_id, Eigen::Vector3f pull_amount)
 	bool converged = false;
 	// bool first = true;
 	int last = 3;
+	// std::cout << Afn << std::endl;
 
 	for (int i = 1; i <= last; i++) {
 		build_b_matrix();
 		if (i!=last) r_matrices.clear();
+    	// std::cout << b << std::endl;
+		// Eigen::MatrixXd b = bf - Afc * xc;
+		Eigen::MatrixXd Atb = Afn.transpose() * b;
+		// std::cout << Atb.row(10) << std::endl;
+		
 
-		Eigen::MatrixXd b = bf - Afc * xc;
-		p_prime = solver.solve(b);
-		if (i == 1) first = false;
+		p_prime = solver.solve(Atb);
+		// std::cout << p_prime << std::endl;
+		
+		// if (i == 1) first = false;
 	}
 	xc_done = false;
 	// first = true;
@@ -180,17 +199,17 @@ void Mesh_deform::compute_r_i(int i) {
 
 	// anchor never moves i is an anchor 
 	Eigen::Vector3d ppi = v.xyz();
-	Eigen::Vector3d pi = v.xyz();
+	Eigen::Vector3d pi = p_all[i];
 
 	// if i is a free vertex
 	if (!is_constraint(i)) {
 		ppi = p_prime.row(free[i]); 
-		pi = p_free[i];
+		// pi = p_free[i];
 	}
 
 	if (_handle.count(i)>0) {
 		ppi = pp_handles[i];
-		pi = p_handles[i];
+		// pi = p_handles[i];s
 	}
 
 	do // *points to*
@@ -200,15 +219,15 @@ void Mesh_deform::compute_r_i(int i) {
 
 		// if j is fixed (nonhandle) constraint vertex
 		Eigen::Vector3d ppj = vj.xyz();
-		Eigen::Vector3d pj = vj.xyz();
+		Eigen::Vector3d pj = p_all[j];
 
 		if (!is_constraint(j)) {
 			ppj = p_prime.row(free[j]);
-			pj = p_free[i];
+			// pj = p_free[i];
 		}
 		if (_handle.count(j)>0) {
 			ppj = pp_handles[j];
-			pj = p_handles[j];
+			// pj = p_handles[j];
 		}
 	
 		Eigen::Vector3d Pp = ppi - ppj;
@@ -264,49 +283,52 @@ void Mesh_deform::build_b_matrix() {
 			compute_r_i(i);
 		}
 
-		if (is_constraint(i) && !xc_done) {
-			Eigen::Vector3d res = v.xyz();
-			if (_handle.count(i)>0) {
-				res = pp_handles[i];
-			}
-			xc.row(c_map[i]) = res;
-		} 
+		Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
+		Eigen::Vector3d out = Eigen::Vector3d(0.0, 0.0, 0.0);
+		
+		Eigen::Vector3d pi = p_all[i]; 
 
-		if (!is_constraint(i))
+		do // *points to*
 		{
-			Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(i);
-			Eigen::Vector3d out = Eigen::Vector3d(0.0, 0.0, 0.0);
-			
-			Eigen::Vector3d pi = p_free[i]; 
-	
-			do // *points to*
-			{
-				Mesh_connectivity::Vertex_iterator vj = ring.half_edge().origin();
-				int j = vj.index();
-				if (r_matrices.count(j)==0 && !first) compute_r_i(j);
+			Mesh_connectivity::Vertex_iterator vj = ring.half_edge().origin();
+			int j = vj.index();
+			if (r_matrices.count(j)==0 && !first) compute_r_i(j);
 
-				Eigen::Vector3d pj = vj.xyz(); 
-				if (!is_constraint(j)) {
-					pj = p_free[j];
-				}
+			Eigen::Vector3d pj = p_all[j];
+
+			Eigen::Vector3d pos = pi - pj;
+
+			Eigen::MatrixXd mul = Eigen::MatrixXd::Zero(3, 3);
+			if (first) {
+				mul = Eigen::MatrixXd::Identity(3, 3) + Eigen::MatrixXd::Identity(3, 3);
+			} else {
+				mul = r_matrices[i] + r_matrices[j];
+			}
+
+			Eigen::Vector3d res = mul * pos;
+			out += 0.5 * W(i,j) * res;
+			// ^ this is for al
+
+			if (is_constraint(j)) {
+				Eigen::Vector3d ppj = p_all[j];
 				if (_handle.count(j)>0) {
-					pj = p_handles[j];
+					ppj = pp_handles[j];
 				}
-				Eigen::Vector3d pos = pi - pj;
+				out += W(i,j) * ppj;
+			}
 
-				Eigen::MatrixXd mul;
-				if (first) {
-					mul = Eigen::MatrixXd::Identity(3, 3) + Eigen::MatrixXd::Identity(3, 3);
-				} else {
-					mul = r_matrices[i] + r_matrices[j];
-				}
+		} while (ring.advance());
 
-				Eigen::Vector3d res = mul * pos;
-				out += 0.5 * W(i,j) * res;
-
-			} while (ring.advance());
-			bf.row(free[i]) = out;
+		if (is_constraint(i)) {
+			Eigen::Vector3d ppi = p_all[i];
+			if (_handle.count(i)>0) {
+				ppi = pp_handles[i];
+			}
+			out -= W(i,i) * ppi;
 		}
+
+		b.row(i) = out;
+
 	}
 	xc_done = true;
 }
@@ -454,4 +476,4 @@ double Mesh_deform::compute_wij(int he_id) {
 }
 
 } // end of mohe
-} // end of minimesh
+} // end of minimesh/
