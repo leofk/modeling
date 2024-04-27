@@ -1,4 +1,4 @@
-		#pragma once
+#pragma once
 
 //
 // mesh_simplify.hpp

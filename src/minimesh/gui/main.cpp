@@ -41,6 +41,7 @@ int glut_main_window_id;
 GLUI * glui;
 //
 int num_entities_to_simplify;
+int target_num_of_vertices;
 bool initialized = false;
 //
 Eigen::Matrix3Xd displaced_vertex_positions;
@@ -226,6 +227,33 @@ void simplify_pressed(int)
 	glutPostRedisplay();
 }
 
+void simplify_target_pressed(int){
+    if (!globalvars::initialized) {
+        globalvars::simp.init();
+        globalvars::initialized = true;
+    }
+    globalvars::simp.simplify_to_target(globalvars::target_num_of_vertices);
+
+    // reload the mesh in the viewer
+    mohe::Mesh_connectivity::Defragmentation_maps defrag;
+    globalvars::mesh.compute_defragmention_maps(defrag);
+    globalvars::viewer.get_mesh_buffer().rebuild(globalvars::mesh, defrag);
+
+    glutPostRedisplay();
+}
+
+
+void simplify_revert_pressed(int){
+    globalvars::simp.revert_simplification();
+
+    // reload the mesh in the viewer
+    mohe::Mesh_connectivity::Defragmentation_maps defrag;
+    globalvars::mesh.compute_defragmention_maps(defrag);
+    globalvars::viewer.get_mesh_buffer().rebuild(globalvars::mesh, defrag);
+
+    glutPostRedisplay();
+
+}
 
 void show_spheres_pressed(int)
 {
@@ -279,21 +307,21 @@ int main(int argc, char * argv[])
 	if(argc == 1)
 	{
 		// FOR MESHES W/O BOUNDARY
-		foldertools::makeandsetdir("/Users/leofk/Documents/GitHub/modeling/mesh/");
+		foldertools::makeandsetdir("E:\\Work\\School\\cpsc-524-project\\mesh\\");
 
 		// A4
 		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/woody-lo.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/woody-hi.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/bar.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/bar_lo.obj");
-		mohe::Mesh_io(globalvars::mesh).read_auto("a4/cactus.obj");
+//		mohe::Mesh_io(globalvars::mesh).read_auto("a4/cactus.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/bumpy_plan.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/cylinder.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("a4/hand.obj");
 		
 
 		// mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
-		// mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
+		 mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("sphere1.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("camel.obj");
 		// mohe::Mesh_io(globalvars::mesh).read_auto("octopus.obj");
@@ -439,6 +467,24 @@ int main(int argc, char * argv[])
     //                                                              freeglutcallback::clear_roi_pressed);
     // clear_roi_button->set_w(200);
 
+    //
+    // Add button to simplify to target number of vertices
+    //
+    globalvars::target_num_of_vertices = 0;
+    GLUI_Spinner* spinner_target_simplify = globalvars::glui->add_spinner("Simplify to # of vertices", GLUI_SPINNER_INT, &globalvars::target_num_of_vertices);
+    spinner_target_simplify->set_alignment(GLUI_ALIGN_CENTER);
+    spinner_target_simplify->set_w(300);
+
+    GLUI_Button* button_target_simplify = globalvars::glui->add_button("Simplify To Target", -1, freeglutcallback::simplify_target_pressed);
+    button_target_simplify->set_w(200);
+
+
+    //
+    // Add button to revert the simplification process
+    //
+
+    GLUI_Button* revert_simplify = globalvars::glui->add_button("Revert Simplify", -1, freeglutcallback::simplify_revert_pressed);
+    revert_simplify->set_w(200);
 
 	//
 	// Save the initial vertex positions
