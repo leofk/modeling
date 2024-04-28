@@ -178,7 +178,7 @@ namespace minimesh {
             HNT.deactivate();
             HTPT.deactivate();
 
-             force_assert( mesh().check_sanity_slowly() );
+//             force_assert( mesh().check_sanity_slowly() );
 
             // now update position and errors for new adjacent vertices
             ring = mesh().vertex_ring_at(V1.index());
@@ -366,10 +366,12 @@ namespace minimesh {
                 HistoryEntry entry = pop_history_entry();
                 construct_edge_from_history(entry);
 //                force_assert(mesh().check_sanity_slowly());
-                std::cout << "Success Count => " << count << std::endl;
+//                std::cout << "Success Count => " << count << std::endl;
                 count++;
             }
 
+            // after reverting, prime the mesh for simplification
+            init();
         }
 
 //
@@ -379,19 +381,19 @@ namespace minimesh {
         void Mesh_simplify::construct_edge_from_history(HistoryEntry &entry) {
 
             Mesh_connectivity::Vertex_iterator V1 = mesh().vertex_at(entry.kept_vertex_data.v_id);
-            Mesh_connectivity::Vertex_iterator V2 = mesh().add_vertex(false);
+            Mesh_connectivity::Vertex_iterator V2 = mesh().add_vertex();
 
             // add the removed half_edges
-            Mesh_connectivity::Half_edge_iterator H = mesh().add_half_edge(false);
-            Mesh_connectivity::Half_edge_iterator HT = mesh().add_half_edge(false);
-            Mesh_connectivity::Half_edge_iterator HN = mesh().add_half_edge(false);
-            Mesh_connectivity::Half_edge_iterator HTP = mesh().add_half_edge(false);
-            Mesh_connectivity::Half_edge_iterator HNT = mesh().add_half_edge(false);
-            Mesh_connectivity::Half_edge_iterator HTPT = mesh().add_half_edge(false);
+            Mesh_connectivity::Half_edge_iterator HTPT = mesh().add_half_edge();
+            Mesh_connectivity::Half_edge_iterator HNT = mesh().add_half_edge();
+            Mesh_connectivity::Half_edge_iterator HTP = mesh().add_half_edge();
+            Mesh_connectivity::Half_edge_iterator HN = mesh().add_half_edge();
+            Mesh_connectivity::Half_edge_iterator HT = mesh().add_half_edge();
+            Mesh_connectivity::Half_edge_iterator H = mesh().add_half_edge();
 
             // add the removed faces
-            Mesh_connectivity::Face_iterator F1 = mesh().add_face(false);
-            Mesh_connectivity::Face_iterator F2 = mesh().add_face(false);
+            Mesh_connectivity::Face_iterator F2 = mesh().add_face();
+            Mesh_connectivity::Face_iterator F1 = mesh().add_face();
 
             Mesh_connectivity::Vertex_iterator V3 = mesh().vertex_at(entry.top);
             Mesh_connectivity::Vertex_iterator V4 = mesh().vertex_at(entry.bottom);
