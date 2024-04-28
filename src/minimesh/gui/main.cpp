@@ -294,8 +294,9 @@ int main(int argc, char *argv[]) {
         foldertools::makeandsetdir("C:\\Work\\School\\2023_W2\\CPSC524\\project\\mesh");
 
         // mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
-         mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
-//        mohe::Mesh_io(globalvars::mesh).read_auto("sphere1.obj");
+        mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
+        // mohe::Mesh_io(globalvars::mesh).read_auto("sphere1.obj");
+        // mohe::Mesh_io(globalvars::mesh).read_auto("horse.obj");
         // mohe::Mesh_io(globalvars::mesh).read_auto("camel.obj");
         // mohe::Mesh_io(globalvars::mesh).read_auto("octopus.obj");
 
