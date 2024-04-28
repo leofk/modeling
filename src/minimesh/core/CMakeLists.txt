@@ -37,6 +37,8 @@ set(SOURCE_FILES
   mohe/mesh_free_param.cpp
   mohe/mesh_deform.cpp
   mohe/mesh_deform.hpp
+  mohe/mesh_mapping.cpp
+  mohe/mesh_mapping.hpp
  )
 
  

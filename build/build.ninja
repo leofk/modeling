@@ -158,6 +158,14 @@ build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_deform.cpp.o: CXX_
   OBJECT_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir
   OBJECT_FILE_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe
 
+build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_mapping.cpp.o: CXX_COMPILER__minimeshcore_unscanned_Debug /Users/leofk/Documents/GitHub/modeling/src/minimesh/core/mohe/mesh_mapping.cpp || cmake_object_order_depends_target_minimeshcore
+  DEFINES = -DDEBUG -DEIGEN_DONT_VECTORIZE -DEIGEN_MAX_ALIGN_BYTES=0 -DGL_SILENCE_DEPRECATION=1
+  DEP_FILE = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_mapping.cpp.o.d
+  FLAGS = -g -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  INCLUDES = -I/Users/leofk/Documents/GitHub/modeling/src -isystem /usr/local/include/eigen3 -F/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks -isystem /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/GLUT.framework/Headers -isystem /usr/local/include
+  OBJECT_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir
+  OBJECT_FILE_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe
+
 
 # =============================================================================
 # Link build statements for STATIC_LIBRARY target minimeshcore
@@ -166,7 +174,7 @@ build src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_deform.cpp.o: CXX_
 #############################################
 # Link the static library src/minimesh/core/libminimeshcore.a
 
-build src/minimesh/core/libminimeshcore.a: CXX_STATIC_LIBRARY_LINKER__minimeshcore_Debug src/minimesh/core/CMakeFiles/minimeshcore.dir/util/foldertools.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/util/get_basefilename.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_connectivity.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_io.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_subdivision.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_fixed_param.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_free_param.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_deform.cpp.o
+build src/minimesh/core/libminimeshcore.a: CXX_STATIC_LIBRARY_LINKER__minimeshcore_Debug src/minimesh/core/CMakeFiles/minimeshcore.dir/util/foldertools.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/util/get_basefilename.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_connectivity.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_io.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_modifier.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_subdivision.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_simplify.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_fixed_param.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_free_param.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_deform.cpp.o src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_mapping.cpp.o
   ARCH_FLAGS = -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
   LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = src/minimesh/core/CMakeFiles/minimeshcore.dir
