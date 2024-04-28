@@ -89,6 +89,22 @@ namespace minimesh {
 
         };
 
+        /*
+         * Simplification history manager,
+         * Inherited by the Mesh_simplify class
+         *
+         * Holds edge collapse history collected at every successful edge collapse step.
+         * stores this data in a stack of history entries
+         *
+         * A history entry, has the following
+         * 1. the vertex info that was removed
+         * 2. the vertex info that was kept
+         * 3. top and bottom vertices adjacent to the collapsed edge
+         * 4. list of deleted edges
+         * 5. list of deleted faces
+         * 6. list of kept faces
+         * 7. list of kept edges
+         * */
 
         class Mesh_simplify_history {
         public:

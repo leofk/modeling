@@ -115,7 +115,7 @@ namespace minimesh {
             // check no vertices adjacent to H has 3 or less valence
             if (!check_valence(H)) return;
 
-            // check that collapsing an edge wont result in illegal topology
+            // check that collapsing an edge won't result in illegal topology
             if (!check_connectivity(H)) return;
 
             // topology will remain valid, now continue with mesh modifications
@@ -361,29 +361,31 @@ namespace minimesh {
 // simplify to target
 //
         void Mesh_simplify::revert_simplification() {
-            int count = 1;
+            std::cout << "Reverting Simplified Mesh to Original" <<std::endl;
             while (!history().empty()) {
                 HistoryEntry entry = pop_history_entry();
                 construct_edge_from_history(entry);
-//                force_assert(mesh().check_sanity_slowly());
-//                std::cout << "Success Count => " << count << std::endl;
-                count++;
             }
 
-            // after reverting, prime the mesh for simplification
+            // after reverting,
+            // prime the mesh for simplification
+            std::cout << "Reverting Complete. Priming for further simplification" <<std::endl;
             init();
+            std::cout << "Complete" <<std::endl;
         }
 
-//
-// builds the collapse half-edge from the history
-//
-
+        /*
+         * builds the collapse half-edge from the history.
+         *
+         * reverse the order of operations done in edge_collapse above.
+         * DO NOT CHANGE THE ORDER OF CREATION OF VERTICES, FACES AND HALF-EDGES.
+         * */
         void Mesh_simplify::construct_edge_from_history(HistoryEntry &entry) {
 
             Mesh_connectivity::Vertex_iterator V1 = mesh().vertex_at(entry.kept_vertex_data.v_id);
             Mesh_connectivity::Vertex_iterator V2 = mesh().add_vertex();
 
-            // add the removed half_edges
+            // restore the removed edges from the storage stack.
             Mesh_connectivity::Half_edge_iterator HTPT = mesh().add_half_edge();
             Mesh_connectivity::Half_edge_iterator HNT = mesh().add_half_edge();
             Mesh_connectivity::Half_edge_iterator HTP = mesh().add_half_edge();
@@ -397,11 +399,6 @@ namespace minimesh {
 
             Mesh_connectivity::Vertex_iterator V3 = mesh().vertex_at(entry.top);
             Mesh_connectivity::Vertex_iterator V4 = mesh().vertex_at(entry.bottom);
-
-            if(!V1.is_active()) printf("not active v1: %d\n", V1.index());
-            if(!V2.is_active()) printf("not active v2: %d\n", V2.index());
-            if(!V3.is_active()) printf("not active v3: %d\n", V3.index());
-            if(!V4.is_active()) printf("not active v4: %d\n", V4.index());
 
             std::vector<int> kept_edges = entry.kept_edges_ids();
             Mesh_connectivity::Half_edge_iterator HP = mesh().half_edge_at(kept_edges[0]);
@@ -418,7 +415,7 @@ namespace minimesh {
             // v1 - shift back to its original position before contraction
             V1.data().xyz = entry.kept_vertex_data.original_position;
 
-            // v2 - give it the previous position and the new
+            // v2 - give it the previous position before it was deleted
             V2.data().xyz = entry.removed_vertex_data.original_position;
 
             // remove the corresponding half-edges from v1 and assign to v2
@@ -433,7 +430,7 @@ namespace minimesh {
                 }
             } while (ring_v1.advance());
 
-            // patch hole
+            // patch the hole that was created
 
             // point next to previous
             H.data().twin = HT.index();
