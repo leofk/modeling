@@ -1,6 +1,14 @@
 # CPSC 524 - Leo Foord-Kelcey
 UBC # 83974592
 
+## Project - Inter-Surface Mapping
+Implementation of Inter-Surface mapping by John S. et al.
+
+Entry Point:
+- see `a2` below
+
+
+
 ## A4 - Deformation
 Implemented the As-Rigid-As-Possible (ARAP) mesh deformation algorithm.
 
