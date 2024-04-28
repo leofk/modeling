@@ -3,6 +3,7 @@
 #include <Eigen/Dense>
 #include <set>
 #include <iostream>
+#include <algorithm>
 
 namespace minimesh {
     namespace mohe {
@@ -121,8 +122,12 @@ namespace minimesh {
 
             // collect the history data
             std::vector<int> r_faces = {F1.index(), F2.index()};
-            std::vector<int> r_hes = {H.index(), HT.index(), HN.index(), HTP.index(), HNT.index(), HTPT.index(),};
-            collect_history_entry(V1.index(), V2.index(), r_hes, r_faces);
+            std::vector<int> r_hes = {H.index(), HT.index(), HN.index(), HTP.index(), HNT.index(), HTPT.index()};
+            std::vector<int> k_faces = {F3.index(), F4.index()};
+            std::vector<int> k_hes = {HP.index(), HNTN.index(), HNTP.index(), HTN.index(), HTPTN.index(),
+                                      HTPTP.index()};
+            collect_history_entry(V1.index(), V2.index(), r_hes, r_faces, V3.index(), V4.index(),
+                                  k_faces, k_hes);
 
             // update origins
             Mesh_connectivity::Vertex_ring_iterator ring = mesh().vertex_ring_at(V2.index());
@@ -173,7 +178,7 @@ namespace minimesh {
             HNT.deactivate();
             HTPT.deactivate();
 
-            // force_assert( mesh().check_sanity_slowly() );
+             force_assert( mesh().check_sanity_slowly() );
 
             // now update position and errors for new adjacent vertices
             ring = mesh().vertex_ring_at(V1.index());
@@ -356,10 +361,13 @@ namespace minimesh {
 // simplify to target
 //
         void Mesh_simplify::revert_simplification() {
-
+            int count = 1;
             while (!history().empty()) {
                 HistoryEntry entry = pop_history_entry();
                 construct_edge_from_history(entry);
+//                force_assert(mesh().check_sanity_slowly());
+                std::cout << "Success Count => " << count << std::endl;
+                count++;
             }
 
         }
@@ -368,12 +376,145 @@ namespace minimesh {
 // builds the collapse half-edge from the history
 //
 
-        void Mesh_simplify::construct_edge_from_history(const HistoryEntry &entry) {
+        void Mesh_simplify::construct_edge_from_history(HistoryEntry &entry) {
 
-            Mesh_connectivity::Vertex_iterator kept_vertex = mesh().vertex_at(entry.kept_vertex_data.v_id);
-            Mesh_connectivity::Vertex_iterator removed_vertex = mesh().vertex_at(entry.removed_vertex_data.v_id);
+            Mesh_connectivity::Vertex_iterator V1 = mesh().vertex_at(entry.kept_vertex_data.v_id);
+            Mesh_connectivity::Vertex_iterator V2 = mesh().add_vertex(false);
 
+            // add the removed half_edges
+            Mesh_connectivity::Half_edge_iterator H = mesh().add_half_edge(false);
+            Mesh_connectivity::Half_edge_iterator HT = mesh().add_half_edge(false);
+            Mesh_connectivity::Half_edge_iterator HN = mesh().add_half_edge(false);
+            Mesh_connectivity::Half_edge_iterator HTP = mesh().add_half_edge(false);
+            Mesh_connectivity::Half_edge_iterator HNT = mesh().add_half_edge(false);
+            Mesh_connectivity::Half_edge_iterator HTPT = mesh().add_half_edge(false);
 
+            // add the removed faces
+            Mesh_connectivity::Face_iterator F1 = mesh().add_face(false);
+            Mesh_connectivity::Face_iterator F2 = mesh().add_face(false);
+
+            Mesh_connectivity::Vertex_iterator V3 = mesh().vertex_at(entry.top);
+            Mesh_connectivity::Vertex_iterator V4 = mesh().vertex_at(entry.bottom);
+
+            if(!V1.is_active()) printf("not active v1: %d\n", V1.index());
+            if(!V2.is_active()) printf("not active v2: %d\n", V2.index());
+            if(!V3.is_active()) printf("not active v3: %d\n", V3.index());
+            if(!V4.is_active()) printf("not active v4: %d\n", V4.index());
+
+            std::vector<int> kept_edges = entry.kept_edges_ids();
+            Mesh_connectivity::Half_edge_iterator HP = mesh().half_edge_at(kept_edges[0]);
+            Mesh_connectivity::Half_edge_iterator HNTN = mesh().half_edge_at(kept_edges[1]);
+            Mesh_connectivity::Half_edge_iterator HNTP = mesh().half_edge_at(kept_edges[2]);
+            Mesh_connectivity::Half_edge_iterator HTN = mesh().half_edge_at(kept_edges[3]);
+            Mesh_connectivity::Half_edge_iterator HTPTN = mesh().half_edge_at(kept_edges[4]);
+            Mesh_connectivity::Half_edge_iterator HTPTP = mesh().half_edge_at(kept_edges[5]);
+            Mesh_connectivity::Face_iterator F3 = mesh().face_at(entry.kept_faces[0]);
+            Mesh_connectivity::Face_iterator F4 = mesh().face_at(entry.kept_faces[1]);
+
+            // update the local components
+
+            // v1 - shift back to its original position before contraction
+            V1.data().xyz = entry.kept_vertex_data.original_position;
+
+            // v2 - give it the previous position and the new
+            V2.data().xyz = entry.removed_vertex_data.original_position;
+
+            // remove the corresponding half-edges from v1 and assign to v2
+            Mesh_connectivity::Vertex_ring_iterator ring_v1 = mesh().vertex_ring_at(V1.index());
+            std::vector<int> removed_vertex_ring_he_ids = entry.removed_vertex_data.ring_edge_ids();
+
+            do { // *points to*
+                // if the he on the ring is in the ring of the removed vertex
+                if (std::find(removed_vertex_ring_he_ids.begin(), removed_vertex_ring_he_ids.end(),
+                              ring_v1.half_edge().index()) != removed_vertex_ring_he_ids.end()) {
+                    ring_v1.half_edge().twin().data().origin = V2.index();
+                }
+            } while (ring_v1.advance());
+
+            // patch hole
+
+            // point next to previous
+            H.data().twin = HT.index();
+            H.data().prev = HP.index();
+            H.data().next = HN.index();
+
+            HT.data().twin = H.index();
+            HT.data().prev = HTP.index();
+            HT.data().next = HTN.index();
+
+            HTN.data().prev = HT.index();
+            HTN.data().next = HTP.index();
+
+            HTP.data().twin = HTPT.index();
+            HTP.data().prev = HTN.index();
+            HTP.data().next = HT.index();
+
+            HTPT.data().twin = HTP.index();
+            HTPT.data().prev = HTPTP.index();
+            HTPT.data().next = HTPTN.index();
+
+            HTPTN.data().prev = HTPT.index();
+            HTPTN.data().next = HTPTP.index();
+
+            HTPTP.data().prev = HTPTN.index();
+            HTPTP.data().next = HTPT.index();
+
+            HP.data().prev = HN.index();
+            HP.data().next = H.index();
+
+            HN.data().twin = HNT.index();
+            HN.data().prev = H.index();
+            HN.data().next = HP.index();
+
+            HNT.data().twin = HN.index();
+            HNT.data().prev = HNTP.index();
+            HNT.data().next = HNTN.index();
+
+            HNTP.data().prev = HNTN.index();
+            HNTP.data().next = HNT.index();
+
+            HNTN.data().prev = HNT.index();
+            HNTN.data().next = HNTP.index();
+
+            // point edges to vertices
+            H.data().origin = V1.index();
+            HT.data().origin = V2.index();
+            HP.data().origin = V3.index();
+            HN.data().origin = V2.index();
+            HTP.data().origin = V4.index();
+            HTN.data().origin = V1.index();
+            HNT.data().origin = V3.index();
+            HTPT.data().origin = V2.index();
+            HNTN.data().origin = V2.index();
+            HTPTN.data().origin = V4.index();
+
+            // set outgoing vertices foreach vertex
+            V1.data().half_edge = H.index();
+            V2.data().half_edge = HT.index();
+            V3.data().half_edge = HNT.index();
+            V4.data().half_edge = HTP.index();
+
+            // update the faces
+            H.data().face = F1.index();
+            HN.data().face = F1.index();
+            HP.data().face = F1.index();
+
+            HT.data().face = F2.index();
+            HTP.data().face = F2.index();
+            HTN.data().face = F2.index();
+
+            HNT.data().face = F3.index();
+            HNTP.data().face = F3.index();
+            HNTN.data().face = F3.index();
+
+            HTPT.data().face = F4.index();
+            HTPTN.data().face = F4.index();
+            HTPTP.data().face = F4.index();
+
+            F1.data().half_edge = H.index();
+            F2.data().half_edge = HT.index();
+            F3.data().half_edge = HNT.index();
+            F4.data().half_edge = HTPT.index();
         }
 
 ////////////////////////////////////////////////

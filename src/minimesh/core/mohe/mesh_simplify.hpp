@@ -99,7 +99,7 @@ public:
     // revert simplification
     void revert_simplification();
 
-    void construct_edge_from_history(const HistoryEntry& entry);
+    void construct_edge_from_history(HistoryEntry& entry);
 
 private:
 	// pointer to the mesh that we are working on.
