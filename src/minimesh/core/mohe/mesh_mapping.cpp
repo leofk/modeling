@@ -15,10 +15,12 @@ void Mesh_mapping::build_mapping()
 	printf("elo \n");
 
     Mesh_simplify simp_m1(_m1);
+	simp_m1.init();
 	simp_m1.simplify_to_target(4);
 	printf("simp m1 \n");
 
     Mesh_simplify simp_m2(_m2);
+	simp_m2.init();
 	simp_m2.simplify_to_target(4);
 	printf("simp m2 \n");
 
