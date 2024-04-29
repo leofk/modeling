@@ -2,12 +2,11 @@
 UBC # 83974592
 
 ## Project - Inter-Surface Mapping
-Implementation of Inter-Surface mapping by John S. et al.
+Implementation of Inter-Surface Mapping by John S. et al.
 
 Entry Point:
-- see `a2` below
-
-
+- `mesh_mapping.hpp`
+- `mesh_mapping.cpp`
 
 ## A4 - Deformation
 Implemented the As-Rigid-As-Possible (ARAP) mesh deformation algorithm.
@@ -33,6 +32,8 @@ Implemented Edge-Collapse based simplification algorithm.
 Entry point:
 - `mesh_simplify.hpp`
 - `mesh_simplify.cpp`
+
+BONUS: Extended to be able to revert edge-collapse
 
 ## A1 - Subdivision
 Implemented Loop's Subdivision schema. Demo available in GUI via subdivide button.
