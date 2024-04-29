@@ -14,6 +14,7 @@
 #include <minimesh/core/mohe/mesh_modifier.hpp>
 #include <minimesh/core/mohe/mesh_simplify.hpp>
 #include <minimesh/core/mohe/mesh_deform.hpp>
+#include <minimesh/core/mohe/mesh_mapping.hpp>
 #include <minimesh/core/util/assert.hpp>
 #include <minimesh/core/util/foldertools.hpp>
 #include <minimesh/core/util/numbers.hpp>
@@ -31,8 +32,11 @@ using namespace minimesh;
 namespace globalvars {
     Mesh_viewer viewer;
     mohe::Mesh_connectivity mesh;
+    mohe::Mesh_connectivity m1;
+    mohe::Mesh_connectivity m2;
     mohe::Mesh_modifier modi(mesh);
     mohe::Mesh_simplify simp(mesh);
+    mohe::Mesh_mapping ISM(m1,m2);
     mohe::Mesh_deform arap(mesh);
 //
     int glut_main_window_id;
@@ -242,6 +246,36 @@ namespace freeglutcallback {
 
     }
 
+    void inter_surface_map(int) {
+        printf("build map \n");
+        globalvars::ISM.build_mapping();
+        printf("done  \n");
+    }
+    
+    void map_m1_on_m2(int)
+    {
+        globalvars::ISM.update_positions(1); // m2 with m1 connectivity
+
+        // reload the mesh in the viewer
+        mohe::Mesh_connectivity::Defragmentation_maps defrag;
+        globalvars::m1.compute_defragmention_maps(defrag);
+        globalvars::viewer.get_mesh_buffer().rebuild(globalvars::m1, defrag);
+
+        glutPostRedisplay();
+    }
+
+    void map_m2_on_m1(int)
+    {
+        globalvars::ISM.update_positions(2); // m2 with m1 connectivity
+
+        // reload the mesh in the viewer
+        mohe::Mesh_connectivity::Defragmentation_maps defrag;
+        globalvars::m2.compute_defragmention_maps(defrag);
+        globalvars::viewer.get_mesh_buffer().rebuild(globalvars::m2, defrag);
+
+        glutPostRedisplay();
+    }
+
     void show_spheres_pressed(int) {
 
         // define anchor colors
@@ -293,6 +327,9 @@ int main(int argc, char *argv[]) {
         // FOR MESHES W/O BOUNDARY
 		foldertools::makeandsetdir("/Users/leofk/Documents/GitHub/modeling/mesh/");
         // foldertools::makeandsetdir("C:\\Work\\School\\2023_W2\\CPSC524\\project\\mesh");
+        
+        mohe::Mesh_io(globalvars::m1).read_auto("cow1.obj");
+        mohe::Mesh_io(globalvars::m2).read_auto("camel.obj");
 
         // mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
         mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
@@ -465,6 +502,19 @@ int main(int argc, char *argv[]) {
     GLUI_Button *revert_simplify = globalvars::glui->add_button("Revert Simplify", -1,
                                                                 freeglutcallback::simplify_revert_pressed);
     revert_simplify->set_w(200);
+
+    GLUI_Button *inter_surface_map = globalvars::glui->add_button("Build Inter Surface Map", -1,
+                                                                freeglutcallback::inter_surface_map);
+    inter_surface_map->set_w(200);
+
+    GLUI_Button *map_m1_on_m2 = globalvars::glui->add_button("Map M1 on M2", -1,
+                                                                freeglutcallback::map_m1_on_m2);
+    map_m1_on_m2->set_w(200);
+
+    GLUI_Button *map_m2_on_m1 = globalvars::glui->add_button("Map M2 on M1", -1,
+                                                                freeglutcallback::map_m2_on_m1);
+    map_m2_on_m1->set_w(200);
+
 
     //
     // Save the initial vertex positions

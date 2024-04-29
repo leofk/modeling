@@ -61,8 +61,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-DRrznr"
-      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-DRrznr"
+      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-IFyOUm"
+      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-IFyOUm"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -74,16 +74,16 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-DRrznr'
+        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-IFyOUm'
         
-        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_25664
-        [1/2] /usr/bin/clang   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -v -Wl,-v -MD -MT CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o -c /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c
+        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_7162d
+        [1/2] /usr/bin/clang   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -v -Wl,-v -MD -MT CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o -c /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c
         Apple clang version 11.0.0 (clang-1100.0.33.17)
         Target: x86_64-apple-darwin21.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
         clang: warning: -Wl,-v: 'linker' input unused [-Wunused-command-line-argument]
-         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-DRrznr/CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-DRrznr -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o -x c /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-IFyOUm/CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-IFyOUm -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o -x c /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c
         clang -cc1 version 11.0.0 (clang-1100.0.33.17) default target x86_64-apple-darwin21.6.0
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/local/include"
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/Library/Frameworks"
@@ -94,12 +94,12 @@ events:
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)
         End of search list.
-        [2/2] : && /usr/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -v -Wl,-v CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o -o cmTC_25664   && :
+        [2/2] : && /usr/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -v -Wl,-v CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o -o cmTC_7162d   && :
         Apple clang version 11.0.0 (clang-1100.0.33.17)
         Target: x86_64-apple-darwin21.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch x86_64 -macosx_version_min 10.15.0 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o cmTC_25664 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a
+         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch x86_64 -macosx_version_min 10.15.0 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o cmTC_7162d -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a
         @(#)PROGRAM:ld  PROJECT:ld64-530
         BUILD 18:57:17 Dec 13 2019
         configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
@@ -138,16 +138,16 @@ events:
     message: |
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
-        ignore line: [Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-DRrznr']
+        ignore line: [Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-IFyOUm']
         ignore line: []
-        ignore line: [Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_25664]
-        ignore line: [[1/2] /usr/bin/clang   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -v -Wl -v -MD -MT CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o -c /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_7162d]
+        ignore line: [[1/2] /usr/bin/clang   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -v -Wl -v -MD -MT CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o -c /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c]
         ignore line: [Apple clang version 11.0.0 (clang-1100.0.33.17)]
         ignore line: [Target: x86_64-apple-darwin21.6.0]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: /Library/Developer/CommandLineTools/usr/bin]
         ignore line: [clang: warning: -Wl -v: 'linker' input unused [-Wunused-command-line-argument]]
-        ignore line: [ "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-DRrznr/CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-DRrznr -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o -x c /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [ "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-IFyOUm/CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-IFyOUm -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o -x c /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCCompilerABI.c]
         ignore line: [clang -cc1 version 11.0.0 (clang-1100.0.33.17) default target x86_64-apple-darwin21.6.0]
         ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/local/include"]
         ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/Library/Frameworks"]
@@ -158,12 +158,12 @@ events:
         ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include]
         ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)]
         ignore line: [End of search list.]
-        ignore line: [[2/2] : && /usr/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl -search_paths_first -Wl -headerpad_max_install_names -v -Wl -v CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o -o cmTC_25664   && :]
+        ignore line: [[2/2] : && /usr/bin/clang -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl -search_paths_first -Wl -headerpad_max_install_names -v -Wl -v CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o -o cmTC_7162d   && :]
         ignore line: [Apple clang version 11.0.0 (clang-1100.0.33.17)]
         ignore line: [Target: x86_64-apple-darwin21.6.0]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: /Library/Developer/CommandLineTools/usr/bin]
-        link line: [ "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch x86_64 -macosx_version_min 10.15.0 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o cmTC_25664 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a]
+        link line: [ "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch x86_64 -macosx_version_min 10.15.0 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o cmTC_7162d -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a]
           arg [/Library/Developer/CommandLineTools/usr/bin/ld] ==> ignore
           arg [-demangle] ==> ignore
           arg [-lto_library] ==> ignore, skip following value
@@ -176,11 +176,11 @@ events:
           arg [-syslibroot] ==> ignore
           arg [/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_25664] ==> ignore
+          arg [cmTC_7162d] ==> ignore
           arg [-search_paths_first] ==> ignore
           arg [-headerpad_max_install_names] ==> ignore
           arg [-v] ==> ignore
-          arg [CMakeFiles/cmTC_25664.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [CMakeFiles/cmTC_7162d.dir/CMakeCCompilerABI.c.o] ==> ignore
           arg [-lSystem] ==> lib [System]
           arg [/Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a] ==> lib [/Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a]
         Library search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/lib]
@@ -204,8 +204,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-93Kequ"
-      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-93Kequ"
+      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-k8BRcI"
+      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-k8BRcI"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -217,16 +217,16 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-93Kequ'
+        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-k8BRcI'
         
-        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_f17f9
-        [1/2] /usr/bin/clang++   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -v -Wl,-v -MD -MT CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_cbacf
+        [1/2] /usr/bin/clang++   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -v -Wl,-v -MD -MT CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp
         Apple clang version 11.0.0 (clang-1100.0.33.17)
         Target: x86_64-apple-darwin21.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
         clang: warning: -Wl,-v: 'linker' input unused [-Wunused-command-line-argument]
-         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-93Kequ/CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -stdlib=libc++ -internal-isystem /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1 -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdeprecated-macro -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-93Kequ -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-k8BRcI/CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -stdlib=libc++ -internal-isystem /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1 -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdeprecated-macro -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-k8BRcI -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp
         clang -cc1 version 11.0.0 (clang-1100.0.33.17) default target x86_64-apple-darwin21.6.0
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/c++/v1"
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/local/include"
@@ -239,12 +239,12 @@ events:
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)
         End of search list.
-        [2/2] : && /usr/bin/clang++ -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -v -Wl,-v CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_f17f9   && :
+        [2/2] : && /usr/bin/clang++ -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -v -Wl,-v CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_cbacf   && :
         Apple clang version 11.0.0 (clang-1100.0.33.17)
         Target: x86_64-apple-darwin21.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch x86_64 -macosx_version_min 10.15.0 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o cmTC_f17f9 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a
+         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch x86_64 -macosx_version_min 10.15.0 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o cmTC_cbacf -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a
         @(#)PROGRAM:ld  PROJECT:ld64-530
         BUILD 18:57:17 Dec 13 2019
         configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
@@ -285,16 +285,16 @@ events:
     message: |
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
-        ignore line: [Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-93Kequ']
+        ignore line: [Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-k8BRcI']
         ignore line: []
-        ignore line: [Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_f17f9]
-        ignore line: [[1/2] /usr/bin/clang++   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -v -Wl -v -MD -MT CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_cbacf]
+        ignore line: [[1/2] /usr/bin/clang++   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk   -v -Wl -v -MD -MT CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
         ignore line: [Apple clang version 11.0.0 (clang-1100.0.33.17)]
         ignore line: [Target: x86_64-apple-darwin21.6.0]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: /Library/Developer/CommandLineTools/usr/bin]
         ignore line: [clang: warning: -Wl -v: 'linker' input unused [-Wunused-command-line-argument]]
-        ignore line: [ "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-93Kequ/CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -stdlib=libc++ -internal-isystem /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1 -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdeprecated-macro -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-93Kequ -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [ "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-k8BRcI/CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -stdlib=libc++ -internal-isystem /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1 -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdeprecated-macro -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-k8BRcI -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/local/Cellar/cmake/3.28.3/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
         ignore line: [clang -cc1 version 11.0.0 (clang-1100.0.33.17) default target x86_64-apple-darwin21.6.0]
         ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/c++/v1"]
         ignore line: [ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/local/include"]
@@ -307,12 +307,12 @@ events:
         ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include]
         ignore line: [ /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)]
         ignore line: [End of search list.]
-        ignore line: [[2/2] : && /usr/bin/clang++ -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl -search_paths_first -Wl -headerpad_max_install_names -v -Wl -v CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_f17f9   && :]
+        ignore line: [[2/2] : && /usr/bin/clang++ -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl -search_paths_first -Wl -headerpad_max_install_names -v -Wl -v CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_cbacf   && :]
         ignore line: [Apple clang version 11.0.0 (clang-1100.0.33.17)]
         ignore line: [Target: x86_64-apple-darwin21.6.0]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: /Library/Developer/CommandLineTools/usr/bin]
-        link line: [ "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch x86_64 -macosx_version_min 10.15.0 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o cmTC_f17f9 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a]
+        link line: [ "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch x86_64 -macosx_version_min 10.15.0 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o cmTC_cbacf -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a]
           arg [/Library/Developer/CommandLineTools/usr/bin/ld] ==> ignore
           arg [-demangle] ==> ignore
           arg [-lto_library] ==> ignore, skip following value
@@ -325,11 +325,11 @@ events:
           arg [-syslibroot] ==> ignore
           arg [/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_f17f9] ==> ignore
+          arg [cmTC_cbacf] ==> ignore
           arg [-search_paths_first] ==> ignore
           arg [-headerpad_max_install_names] ==> ignore
           arg [-v] ==> ignore
-          arg [CMakeFiles/cmTC_f17f9.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [CMakeFiles/cmTC_cbacf.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
           arg [-lc++] ==> lib [c++]
           arg [-lSystem] ==> lib [System]
           arg [/Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a] ==> lib [/Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a]
@@ -353,8 +353,8 @@ events:
       - "CMakeLists.txt:22 (find_package)"
     description: "Detecting C OpenMP compiler info"
     directories:
-      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-n3pmrG"
-      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-n3pmrG"
+      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-VfD5m5"
+      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-VfD5m5"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -367,17 +367,17 @@ events:
       variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
       cached: true
       stdout: |
-        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-n3pmrG'
+        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-VfD5m5'
         
-        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_95edd
-        [1/2] /usr/bin/clang   -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_95edd.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_95edd.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_95edd.dir/OpenMPTryFlag.c.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-n3pmrG/OpenMPTryFlag.c
-        FAILED: CMakeFiles/cmTC_95edd.dir/OpenMPTryFlag.c.o 
-        /usr/bin/clang   -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_95edd.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_95edd.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_95edd.dir/OpenMPTryFlag.c.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-n3pmrG/OpenMPTryFlag.c
+        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_5f3e3
+        [1/2] /usr/bin/clang   -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_5f3e3.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_5f3e3.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_5f3e3.dir/OpenMPTryFlag.c.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-VfD5m5/OpenMPTryFlag.c
+        FAILED: CMakeFiles/cmTC_5f3e3.dir/OpenMPTryFlag.c.o 
+        /usr/bin/clang   -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_5f3e3.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_5f3e3.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_5f3e3.dir/OpenMPTryFlag.c.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-VfD5m5/OpenMPTryFlag.c
         Apple clang version 11.0.0 (clang-1100.0.33.17)
         Target: x86_64-apple-darwin21.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-n3pmrG/CMakeFiles/cmTC_95edd.dir/OpenMPTryFlag.c.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_95edd.dir/OpenMPTryFlag.c.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_95edd.dir/OpenMPTryFlag.c.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-n3pmrG -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -fopenmp -o CMakeFiles/cmTC_95edd.dir/OpenMPTryFlag.c.o -x c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-n3pmrG/OpenMPTryFlag.c
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-VfD5m5/CMakeFiles/cmTC_5f3e3.dir/OpenMPTryFlag.c.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_5f3e3.dir/OpenMPTryFlag.c.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_5f3e3.dir/OpenMPTryFlag.c.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-VfD5m5 -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -fopenmp -o CMakeFiles/cmTC_5f3e3.dir/OpenMPTryFlag.c.o -x c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-VfD5m5/OpenMPTryFlag.c
         clang -cc1 version 11.0.0 (clang-1100.0.33.17) default target x86_64-apple-darwin21.6.0
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/local/include"
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/Library/Frameworks"
@@ -388,7 +388,7 @@ events:
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)
         End of search list.
-        /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-n3pmrG/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+        /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-VfD5m5/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
         #include <omp.h>
                  ^~~~~~~
         1 error generated.
@@ -403,8 +403,8 @@ events:
       - "CMakeLists.txt:22 (find_package)"
     description: "Trying C OpenMP compiler with '/usr/local/lib/libomp.dylib'"
     directories:
-      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-219Qcb"
-      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-219Qcb"
+      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-fn2M6A"
+      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-fn2M6A"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -417,17 +417,17 @@ events:
       variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
       cached: true
       stdout: |
-        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-219Qcb'
+        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-fn2M6A'
         
-        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_87596
-        [1/2] /usr/bin/clang   -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_87596.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_87596.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_87596.dir/OpenMPTryFlag.c.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-219Qcb/OpenMPTryFlag.c
-        FAILED: CMakeFiles/cmTC_87596.dir/OpenMPTryFlag.c.o 
-        /usr/bin/clang   -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_87596.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_87596.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_87596.dir/OpenMPTryFlag.c.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-219Qcb/OpenMPTryFlag.c
+        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_58b34
+        [1/2] /usr/bin/clang   -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_58b34.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_58b34.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_58b34.dir/OpenMPTryFlag.c.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-fn2M6A/OpenMPTryFlag.c
+        FAILED: CMakeFiles/cmTC_58b34.dir/OpenMPTryFlag.c.o 
+        /usr/bin/clang   -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_58b34.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_58b34.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_58b34.dir/OpenMPTryFlag.c.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-fn2M6A/OpenMPTryFlag.c
         Apple clang version 11.0.0 (clang-1100.0.33.17)
         Target: x86_64-apple-darwin21.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-219Qcb/CMakeFiles/cmTC_87596.dir/OpenMPTryFlag.c.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_87596.dir/OpenMPTryFlag.c.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_87596.dir/OpenMPTryFlag.c.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-219Qcb -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -fopenmp -o CMakeFiles/cmTC_87596.dir/OpenMPTryFlag.c.o -x c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-219Qcb/OpenMPTryFlag.c
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-fn2M6A/CMakeFiles/cmTC_58b34.dir/OpenMPTryFlag.c.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_58b34.dir/OpenMPTryFlag.c.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_58b34.dir/OpenMPTryFlag.c.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-fn2M6A -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -fopenmp -o CMakeFiles/cmTC_58b34.dir/OpenMPTryFlag.c.o -x c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-fn2M6A/OpenMPTryFlag.c
         clang -cc1 version 11.0.0 (clang-1100.0.33.17) default target x86_64-apple-darwin21.6.0
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/local/include"
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/Library/Frameworks"
@@ -438,7 +438,7 @@ events:
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)
         End of search list.
-        /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-219Qcb/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
+        /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-fn2M6A/OpenMPTryFlag.c:2:10: fatal error: 'omp.h' file not found
         #include <omp.h>
                  ^~~~~~~
         1 error generated.
@@ -453,8 +453,8 @@ events:
       - "CMakeLists.txt:22 (find_package)"
     description: "Trying C OpenMP compiler with '/usr/local/lib/libomp.dylib' and '/usr/local/include'"
     directories:
-      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-w28yJr"
-      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-w28yJr"
+      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-gCFIoH"
+      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-gCFIoH"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -467,15 +467,15 @@ events:
       variable: "OpenMP_COMPILE_RESULT_C_Xclang fopenmp"
       cached: true
       stdout: |
-        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-w28yJr'
+        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-gCFIoH'
         
-        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_a8a0b
-        [1/2] /usr/bin/clang  -I/usr/local/include -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_a8a0b.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_a8a0b.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_a8a0b.dir/OpenMPTryFlag.c.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-w28yJr/OpenMPTryFlag.c
+        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_c4336
+        [1/2] /usr/bin/clang  -I/usr/local/include -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_c4336.dir/OpenMPTryFlag.c.o -MF CMakeFiles/cmTC_c4336.dir/OpenMPTryFlag.c.o.d -o CMakeFiles/cmTC_c4336.dir/OpenMPTryFlag.c.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-gCFIoH/OpenMPTryFlag.c
         Apple clang version 11.0.0 (clang-1100.0.33.17)
         Target: x86_64-apple-darwin21.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-w28yJr/CMakeFiles/cmTC_a8a0b.dir/OpenMPTryFlag.c.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_a8a0b.dir/OpenMPTryFlag.c.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_a8a0b.dir/OpenMPTryFlag.c.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -I /usr/local/include -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-w28yJr -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -fopenmp -o CMakeFiles/cmTC_a8a0b.dir/OpenMPTryFlag.c.o -x c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-w28yJr/OpenMPTryFlag.c
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-gCFIoH/CMakeFiles/cmTC_c4336.dir/OpenMPTryFlag.c.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_c4336.dir/OpenMPTryFlag.c.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_c4336.dir/OpenMPTryFlag.c.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -I /usr/local/include -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-gCFIoH -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -fopenmp -o CMakeFiles/cmTC_c4336.dir/OpenMPTryFlag.c.o -x c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-gCFIoH/OpenMPTryFlag.c
         clang -cc1 version 11.0.0 (clang-1100.0.33.17) default target x86_64-apple-darwin21.6.0
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/local/include"
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/Library/Frameworks"
@@ -487,12 +487,12 @@ events:
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)
         End of search list.
-        [2/2] : && /usr/bin/clang -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTC_a8a0b.dir/OpenMPTryFlag.c.o -o cmTC_a8a0b  -v -Wl,-v  /usr/local/lib/libomp.dylib && :
+        [2/2] : && /usr/bin/clang -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTC_c4336.dir/OpenMPTryFlag.c.o -o cmTC_c4336  -v -Wl,-v  /usr/local/lib/libomp.dylib && :
         Apple clang version 11.0.0 (clang-1100.0.33.17)
         Target: x86_64-apple-darwin21.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch x86_64 -macosx_version_min 10.15.0 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o cmTC_a8a0b -search_paths_first -headerpad_max_install_names CMakeFiles/cmTC_a8a0b.dir/OpenMPTryFlag.c.o -v /usr/local/lib/libomp.dylib -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a
+         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch x86_64 -macosx_version_min 10.15.0 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o cmTC_c4336 -search_paths_first -headerpad_max_install_names CMakeFiles/cmTC_c4336.dir/OpenMPTryFlag.c.o -v /usr/local/lib/libomp.dylib -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a
         @(#)PROGRAM:ld  PROJECT:ld64-530
         BUILD 18:57:17 Dec 13 2019
         configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
@@ -510,8 +510,8 @@ events:
       - "CMakeLists.txt:22 (find_package)"
     description: "Detecting CXX OpenMP compiler info"
     directories:
-      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-vNdCtO"
-      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-vNdCtO"
+      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-8e6qUo"
+      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-8e6qUo"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -524,17 +524,17 @@ events:
       variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
       cached: true
       stdout: |
-        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-vNdCtO'
+        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-8e6qUo'
         
-        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_397b6
-        [1/2] /usr/bin/clang++   -Xclang -fopenmp -v -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_397b6.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_397b6.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_397b6.dir/OpenMPTryFlag.cpp.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-vNdCtO/OpenMPTryFlag.cpp
-        FAILED: CMakeFiles/cmTC_397b6.dir/OpenMPTryFlag.cpp.o 
-        /usr/bin/clang++   -Xclang -fopenmp -v -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_397b6.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_397b6.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_397b6.dir/OpenMPTryFlag.cpp.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-vNdCtO/OpenMPTryFlag.cpp
+        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_560d0
+        [1/2] /usr/bin/clang++   -Xclang -fopenmp -v -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_560d0.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_560d0.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_560d0.dir/OpenMPTryFlag.cpp.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-8e6qUo/OpenMPTryFlag.cpp
+        FAILED: CMakeFiles/cmTC_560d0.dir/OpenMPTryFlag.cpp.o 
+        /usr/bin/clang++   -Xclang -fopenmp -v -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_560d0.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_560d0.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_560d0.dir/OpenMPTryFlag.cpp.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-8e6qUo/OpenMPTryFlag.cpp
         Apple clang version 11.0.0 (clang-1100.0.33.17)
         Target: x86_64-apple-darwin21.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-vNdCtO/CMakeFiles/cmTC_397b6.dir/OpenMPTryFlag.cpp.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_397b6.dir/OpenMPTryFlag.cpp.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_397b6.dir/OpenMPTryFlag.cpp.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -stdlib=libc++ -internal-isystem /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1 -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -std=gnu++14 -fdeprecated-macro -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-vNdCtO -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -fopenmp -o CMakeFiles/cmTC_397b6.dir/OpenMPTryFlag.cpp.o -x c++ /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-vNdCtO/OpenMPTryFlag.cpp
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-8e6qUo/CMakeFiles/cmTC_560d0.dir/OpenMPTryFlag.cpp.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_560d0.dir/OpenMPTryFlag.cpp.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_560d0.dir/OpenMPTryFlag.cpp.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -stdlib=libc++ -internal-isystem /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1 -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -std=gnu++14 -fdeprecated-macro -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-8e6qUo -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -fopenmp -o CMakeFiles/cmTC_560d0.dir/OpenMPTryFlag.cpp.o -x c++ /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-8e6qUo/OpenMPTryFlag.cpp
         clang -cc1 version 11.0.0 (clang-1100.0.33.17) default target x86_64-apple-darwin21.6.0
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/c++/v1"
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/local/include"
@@ -547,7 +547,7 @@ events:
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)
         End of search list.
-        /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-vNdCtO/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+        /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-8e6qUo/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
         #include <omp.h>
                  ^~~~~~~
         1 error generated.
@@ -562,8 +562,8 @@ events:
       - "CMakeLists.txt:22 (find_package)"
     description: "Trying CXX OpenMP compiler with '/usr/local/lib/libomp.dylib'"
     directories:
-      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-odu88o"
-      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-odu88o"
+      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-kKp70o"
+      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-kKp70o"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -576,17 +576,17 @@ events:
       variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
       cached: true
       stdout: |
-        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-odu88o'
+        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-kKp70o'
         
-        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_f9b0e
-        [1/2] /usr/bin/clang++   -Xclang -fopenmp -v -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_f9b0e.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_f9b0e.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_f9b0e.dir/OpenMPTryFlag.cpp.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-odu88o/OpenMPTryFlag.cpp
-        FAILED: CMakeFiles/cmTC_f9b0e.dir/OpenMPTryFlag.cpp.o 
-        /usr/bin/clang++   -Xclang -fopenmp -v -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_f9b0e.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_f9b0e.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_f9b0e.dir/OpenMPTryFlag.cpp.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-odu88o/OpenMPTryFlag.cpp
+        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_d7129
+        [1/2] /usr/bin/clang++   -Xclang -fopenmp -v -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_d7129.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_d7129.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_d7129.dir/OpenMPTryFlag.cpp.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-kKp70o/OpenMPTryFlag.cpp
+        FAILED: CMakeFiles/cmTC_d7129.dir/OpenMPTryFlag.cpp.o 
+        /usr/bin/clang++   -Xclang -fopenmp -v -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_d7129.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_d7129.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_d7129.dir/OpenMPTryFlag.cpp.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-kKp70o/OpenMPTryFlag.cpp
         Apple clang version 11.0.0 (clang-1100.0.33.17)
         Target: x86_64-apple-darwin21.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-odu88o/CMakeFiles/cmTC_f9b0e.dir/OpenMPTryFlag.cpp.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_f9b0e.dir/OpenMPTryFlag.cpp.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_f9b0e.dir/OpenMPTryFlag.cpp.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -stdlib=libc++ -internal-isystem /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1 -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -std=gnu++14 -fdeprecated-macro -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-odu88o -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -fopenmp -o CMakeFiles/cmTC_f9b0e.dir/OpenMPTryFlag.cpp.o -x c++ /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-odu88o/OpenMPTryFlag.cpp
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-kKp70o/CMakeFiles/cmTC_d7129.dir/OpenMPTryFlag.cpp.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_d7129.dir/OpenMPTryFlag.cpp.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_d7129.dir/OpenMPTryFlag.cpp.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -stdlib=libc++ -internal-isystem /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1 -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -std=gnu++14 -fdeprecated-macro -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-kKp70o -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -fopenmp -o CMakeFiles/cmTC_d7129.dir/OpenMPTryFlag.cpp.o -x c++ /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-kKp70o/OpenMPTryFlag.cpp
         clang -cc1 version 11.0.0 (clang-1100.0.33.17) default target x86_64-apple-darwin21.6.0
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/c++/v1"
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/local/include"
@@ -599,7 +599,7 @@ events:
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)
         End of search list.
-        /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-odu88o/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
+        /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-kKp70o/OpenMPTryFlag.cpp:2:10: fatal error: 'omp.h' file not found
         #include <omp.h>
                  ^~~~~~~
         1 error generated.
@@ -614,8 +614,8 @@ events:
       - "CMakeLists.txt:22 (find_package)"
     description: "Trying CXX OpenMP compiler with '/usr/local/lib/libomp.dylib' and '/usr/local/include'"
     directories:
-      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-bZTQDd"
-      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-bZTQDd"
+      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-Ma2hMv"
+      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-Ma2hMv"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -628,15 +628,15 @@ events:
       variable: "OpenMP_COMPILE_RESULT_CXX_Xclang fopenmp"
       cached: true
       stdout: |
-        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-bZTQDd'
+        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-Ma2hMv'
         
-        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_5fc8f
-        [1/2] /usr/bin/clang++  -I/usr/local/include -Xclang -fopenmp -v -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_5fc8f.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_5fc8f.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_5fc8f.dir/OpenMPTryFlag.cpp.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-bZTQDd/OpenMPTryFlag.cpp
+        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_63809
+        [1/2] /usr/bin/clang++  -I/usr/local/include -Xclang -fopenmp -v -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_63809.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_63809.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_63809.dir/OpenMPTryFlag.cpp.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-Ma2hMv/OpenMPTryFlag.cpp
         Apple clang version 11.0.0 (clang-1100.0.33.17)
         Target: x86_64-apple-darwin21.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-bZTQDd/CMakeFiles/cmTC_5fc8f.dir/OpenMPTryFlag.cpp.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_5fc8f.dir/OpenMPTryFlag.cpp.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_5fc8f.dir/OpenMPTryFlag.cpp.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -I /usr/local/include -stdlib=libc++ -internal-isystem /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1 -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -std=gnu++14 -fdeprecated-macro -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-bZTQDd -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -fopenmp -o CMakeFiles/cmTC_5fc8f.dir/OpenMPTryFlag.cpp.o -x c++ /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-bZTQDd/OpenMPTryFlag.cpp
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name OpenMPTryFlag.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mdisable-fp-elim -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -ggnu-pubnames -target-linker-version 530 -v -coverage-notes-file /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-Ma2hMv/CMakeFiles/cmTC_63809.dir/OpenMPTryFlag.cpp.gcno -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0 -dependency-file CMakeFiles/cmTC_63809.dir/OpenMPTryFlag.cpp.o.d -skip-unused-modulemap-deps -sys-header-deps -MT CMakeFiles/cmTC_63809.dir/OpenMPTryFlag.cpp.o -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -I /usr/local/include -stdlib=libc++ -internal-isystem /Library/Developer/CommandLineTools/usr/bin/../include/c++/v1 -Wno-framework-include-private-from-public -Wno-atimport-in-framework-header -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -std=gnu++14 -fdeprecated-macro -fdebug-compilation-dir /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-Ma2hMv -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -fopenmp -o CMakeFiles/cmTC_63809.dir/OpenMPTryFlag.cpp.o -x c++ /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-Ma2hMv/OpenMPTryFlag.cpp
         clang -cc1 version 11.0.0 (clang-1100.0.33.17) default target x86_64-apple-darwin21.6.0
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/c++/v1"
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/local/include"
@@ -650,12 +650,12 @@ events:
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include
          /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)
         End of search list.
-        [2/2] : && /usr/bin/clang++ -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTC_5fc8f.dir/OpenMPTryFlag.cpp.o -o cmTC_5fc8f  -v -Wl,-v  /usr/local/lib/libomp.dylib && :
+        [2/2] : && /usr/bin/clang++ -Xclang -fopenmp -v -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTC_63809.dir/OpenMPTryFlag.cpp.o -o cmTC_63809  -v -Wl,-v  /usr/local/lib/libomp.dylib && :
         Apple clang version 11.0.0 (clang-1100.0.33.17)
         Target: x86_64-apple-darwin21.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch x86_64 -macosx_version_min 10.15.0 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o cmTC_5fc8f -search_paths_first -headerpad_max_install_names CMakeFiles/cmTC_5fc8f.dir/OpenMPTryFlag.cpp.o -v /usr/local/lib/libomp.dylib -lc++ -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a
+         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch x86_64 -macosx_version_min 10.15.0 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o cmTC_63809 -search_paths_first -headerpad_max_install_names CMakeFiles/cmTC_63809.dir/OpenMPTryFlag.cpp.o -v /usr/local/lib/libomp.dylib -lc++ -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.osx.a
         @(#)PROGRAM:ld  PROJECT:ld64-530
         BUILD 18:57:17 Dec 13 2019
         configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
@@ -673,8 +673,8 @@ events:
       - "CMakeLists.txt:22 (find_package)"
     description: "Detecting C OpenMP version"
     directories:
-      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-xgz6IS"
-      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-xgz6IS"
+      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-2m4y69"
+      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-2m4y69"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -687,11 +687,11 @@ events:
       variable: "OpenMP_SPECTEST_C_"
       cached: true
       stdout: |
-        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-xgz6IS'
+        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-2m4y69'
         
-        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_50a05
-        [1/2] /usr/bin/clang  -I/usr/local/include -Xclang -fopenmp -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_50a05.dir/OpenMPCheckVersion.c.o -MF CMakeFiles/cmTC_50a05.dir/OpenMPCheckVersion.c.o.d -o CMakeFiles/cmTC_50a05.dir/OpenMPCheckVersion.c.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-xgz6IS/OpenMPCheckVersion.c
-        [2/2] : && /usr/bin/clang -Xclang -fopenmp -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTC_50a05.dir/OpenMPCheckVersion.c.o -o cmTC_50a05   && :
+        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_6ba6d
+        [1/2] /usr/bin/clang  -I/usr/local/include -Xclang -fopenmp -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_6ba6d.dir/OpenMPCheckVersion.c.o -MF CMakeFiles/cmTC_6ba6d.dir/OpenMPCheckVersion.c.o.d -o CMakeFiles/cmTC_6ba6d.dir/OpenMPCheckVersion.c.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-2m4y69/OpenMPCheckVersion.c
+        [2/2] : && /usr/bin/clang -Xclang -fopenmp -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTC_6ba6d.dir/OpenMPCheckVersion.c.o -o cmTC_6ba6d   && :
         
       exitCode: 0
   -
@@ -702,8 +702,8 @@ events:
       - "CMakeLists.txt:22 (find_package)"
     description: "Detecting CXX OpenMP version"
     directories:
-      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-1MOM6i"
-      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-1MOM6i"
+      source: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-ELECon"
+      binary: "/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-ELECon"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -716,11 +716,11 @@ events:
       variable: "OpenMP_SPECTEST_CXX_"
       cached: true
       stdout: |
-        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-1MOM6i'
+        Change Dir: '/Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-ELECon'
         
-        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_e28b0
-        [1/2] /usr/bin/clang++  -I/usr/local/include -Xclang -fopenmp -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_e28b0.dir/OpenMPCheckVersion.cpp.o -MF CMakeFiles/cmTC_e28b0.dir/OpenMPCheckVersion.cpp.o.d -o CMakeFiles/cmTC_e28b0.dir/OpenMPCheckVersion.cpp.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-1MOM6i/OpenMPCheckVersion.cpp
-        [2/2] : && /usr/bin/clang++ -Xclang -fopenmp -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTC_e28b0.dir/OpenMPCheckVersion.cpp.o -o cmTC_e28b0   && :
+        Run Build Command(s): /Users/leofk/opt/anaconda3/envs/mallard/bin/ninja -v cmTC_31cf4
+        [1/2] /usr/bin/clang++  -I/usr/local/include -Xclang -fopenmp -std=gnu++14 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -MD -MT CMakeFiles/cmTC_31cf4.dir/OpenMPCheckVersion.cpp.o -MF CMakeFiles/cmTC_31cf4.dir/OpenMPCheckVersion.cpp.o.d -o CMakeFiles/cmTC_31cf4.dir/OpenMPCheckVersion.cpp.o -c /Users/leofk/Documents/GitHub/modeling/build/CMakeFiles/CMakeScratch/TryCompile-ELECon/OpenMPCheckVersion.cpp
+        [2/2] : && /usr/bin/clang++ -Xclang -fopenmp -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTC_31cf4.dir/OpenMPCheckVersion.cpp.o -o cmTC_31cf4   && :
         
       exitCode: 0
 ...

@@ -12,97 +12,80 @@ namespace mohe
 void Mesh_mapping::build_mapping()
 {
 	// inter surface mapping
+	printf("elo \n");
 
     Mesh_simplify simp_m1(_m1);
 	simp_m1.simplify_to_target(4);
+	printf("simp m1 \n");
+
     Mesh_simplify simp_m2(_m2);
 	simp_m2.simplify_to_target(4);
+	printf("simp m2 \n");
 
-	// TODO NEED A MAPPING BETWEEN M1 AND M2
+	init_ISM();
+	printf("init map \n");
 
 	while (!simp_m1.is_history_empty() || !simp_m2.is_history_empty()) 
 	{
+		printf("loop \n");
+
 		if (!simp_m1.is_history_empty()) {
 			current_mesh = M1;
-
-			HistoryEntry entry = simp_m1.get_history();
-			std::vector<int> faces = entry.kept_faces;
-			Inter_data new_v_data = ISM_iteration(entry);
-			simp_m1.construct_edge_from_history(entry);
-			int new_vid = simp_m1.get_split_vid();
-			ISM_M1[new_vid] = new_v_data;
-			m2_ftv_map[new_v_data.f_id] = new_vid;
-
-			// here we update any mappings from m2 that concern the split neighbourhood
-
-			std::vector<int> new_faces = simp_m1.get_new_faces();
-
-			// Combine faces and new_faces using insert function
-			new_faces.insert(new_faces.end(), faces.begin(), faces.end());
-
-			std::vector<int> verts_for_faces;
-			for (const auto& face : faces) 
-			{
-				verts_for_faces.push_back(m1_ftv_map[face]);
-			}
-
-			switch_mesh();
-
-			for (const auto& v_id : verts_for_faces) 
-			{
-				Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(v_id);
-				Inter_data v_data = find_enclosing_face(new_faces, v.xyz());
-				ISM_M2[v_id] = v_data;
-			}
-			
-			switch_mesh();
-
+			process_simp_history(simp_m1);
 		}
 
 		if (!simp_m2.is_history_empty()) {
 			current_mesh = M2;
-
-			HistoryEntry entry = simp_m2.get_history();
-			std::vector<int> faces = entry.kept_faces;
-			Inter_data new_v_data = ISM_iteration(entry);
-			simp_m2.construct_edge_from_history(entry);
-			int new_vid = simp_m2.get_split_vid();
-			ISM_M2[new_vid] = new_v_data;
-			m2_ftv_map[new_v_data.f_id] = new_vid;
-
-			// here we update any mappings from m2 that concern the split neighbourhood
-
-			std::vector<int> new_faces = simp_m2.get_new_faces();
-
-			// Combine faces and new_faces using insert function
-			new_faces.insert(new_faces.end(), faces.begin(), faces.end());
-
-			std::vector<int> verts_for_faces;
-			for (const auto& face : faces) 
-			{
-				verts_for_faces.push_back(m2_ftv_map[face]);
-			}
-
-			switch_mesh();
-
-			for (const auto& v_id : verts_for_faces) 
-			{
-				Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(v_id);
-				Inter_data v_data = find_enclosing_face(new_faces, v.xyz());
-				ISM_M1[v_id] = v_data;
-			}
-			
-			switch_mesh();
+			process_simp_history(simp_m2);
 		}
 	}
+}
+
+void Mesh_mapping::process_simp_history(Mesh_simplify& simp_m) 
+{
+	std::map<int, Inter_data>& ISM_map = current_ISM();
+
+    HistoryEntry entry = simp_m.get_history();
+    std::vector<int> faces = entry.kept_faces;
+    Inter_data new_v_data = ISM_iteration(entry);
+    simp_m.construct_edge_from_history(entry);
+    int new_vid = simp_m.get_split_vid();
+    ISM_map[new_vid] = new_v_data;
+
+	switch_mesh();
+	std::map<int, int>& ftv_map = current_FTV();
+    ftv_map[new_v_data.f_id] = new_vid;
+	switch_mesh();
+
+    // Update any mappings concerning the split neighborhood here
+
+    std::vector<int> new_faces = simp_m.get_new_faces();
+
+    // Combine faces and new_faces using insert function
+    new_faces.insert(new_faces.end(), faces.begin(), faces.end());
+
+	ftv_map = current_FTV();
+    std::vector<int> verts_for_faces;
+    for (const auto& face : faces) {
+        verts_for_faces.push_back(ftv_map[face]);
+    }
+
+    switch_mesh();
+	ISM_map = current_ISM();
+    switch_mesh();
+	
+    for (const auto& v_id : verts_for_faces) {
+        Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(v_id);
+        Inter_data v_data = find_enclosing_face(new_faces, v.xyz());
+        ISM_map[v_id] = v_data;
+    }
 }
 
 
 Inter_data Mesh_mapping::ISM_iteration(HistoryEntry &entry)
 {
 	// say M1, split vertex. 
-	std::map<int, Inter_data> & ISM = ISM_M1;
-	if (current_mesh != M1) ISM = ISM_M2;
+	std::map<int, Inter_data>& ISM = current_ISM();
 
 	// 2. get keptFaces and removedVertex from history Entry
 	std::vector<int> faces = entry.kept_faces;
@@ -296,6 +279,23 @@ double Mesh_mapping::get_wij(Eigen::Vector3d i, Eigen::Vector3d j, std::vector<E
 }
 
 
+void Mesh_mapping::update_positions(int _mesh) {
+	current_mesh = _mesh;
+	std::map<int, Inter_data>& ISM = current_ISM();
+
+	for(auto &pair: ISM)
+	{
+		Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(pair.first);
+		switch_mesh();
+		v.data().xyz = get_pos_from_inter_data(pair.second);
+		switch_mesh();
+	}
+}
+
+
+double Mesh_mapping::get_angle(const Eigen::Vector3d &v1, const Eigen::Vector3d &v2) {
+	return std::acos(v1.dot(v2) / (v1.norm() * v2.norm()));
+}
 
 } // end of mohe
 } // end of minimesh
