@@ -866,7 +866,7 @@ bool Mesh_connectivity::check_sanity_slowly(const bool verbose)
 				const int other_vertex = ring_iter.half_edge().origin().index();
 				soft_assert_msg(ring_iter.half_edge().is_active(), "");
 				soft_assert_msg(ring_iter.half_edge().twin().is_active(), "");
-				soft_assert_msg(ring_iter.half_edge().dest().index() == vid, "");
+                soft_assert_msg(ring_iter.half_edge().dest().index() == vid, "");
 
 				// The number of outgoing half-edges should not be unbounded
 				++n_traversed_edges;

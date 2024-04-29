@@ -39,7 +39,9 @@ set(SOURCE_FILES
   mohe/mesh_deform.hpp
   mohe/mesh_mapping.cpp
   mohe/mesh_mapping.hpp
- )
+  mohe/mesh_simplify_history.hpp
+  mohe/mesh_simplify_history.hpp
+)
 
  
 # create a library that the viewer can use to link to.
