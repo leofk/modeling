@@ -182,10 +182,12 @@ Inter_data Mesh_mapping::find_enclosing_face(std::vector<int> faces, Eigen::Vect
 void Mesh_mapping::init_ISM()
 {
 	for(auto &pair: mesh_map){
+		current_mesh = M2;
 		Inter_data data = trivial_map_data(pair.second);
 		m1_ftv_map[data.f_id] = pair.first;
 		ISM_M1[pair.first] = data;
 		
+		current_mesh = M1;
 		data = trivial_map_data(pair.first);
 		m2_ftv_map[data.f_id] = pair.second;
 		ISM_M2[pair.second] = data;

@@ -39,3 +39,6 @@
 8	2546	1714426540310116585	src/minimesh/gui/CMakeFiles/minimeshgui.dir/main.cpp.o	605d8be851417ca5
 2218	2809	1714426540588758000	src/minimesh/core/libminimeshcore.a	f3402d129bb8178
 2809	3531	1714426541263122062	bin/minimeshgui	64cd22fdc21c711f
+8	2070	1714426731769071065	src/minimesh/core/CMakeFiles/minimeshcore.dir/mohe/mesh_mapping.cpp.o	181cd0b04102a74e
+2070	2647	1714426732358303000	src/minimesh/core/libminimeshcore.a	f3402d129bb8178
+2647	3398	1714426733048189986	bin/minimeshgui	64cd22fdc21c711f
