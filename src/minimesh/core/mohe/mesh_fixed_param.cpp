@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <sstream>
+#include "minimesh/core/util/numbers.hpp"
 
 namespace minimesh
 {
@@ -89,7 +90,7 @@ void Mesh_fixed_param::generate_circle()
 {
 
 	num_boundary = static_cast<int>(boundary_ids.size());
-    double angle_increment = 2 * M_PI / num_boundary;
+    double angle_increment = 2 * numbers::pi / num_boundary;
     double angle = 0.0;
 
 	// iterate over ordered stack of boundary vertices and compute their position on the unit circle
