@@ -14,6 +14,8 @@ Implemented the As-Rigid-As-Possible (ARAP) mesh deformation algorithm.
 Entry point:
 - `mesh_deform.hpp`
 - `mesh_deform.cpp`
+
+BONUS: Ability to use multiple handle constraint vertices.
   
 ## A3 - Parameterization
 Implemented two parameterization methods:
