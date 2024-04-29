@@ -57,6 +57,11 @@ namespace minimesh {
                 return arr;
             }
 
+            Eigen::Vector3d get_vertex_pos() {
+                return removed_vertex_data.original_position;
+            };  // position of the vertex before contraction
+            
+
 
             // gets remove_edges id
             std::vector<int> removed_edges_ids() {

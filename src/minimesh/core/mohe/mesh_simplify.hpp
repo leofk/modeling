@@ -54,6 +54,22 @@ public:
 		init_pos_and_errors();
 	}
 
+	HistoryEntry get_history() {
+		return pop_history_entry();
+	}
+
+	int get_split_vid() {
+		return split_v_id;
+	}
+
+	std::vector<int> get_new_faces() {
+		return new_faces;
+	}
+
+	bool is_history_empty() {
+		return history().empty();
+	}
+
 	//
 	// simplify
 	//
@@ -119,6 +135,9 @@ private:
 
 	// a priority queue of half edges ordered on min error
     std::priority_queue<Error> errorQueue;
+
+	int split_v_id;
+	std::vector<int> new_faces;
 };
 
 

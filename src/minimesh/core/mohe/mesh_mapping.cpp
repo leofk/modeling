@@ -1,4 +1,5 @@
 #include <minimesh/core/mohe/mesh_mapping.hpp>
+#include <minimesh/core/mohe/mesh_simplify.hpp>
 #include <minimesh/core/util/assert.hpp>
 #include <set>
 
@@ -11,33 +12,104 @@ namespace mohe
 void Mesh_mapping::build_mapping()
 {
 	// inter surface mapping
-	current_mesh = M1;
 
-	
-	
+    Mesh_simplify simp_m1(_m1);
+	simp_m1.simplify_to_target(4);
+    Mesh_simplify simp_m2(_m2);
+	simp_m2.simplify_to_target(4);
+
+	// TODO NEED A MAPPING BETWEEN M1 AND M2
+
+	while (!simp_m1.is_history_empty() || !simp_m2.is_history_empty()) 
+	{
+		if (!simp_m1.is_history_empty()) {
+			current_mesh = M1;
+
+			HistoryEntry entry = simp_m1.get_history();
+			std::vector<int> faces = entry.kept_faces;
+			Inter_data new_v_data = ISM_iteration(entry);
+			simp_m1.construct_edge_from_history(entry);
+			int new_vid = simp_m1.get_split_vid();
+			ISM_M1[new_vid] = new_v_data;
+			m2_ftv_map[new_v_data.f_id] = new_vid;
+
+			// here we update any mappings from m2 that concern the split neighbourhood
+
+			std::vector<int> new_faces = simp_m1.get_new_faces();
+
+			// Combine faces and new_faces using insert function
+			new_faces.insert(new_faces.end(), faces.begin(), faces.end());
+
+			std::vector<int> verts_for_faces;
+			for (const auto& face : faces) 
+			{
+				verts_for_faces.push_back(m1_ftv_map[face]);
+			}
+
+			switch_mesh();
+
+			for (const auto& v_id : verts_for_faces) 
+			{
+				Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(v_id);
+				Inter_data v_data = find_enclosing_face(new_faces, v.xyz());
+				ISM_M2[v_id] = v_data;
+			}
+			
+			switch_mesh();
+
+		}
+
+		if (!simp_m2.is_history_empty()) {
+			current_mesh = M2;
+
+			HistoryEntry entry = simp_m2.get_history();
+			std::vector<int> faces = entry.kept_faces;
+			Inter_data new_v_data = ISM_iteration(entry);
+			simp_m2.construct_edge_from_history(entry);
+			int new_vid = simp_m2.get_split_vid();
+			ISM_M2[new_vid] = new_v_data;
+			m2_ftv_map[new_v_data.f_id] = new_vid;
+
+			// here we update any mappings from m2 that concern the split neighbourhood
+
+			std::vector<int> new_faces = simp_m2.get_new_faces();
+
+			// Combine faces and new_faces using insert function
+			new_faces.insert(new_faces.end(), faces.begin(), faces.end());
+
+			std::vector<int> verts_for_faces;
+			for (const auto& face : faces) 
+			{
+				verts_for_faces.push_back(m2_ftv_map[face]);
+			}
+
+			switch_mesh();
+
+			for (const auto& v_id : verts_for_faces) 
+			{
+				Mesh_connectivity::Vertex_iterator v = mesh().vertex_at(v_id);
+				Inter_data v_data = find_enclosing_face(new_faces, v.xyz());
+				ISM_M1[v_id] = v_data;
+			}
+			
+			switch_mesh();
+		}
+	}
 }
 
-void Mesh_mapping::ISM_iteration()
+
+Inter_data Mesh_mapping::ISM_iteration(HistoryEntry &entry)
 {
 	// say M1, split vertex. 
-	std::map<int, inter_data> & ISM = ISM_M1;
+	std::map<int, Inter_data> & ISM = ISM_M1;
 	if (current_mesh != M1) ISM = ISM_M2;
 
-	// 1. pop from top of collapse queue - HistroyEntry
-
-	//todo adapt akumah
-
-	// here we need to check if this split fucked with our previous mappings from m2-> m1
-	// ie. suppose v on m2, there is a map v -> some face in m1, but b/c of the 
-	// split on m1, v might no longer belong to that face. so we need to realize its bary cords
-
 	// 2. get keptFaces and removedVertex from history Entry
-	std::vector<int> faces; // = historyEntry.keptFaces
-	Eigen::Vector3d v_pos;  // = historyEntry.removedVertex.position
-	int v_id;  // = historyEntry.removedVertex.id
+	std::vector<int> faces = entry.kept_faces;
+	Eigen::Vector3d v_pos = entry.get_vertex_pos();  
 
 	// 3. compute bary coords on keptFaces vs. removedVertex to see where removedVertex lives
-	inter_data v_data = find_enclosing_face(faces, v_pos);
+	Inter_data v_data = find_enclosing_face(faces, v_pos);
 
 	// 4. once we find the face, get its vertices, and use the map to find their positions in m2'
 	int f_id = v_data.f_id;
@@ -50,7 +122,7 @@ void Mesh_mapping::ISM_iteration()
 	do
 	{
 		Mesh_connectivity::Vertex_iterator v_curr = he.origin();
-		inter_data curr_data = ISM[v_curr.index()];
+		Inter_data curr_data = ISM[v_curr.index()];
 		Mj_faces.push_back(curr_data.f_id);
 		Mjp_verts.push_back(get_pos_from_inter_data(curr_data));
 		he = he.next();
@@ -67,16 +139,17 @@ void Mesh_mapping::ISM_iteration()
 	// 6. collect the faces on m2 from the map used in 4
 	// 7. for each distinct face from 6. lets compute bary coords for v' 
 	//	  if the coords are non-negative, this is our face F.
-	inter_data vp_data = find_enclosing_face(Mj_faces, mj_vp);
+	Inter_data vp_data = find_enclosing_face(Mj_faces, mj_vp);
 
 	// 8. add v to the map m1->m2' or v1 -> F, C
-	ISM[v_id] = vp_data;
+	// ISM[v_id] = vp_data;
+	return vp_data;
 }
 
 //
 // compute position of vertice using barycentric coordinates given by inter data
 //
-Eigen::Vector3d Mesh_mapping::get_pos_from_inter_data(inter_data data)
+Eigen::Vector3d Mesh_mapping::get_pos_from_inter_data(Inter_data data)
 {
 	int f_id = data.f_id;
 	Mesh_connectivity::Face_iterator f = mesh().face_at(f_id);
@@ -103,7 +176,7 @@ Eigen::Vector3d Mesh_mapping::get_pos_from_inter_data(inter_data data)
 // compute the barycentric coordinates of v_pos wihin each face in faces
 // return the face and coordinates of the face with non-negative bary. coords
 //
-inter_data Mesh_mapping::find_enclosing_face(std::vector<int> faces, Eigen::Vector3d v_pos)
+Inter_data Mesh_mapping::find_enclosing_face(std::vector<int> faces, Eigen::Vector3d v_pos)
 {
 	std::set<int> faces_set(faces.begin(), faces.end());
 
@@ -117,19 +190,24 @@ inter_data Mesh_mapping::find_enclosing_face(std::vector<int> faces, Eigen::Vect
 		if (bary[0] != -1.0) {break;}
     }
 
-	return inter_data(f_id, bary);
+	return Inter_data{bary, f_id};
 }
 
 
 void Mesh_mapping::init_ISM()
 {
 	for(auto &pair: mesh_map){
-		ISM_M1[pair.first] = trivial_map_data(pair.second);
-		ISM_M2[pair.second] = trivial_map_data(pair.first);
+		Inter_data data = trivial_map_data(pair.second);
+		m1_ftv_map[data.f_id] = pair.first;
+		ISM_M1[pair.first] = data;
+		
+		data = trivial_map_data(pair.first);
+		m2_ftv_map[data.f_id] = pair.second;
+		ISM_M2[pair.second] = data;
 	}
 }
 
-inter_data Mesh_mapping::trivial_map_data(int vid)
+Inter_data Mesh_mapping::trivial_map_data(int vid)
 {
 	std::vector<double> bary; 
 
@@ -147,7 +225,8 @@ inter_data Mesh_mapping::trivial_map_data(int vid)
 	} while (ring.advance());
 	
 	int f_id = f_v.index(); 
-	return inter_data(f_id, bary);
+
+	return Inter_data{bary, f_id};
 }
 
 

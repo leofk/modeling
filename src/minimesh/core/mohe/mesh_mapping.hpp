@@ -3,14 +3,14 @@
 #include <string>
 
 #include <minimesh/core/mohe/mesh_connectivity.hpp>
+#include <minimesh/core/mohe/mesh_simplify.hpp>
 
 #define M1 1
 #define M2 2
 
-struct inter_data {
+struct Inter_data {
     std::vector<double> bary; 
 	int f_id; 
-    inter_data(int f_id, std::vector<double> bary) : bary(bary), f_id(f_id) {}
 };
 
 namespace minimesh
@@ -33,15 +33,28 @@ public:
 		else
 			return _m2;
 	}
+
+	void switch_mesh() {
+		if (current_mesh == M1)
+			current_mesh = M2;
+		else
+			current_mesh = M1;
+	}
+	// std::map<int, Inter_data> & ISM() {
+	// 	if (current_mesh == M1)
+	// 		return ISM_M1;
+	// 	else
+	// 		return ISM_M2;
+	// }
 	// const Mesh_connectivity & mesh() const { return _m; }
 
 	void build_mapping();
 	void init_ISM();
-	void ISM_iteration();
-	inter_data trivial_map_data(int vid);
+	Inter_data ISM_iteration(HistoryEntry &entry);
+	Inter_data trivial_map_data(int vid);
 	void yep(Mesh_connectivity & mesh_in);
-	inter_data find_enclosing_face(std::vector<int> faces, Eigen::Vector3d v_pos);
-	Eigen::Vector3d get_pos_from_inter_data(inter_data data);
+	Inter_data find_enclosing_face(std::vector<int> faces, Eigen::Vector3d v_pos);
+	Eigen::Vector3d get_pos_from_inter_data(Inter_data data);
 	std::vector<double> compute_bc(int f_id, Eigen::Vector3d v_pos);
 	double get_wij(Eigen::Vector3d i, Eigen::Vector3d j, std::vector<Eigen::Vector3d> &verts); 
 
@@ -53,8 +66,10 @@ private:
 	Mesh_connectivity & _m2;
 
     std::map<int, int> mesh_map;
-    std::map<int, inter_data> ISM_M1;
-    std::map<int, inter_data> ISM_M2;
+    std::map<int, int> m1_ftv_map; //m1face to m2vertex map
+    std::map<int, int> m2_ftv_map; //m2face to m1vertex map
+    std::map<int, Inter_data> ISM_M1;
+    std::map<int, Inter_data> ISM_M2;
 	int current_mesh;
 };
 
