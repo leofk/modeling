@@ -247,9 +247,7 @@ namespace freeglutcallback {
     }
 
     void inter_surface_map(int) {
-        printf("build map \n");
         globalvars::ISM.build_mapping();
-        printf("done  \n");
     }
     
     void map_m1_on_m2(int)

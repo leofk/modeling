@@ -12,31 +12,32 @@ namespace mohe
 void Mesh_mapping::build_mapping()
 {
 	// inter surface mapping
-	printf("elo \n");
-
     Mesh_simplify simp_m1(_m1);
 	simp_m1.init();
 	simp_m1.simplify_to_target(4);
-	printf("simp m1 \n");
+	printf("M1 Simplified. \n");
 
     Mesh_simplify simp_m2(_m2);
 	simp_m2.init();
 	simp_m2.simplify_to_target(4);
-	printf("simp m2 \n");
+	printf("M2 Simplified. \n");
 
 	init_ISM();
-	printf("init map \n");
+	printf("Map Initialized. \n");
+	printf("Begin Iteration. \n");
 
 	while (!simp_m1.is_history_empty() || !simp_m2.is_history_empty()) 
 	{
-		printf("loop \n");
 
 		if (!simp_m1.is_history_empty()) {
+			printf("M1 Split \n");
+
 			current_mesh = M1;
 			process_simp_history(simp_m1);
 		}
 
 		if (!simp_m2.is_history_empty()) {
+			printf("M2 Split \n");
 			current_mesh = M2;
 			process_simp_history(simp_m2);
 		}
@@ -81,6 +82,7 @@ void Mesh_mapping::process_simp_history(Mesh_simplify& simp_m)
         Inter_data v_data = find_enclosing_face(new_faces, v.xyz());
         ISM_map[v_id] = v_data;
     }
+
 }
 
 
@@ -104,6 +106,8 @@ Inter_data Mesh_mapping::ISM_iteration(HistoryEntry &entry)
 	std::vector<int> Mj_faces;
 	std::vector<Eigen::Vector3d> Mjp_verts;
 
+	switch_mesh();
+
 	do
 	{
 		Mesh_connectivity::Vertex_iterator v_curr = he.origin();
@@ -125,6 +129,8 @@ Inter_data Mesh_mapping::ISM_iteration(HistoryEntry &entry)
 	// 7. for each distinct face from 6. lets compute bary coords for v' 
 	//	  if the coords are non-negative, this is our face F.
 	Inter_data vp_data = find_enclosing_face(Mj_faces, mj_vp);
+	
+	switch_mesh();
 
 	// 8. add v to the map m1->m2' or v1 -> F, C
 	// ISM[v_id] = vp_data;
