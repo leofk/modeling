@@ -9,36 +9,41 @@ namespace minimesh
 namespace mohe
 {
 
-
+//
+// Build Inter-surface map between two meshes
+//
 void Mesh_mapping::build_mapping()
 {
-	// inter surface mapping
+	// Simplify Cow to 4 verts
     Mesh_simplify simp_m1(_m1);
 	simp_m1.init();
 	simp_m1.simplify_to_target(4);
 	printf("M1 Simplified. \n");
 
+	// Simplify Camel to 4 verts
     Mesh_simplify simp_m2(_m2);
 	simp_m2.init();
 	simp_m2.simplify_to_target(4);
 	printf("M2 Simplified. \n");
 
+	// Initialize Inter-surface Map with initial trivial mapping
 	init_ISM();
 
 	printf("Begin Iteration. \n");
 	int count = 0;
 	int breakpoint = 3;
 
+	// Iteratively reconstruct both meshes 
 	while (!simp_m1.is_history_empty() || !simp_m2.is_history_empty()) 
 	{
 		if (!simp_m1.is_history_empty()) {
 			current_mesh = M1;
-			process_simp_history(simp_m1);
+			split_vertex(simp_m1);
 		}
 
 		if (!simp_m2.is_history_empty()) {
 			current_mesh = M2;
-			process_simp_history(simp_m2);
+			split_vertex(simp_m2);
 		}
 	
 		count++;
@@ -47,9 +52,11 @@ void Mesh_mapping::build_mapping()
 	printf("DONE.\n");
 }
 
-void Mesh_mapping::process_simp_history(Mesh_simplify& simp_m) 
+void Mesh_mapping::split_vertex(Mesh_simplify& simp_m) 
 {
-	// printf("CURR MESH: %d \n", current_mesh);
+	// ** FOR THE SAKE OF DOCUMENTATION **
+	// ** SUPPOSE WE ARE VERTEX SPLITTING ON M1 **
+	// ** AND OPTIMIZING ITS POSITION ON M2 **
 
 	// Get M1 Map
 	std::map<int, Inter_data>& ISM_map_1 = current_ISM(); // M1 ISM
@@ -106,30 +113,30 @@ void Mesh_mapping::process_simp_history(Mesh_simplify& simp_m)
     ftv_map_2[new_v_data.f_id] = new_vid; 
 }
 
-
+//
+// Compute map data (face, barycentric coords)
+//
 Inter_data Mesh_mapping::ISM_iteration(HistoryEntry &entry)
 {
 	// say M1, split vertex. 
 	std::map<int, Inter_data>& ISM = current_ISM(); // M1 ISM
 
-	// 2. get keptFaces and removedVertex from history Entry
+	// get faces before split, and position of new vertex
 	std::vector<int> faces = entry.kept_faces;
 	Eigen::Vector3d v_pos = entry.get_vertex_pos();  
 
-	// 3. compute bary coords on keptFaces vs. removedVertex to see where removedVertex lives
-	// THIS WORKS
+	// figure out where the new vertex is relative to the original faces
+	// find the face as well as its corresponding barycentric coordinates
 	Inter_data v_data = find_enclosing_face(faces, v_pos); // M1 DATA 
 
-	// 4. once we find the face, get its vertices, and use the map to find their positions in m2'
+	// given the face, get its vertices, and compute their corresponding position in M2 space
 	int f_id = v_data.f_id;
 	Mesh_connectivity::Face_iterator f = mesh().face_at(f_id);
 	Mesh_connectivity::Half_edge_iterator he = f.half_edge();
 	Mesh_connectivity::Vertex_iterator v = he.origin();
 	std::vector<int> Mj_faces;
 	std::vector<Eigen::Vector3d> Mjp_verts;
-
 	switch_mesh(); // M2 
-
 	do
 	{
 		Mesh_connectivity::Vertex_iterator v_curr = he.origin();
@@ -140,28 +147,25 @@ Inter_data Mesh_mapping::ISM_iteration(HistoryEntry &entry)
 		he = he.next();
 	} while (he.origin().index() != v.index());
 
-	// 5. compute v' using bary coords C and positions in m2'
+	// using the previously computed barycentric coordinates
+	// compute the position of the new split vertex in M2 space - v'
 	Eigen::Vector3d mj_vp;
 	for (int i=0; i<3; i++)
 	{
 		mj_vp += Mjp_verts[i]*v_data.bary[i];
 	}
 
-	// now we need to figure out what face in m2 v' is in
-	// 6. collect the faces on m2 from the map used in 4
-	// 7. for each distinct face from 6. lets compute bary coords for v' 
-	//	  if the coords are non-negative, this is our face F.
-
+	// for the sake of the map, now we need the face on M2, v' lives in 
 	Inter_data vp_data = find_enclosing_face(Mj_faces, mj_vp);
 	
-	switch_mesh();
+	switch_mesh(); // M1 for the sake of consistency
 
-	// 8. add v to the map m1->m2' or v1 -> F, C
+	// return the map data
 	return vp_data;
 }
 
 //
-// compute position of vertice using barycentric coordinates given by inter data
+// compute position of vertex given a face and barycentric coordinates
 //
 Eigen::Vector3d Mesh_mapping::get_pos_from_inter_data(Inter_data data)
 {
@@ -180,23 +184,20 @@ Eigen::Vector3d Mesh_mapping::get_pos_from_inter_data(Inter_data data)
 	Eigen::Vector3d v_out = Eigen::Vector3d::Zero();
 	for (int i=0; i<3; i++)
 	{
-		// Eigen::Vector3d v_pos = verts[i];
-		// double bary_coord = data.bary[i];
-		// Eigen::Vector3d vtmp  = bary_coord*v_pos;
 		v_out += verts[i] * data.bary[i];
 	}
 	return v_out;
 }
 
 //
-// compute the barycentric coordinates of v_pos wihin each face in faces
-// return the face and coordinates of the face with non-negative bary. coords
+// given a vertex position and a list of faces
+// compute the barycentric coordinates for the vertex per face
+// if we find a non-nan set of coords, return that face and corresponding coords
 //
 Inter_data Mesh_mapping::find_enclosing_face(std::vector<int> faces, Eigen::Vector3d v_pos)
 {
-	std::set<int> faces_set(faces.begin(), faces.end());
+	std::set<int> faces_set(faces.begin(), faces.end()); // remove any duplicates
 
-    // Compute barycentric coordinates for each element in the set
     int f_id;
 	std::vector<double> bary;
 
@@ -210,7 +211,9 @@ Inter_data Mesh_mapping::find_enclosing_face(std::vector<int> faces, Eigen::Vect
 	return Inter_data{bary, f_id};
 }
 
-
+//
+// Initialize Inter-surface maps given simplicial correspondence
+//
 void Mesh_mapping::init_ISM()
 {
 	for(auto &pair: mesh_map){
@@ -226,6 +229,10 @@ void Mesh_mapping::init_ISM()
 	}
 }
 
+//
+// Find the face and corresponding barycentric coordinates for a vertex
+// since this is the base correspondence, coords must weight one vertex entirely
+//
 Inter_data Mesh_mapping::trivial_map_data(int vid)
 {
 	std::vector<double> bary; 
@@ -239,8 +246,8 @@ Inter_data Mesh_mapping::trivial_map_data(int vid)
 	do
 	{
 		Mesh_connectivity::Vertex_iterator v_curr = he.origin();
-		if (v_curr.index() == vid) bary.push_back(1.0);
-		else bary.push_back(0.0);		
+		if (v_curr.index() == vid) bary.push_back(1.0); // this is our correspondence, so weight=1
+		else bary.push_back(0.0); // else weight=0
 		he = he.next();
 	} while (he.origin().index() != v.index());
 
@@ -252,10 +259,10 @@ Inter_data Mesh_mapping::trivial_map_data(int vid)
 
 //
 // compute the barycentric coordinates of v_pos wihin f_id
+// return a default error vector if any coordinates are nan
 //
 std::vector<double> Mesh_mapping::compute_bc(int f_id, Eigen::Vector3d v_pos)
 {
-
 	Mesh_connectivity::Face_iterator f = mesh().face_at(f_id);
 	Mesh_connectivity::Half_edge_iterator he = f.half_edge();
 	Mesh_connectivity::Vertex_iterator v = he.origin();
@@ -263,6 +270,7 @@ std::vector<double> Mesh_mapping::compute_bc(int f_id, Eigen::Vector3d v_pos)
 	std::vector<double> fail;
 	fail.push_back(-1.0);
 
+	// get vertex positions on the given face
 	std::vector<Eigen::Vector3d> verts;
 	do
 	{
@@ -271,6 +279,7 @@ std::vector<double> Mesh_mapping::compute_bc(int f_id, Eigen::Vector3d v_pos)
 		he = he.next();
 	} while (he.origin().index() != v.index());
 
+	// compute weight from the given vert to each vert on the face
 	double sum = 0.0;
     for (const auto& vert : verts) 
 	{
@@ -284,6 +293,7 @@ std::vector<double> Mesh_mapping::compute_bc(int f_id, Eigen::Vector3d v_pos)
 		}
 	}
 
+	// normalize
     for (auto& element : bary) {
         element /= sum;
     }
@@ -291,8 +301,9 @@ std::vector<double> Mesh_mapping::compute_bc(int f_id, Eigen::Vector3d v_pos)
 	return bary;
 }
 
-// barycentric coordinates (mean-value)
-// the weight of vertex j for i
+//
+// compute barycentric coordinates (mean-value) between i and j
+//
 double Mesh_mapping::get_wij(Eigen::Vector3d i, Eigen::Vector3d j, std::vector<Eigen::Vector3d> &verts) 
 {
 	// Assuming verts always has size 3
@@ -321,7 +332,9 @@ double Mesh_mapping::get_wij(Eigen::Vector3d i, Eigen::Vector3d j, std::vector<E
 	return (std::tan(alpha / 2) + std::tan(beta / 2)) / r;
 }
 
-
+//
+// update position on mesh using inter-surface map
+//
 void Mesh_mapping::update_positions(int _mesh) {
 	current_mesh = _mesh;
 	std::map<int, Inter_data>& ISM = current_ISM(); // M1 ISM
