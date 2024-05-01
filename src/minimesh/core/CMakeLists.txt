@@ -39,7 +39,7 @@ set(SOURCE_FILES
   mohe/mesh_deform.hpp
   mohe/mesh_mapping.cpp
   mohe/mesh_mapping.hpp
- )
+        mohe/mesh_mapping_vertex_optimizer.hpp)
 
  
 # create a library that the viewer can use to link to.
