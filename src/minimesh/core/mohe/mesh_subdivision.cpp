@@ -1,5 +1,6 @@
 #include <minimesh/core/mohe/mesh_subdivision.hpp>
 #include <minimesh/core/util/assert.hpp>
+#include "minimesh/core/util/numbers.hpp"
 
 namespace minimesh
 {
@@ -179,7 +180,7 @@ Eigen::Vector3d Mesh_subdivision::loop_interior_control(const int v_index)
 		n++;
 	}
 
-    double alpha_n = (3.0/8.0) + std::pow((3.0/8.0) + (1.0/4.0) * std::cos((2.0 * M_PI) / n), 2);
+    double alpha_n = (3.0/8.0) + std::pow((3.0/8.0) + (1.0/4.0) * std::cos((2.0 * numbers::pi) / n), 2);
 
 	return alpha_n * v.xyz() + ((1.0-alpha_n)/n) * sum_adj_pos;
 } 
