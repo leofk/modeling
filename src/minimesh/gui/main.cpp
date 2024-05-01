@@ -248,11 +248,22 @@ namespace freeglutcallback {
 
     void inter_surface_map(int) {
         globalvars::ISM.build_mapping();
+        
+        // printf("UPDATE M1 POSITIONS. \n");
+        // globalvars::ISM.update_positions(1); // m2 with m1 connectivity
+        // mohe::Mesh_io(globalvars::m1).write_obj("M2_W_M1_CONNECTIVITY.obj");
+
+        // printf("UPDATE M2 POSITIONS. \n");
+        // globalvars::ISM.update_positions(2); // m2 with m1 connectivity
+        // mohe::Mesh_io(globalvars::m2).write_obj("M1_W_M2_CONNECTIVITY.obj");
+
     }
     
     void map_m1_on_m2(int)
     {
+        printf("UPDATE M1 POSITIONS. \n");
         globalvars::ISM.update_positions(1); // m2 with m1 connectivity
+        mohe::Mesh_io(globalvars::m1).write_obj("M2_W_M1_CONNECTIVITY.obj");
 
         // reload the mesh in the viewer
         mohe::Mesh_connectivity::Defragmentation_maps defrag;
@@ -264,7 +275,9 @@ namespace freeglutcallback {
 
     void map_m2_on_m1(int)
     {
+        printf("UPDATE M2 POSITIONS. \n");
         globalvars::ISM.update_positions(2); // m2 with m1 connectivity
+        mohe::Mesh_io(globalvars::m2).write_obj("M1_W_M2_CONNECTIVITY.obj");
 
         // reload the mesh in the viewer
         mohe::Mesh_connectivity::Defragmentation_maps defrag;
@@ -330,7 +343,8 @@ int main(int argc, char *argv[]) {
         mohe::Mesh_io(globalvars::m2).read_auto("camel.obj");
 
         // mohe::Mesh_io(globalvars::mesh).read_auto("cube.obj");
-        mohe::Mesh_io(globalvars::mesh).read_auto("cow1.obj");
+        mohe::Mesh_io(globalvars::mesh).read_auto("camel.obj");
+        // mohe::Mesh_io(globalvars::mesh).read_auto("camel_simple.obj");
         // mohe::Mesh_io(globalvars::mesh).read_auto("sphere1.obj");
         // mohe::Mesh_io(globalvars::mesh).read_auto("horse.obj");
         // mohe::Mesh_io(globalvars::mesh).read_auto("camel.obj");
