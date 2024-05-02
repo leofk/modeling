@@ -4,9 +4,15 @@ UBC # 83974592
 ## Project - Inter-Surface Mapping
 Implementation of Inter-Surface Mapping by John S. et al.
 
-Entry Point:
-- `mesh_mapping.hpp`
-- `mesh_mapping.cpp`
+Documentation:
+- see `ISM_Documentation.PDF`
+
+GUI:
+- `Simplify to target` - simplifies mesh to desired number of vertices
+- `Revert Simplify` - reconstructs mesh to original resolution from any level of simplification
+- `Build Inter Surface Map` - Iteratively genearates inter surface mapping between cow and camel mesh
+- `Map M1 On M2` - Updates M1's (cow) vertex positions via built inter surface mapping
+- `Map M2 On M1` - Updates M2's (camel) vertex positions via built inter surface mapping
 
 ## A4 - Deformation
 Implemented the As-Rigid-As-Possible (ARAP) mesh deformation algorithm.
