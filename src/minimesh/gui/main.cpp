@@ -336,8 +336,8 @@ int main(int argc, char *argv[]) {
     // Change the hardcoded address to your needs.
     if (argc == 1) {
         // FOR MESHES W/O BOUNDARY
-		foldertools::makeandsetdir("/Users/leofk/Documents/GitHub/modeling/mesh/");
-        // foldertools::makeandsetdir("C:\\Work\\School\\2023_W2\\CPSC524\\project\\mesh");
+//		foldertools::makeandsetdir("/Users/leofk/Documents/GitHub/modeling/mesh/");
+         foldertools::makeandsetdir("C:\\Work\\School\\2023_W2\\CPSC524\\project\\mesh");
         
         mohe::Mesh_io(globalvars::m1).read_auto("cow1.obj");
         mohe::Mesh_io(globalvars::m2).read_auto("camel.obj");
@@ -362,8 +362,8 @@ int main(int argc, char *argv[]) {
         // mohe::Mesh_io(globalvars::mesh).read_auto("hex_more.obj");
     } else // otherwise use the address specified in the command line
     {
-        // foldertools::makeandsetdir("C:\\Work\\School\\2023_W2\\CPSC524\\project\\mesh");
-		foldertools::makeandsetdir("/Users/leofk/Documents/GitHub/modeling/mesh/");
+         foldertools::makeandsetdir("C:\\Work\\School\\2023_W2\\CPSC524\\project\\mesh");
+//		foldertools::makeandsetdir("/Users/leofk/Documents/GitHub/modeling/mesh/");
 
         mohe::Mesh_io(globalvars::mesh).read_auto(argv[1]);
     }
