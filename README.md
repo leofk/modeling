@@ -5,10 +5,10 @@ UBC # 83974592
 Implementation of Inter-Surface Mapping by John S. et al.
 
 Documentation:
-- see `ISM_Documentation.PDF`
+- see `ISM_Report.PDF`
 
 GUI:
-- `Simplify to target` - simplifies mesh to desired number of vertices
+- `Simplify to Target` - simplifies mesh to desired number of vertices
 - `Revert Simplify` - reconstructs mesh to original resolution from any level of simplification
 - `Build Inter Surface Map` - Iteratively genearates inter surface mapping between cow and camel mesh
 - `Map M1 On M2` - Updates M1's (cow) vertex positions via built inter surface mapping
