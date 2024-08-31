@@ -1,6 +1,6 @@
 # Seminal Algorithms in Digital Geometry Processing
 
-## Project - Inter-Surface Mapping
+## Inter-Surface Mapping
 Implementation of Inter-Surface Mapping by John S. et al.
 
 Documentation:
