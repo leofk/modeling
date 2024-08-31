@@ -3,9 +3,6 @@
 ## Inter-Surface Mapping
 Implementation of Inter-Surface Mapping by John S. et al.
 
-Documentation:
-- see `ISM_Report.PDF`
-
 GUI:
 - `Simplify to Target` - simplifies mesh to desired number of vertices
 - `Revert Simplify` - reconstructs mesh to original resolution from any level of simplification
