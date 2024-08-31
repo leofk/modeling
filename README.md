@@ -1,5 +1,4 @@
-# CPSC 524 - Leo Foord-Kelcey
-UBC # 83974592
+# Seminal Algorithms in Digital Geometry Processing
 
 ## Project - Inter-Surface Mapping
 Implementation of Inter-Surface Mapping by John S. et al.
@@ -14,7 +13,7 @@ GUI:
 - `Map M1 On M2` - Updates M1's (cow) vertex positions via built inter surface mapping
 - `Map M2 On M1` - Updates M2's (camel) vertex positions via built inter surface mapping
 
-## A4 - Deformation
+## Deformation
 Implemented the As-Rigid-As-Possible (ARAP) mesh deformation algorithm.
 
 Entry point:
@@ -23,7 +22,7 @@ Entry point:
 
 BONUS: Ability to use multiple handle constraint vertices.
   
-## A3 - Parameterization
+## Parameterization
 Implemented two parameterization methods:
 1. Fixed convex boundary (unit circle) with mean-value weights
 2. Free boundary Least-Squares Conformal Method
@@ -34,7 +33,7 @@ Entry point:
 - `mesh_free_param.hpp`
 - `mesh_free_param.cpp`
   
-## A2 - Simplification
+## Simplification
 Implemented Edge-Collapse based simplification algorithm.
 
 Entry point:
@@ -43,7 +42,7 @@ Entry point:
 
 BONUS: Extended to be able to revert edge-collapse
 
-## A1 - Subdivision
+## Subdivision
 Implemented Loop's Subdivision schema. Demo available in GUI via subdivide button.
 
 Entry point:
